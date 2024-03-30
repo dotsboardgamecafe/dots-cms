@@ -1,0 +1,391 @@
+/* Text Styles  */
+.typography--variant-heading-h1 {
+  font-family: var(--font-open-sans);
+  font-size: 48px;
+  line-height: 60px;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-heading-h2 {
+  font-family: var(--font-open-sans);
+  font-size: 36px;
+  line-height: 44px;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-heading-h3 {
+  font-family: "Futura PT";
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 38px; /* 126.667% */
+}
+
+.typography--variant-heading-h4 {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.typography--variant-text-body-xxl-medium {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 20px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-xxl-bold {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 20px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-xxl-heavy {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 20px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-xxl-demi {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 20px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-xxl-regular {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 20px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-xl-medium {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 18px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-xl-bold {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 18px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-xl-heavy {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 18px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-xl-regular {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 18px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-l-medium {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 16px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-l-bold {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 16px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-l-demi {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 16px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-l-regular {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.typography--variant-text-body-l-heavy {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 16px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-m-medium {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 14px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-m-bold {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 14px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-m-regular {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 14px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-m-demi {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 14px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-m-light {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 14px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-m-heavy {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 14px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-s-medium {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 12px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-s-bold {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 12px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-s-demi {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 12px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-s-regular {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 12px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-s-heavy {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 12px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-xs-medium {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 10px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-xs-bold {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 10px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-xs-regular {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 10px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-xs-demi {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 10px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-xxs-medium {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 8px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-text-body-xxs-bold {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 8px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-paragraph-xxl-regular {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 20px;
+  line-height: 32px;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-paragraph-xl-regular {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 18px;
+  line-height: 28px;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-paragraph-xl-bold {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 18px;
+  line-height: 28px;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-paragraph-xl-medium {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 18px;
+  line-height: 28px;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-paragraph-l-regular {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-paragraph-l-medium {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-paragraph-l-bold {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-paragraph-m-regular {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-paragraph-m-demi {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-paragraph-s-regular {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-paragraph-xs-regular {
+  font-family: 'Futura PT', sans-serif;
+  font-size: 10px;
+  line-height: 15px;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-bubble-text-body-xxl-bold {
+  font-family: bubbleboddy;
+  font-size: 20px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-bubble-heading-h2 {
+  font-family: bubbleboddy;
+  font-size: 24px;
+  line-height: normal;
+  letter-spacing: 0%;
+  font-weight: 400;
+}
+
+.typography--variant-emoji {
+  
+  font-family: var(--font-lexend);
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 40px;
+}

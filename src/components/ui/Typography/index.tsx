@@ -2,33 +2,23 @@ import { PropsWithChildren, PropsWithRef } from 'react';
 
 import { cn } from '@/lib/utils';
 
+import { variantsMapping } from '@/components/ui/Typography/variants';
 
-const variantsMapping = {
-  h1: 'h1',
-  h2: 'h2',
-  h3: 'h3',
-  h4: 'h4',
-  h5: 'h5',
-  h6: 'h6',
-  subheading1: 'h6',
-  subheading2: 'h6',
-  body1: 'p',
-  body2: 'p',
-  body3: 'p',
-  small: 'p',
-} as const;
+
+
 
 type Props = PropsWithRef<
   PropsWithChildren<{
     color?:
-    | 'high-emphasis'
-    | 'low-emphasis'
-    | 'disabled'
-    | 'on-activity'
-    | 'alert'
-    | 'positive'
-    | 'invert'
-    | string;
+    | 'brand-yellow'
+    | 'brand-red'
+    | 'brand-blue-electric'
+    | 'brand-neon-color'
+    | 'midnight-black'
+    | 'hover'
+    | 'neutral-ink'
+    | 'neutral-smoke-white'
+    | 'accent-soft-blue';
     variant: keyof typeof variantsMapping;
     weight?: 'regular' | 'bold';
     className?: string;
@@ -40,20 +30,18 @@ const Typography = ( {
   variant,
   color,
   children,
-  weight,
   className,
   ...props
 }: Props ) => {
   const Component = variant ? variantsMapping[ variant ] : 'p';
-
+  const colorClass = color ? `typography--color-${color}` : '';
   return (
     <Component
       className={ cn( [
         {
           [ `typography--variant-${variant}` ]: variant,
-          [ `typography--color-${color}` ]: color,
-          [ `typography--weight-${weight}` ]: weight,
         },
+        colorClass,
         className,
       ] ) }
       { ...props }

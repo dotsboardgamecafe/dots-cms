@@ -18,13 +18,14 @@ import LoginForm from '@/components/PageComponents/LoginPage/LoginForm';
 
 export default async function LoginPage () {
   return (
-    <section className='h-screen grid grid-cols-[1fr_auto] gap-16 align-middle justify-center items-center p-8 '>
+    <section className='h-screen grid grid-cols-[1fr_auto] gap-16 align-middle justify-center items-center p-8 pr-[103px]'>
       <div className='h-full rounded-[32px] bg-[#EEEEF9]  relative'>
-        <Image src="/images/login_figure.png" alt="login image" fill objectFit='cover' />
+        <Image src="/images/login_figure.png" alt="login image" sizes="100vw" fill
+          style={ { objectFit: 'cover' } } priority={ true } />
       </div>
       {/* Form Section */ }
       <div className='w-[465px] flex-col gap-10 flex '>
-        <Image src="/images/logo.png" alt='logo image' width={ 140 } height={ 64 } />
+        <Image src="/images/logo.png" alt='logo image' width={ 140 } height={ 64 } style={ { width: '140px', height: '64px' } } />
         <LoginForm />
 
       </div>

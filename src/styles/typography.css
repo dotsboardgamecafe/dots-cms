@@ -3,7 +3,7 @@
   font-family: var(--font-open-sans);
   font-size: 48px;
   line-height: 60px;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -11,7 +11,7 @@
   font-family: var(--font-open-sans);
   font-size: 36px;
   line-height: 44px;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -33,7 +33,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 20px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -41,7 +41,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 20px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -49,7 +49,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 20px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -57,7 +57,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 20px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -65,7 +65,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 20px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -73,7 +73,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 18px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -81,7 +81,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 18px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -89,7 +89,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 18px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -97,7 +97,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 18px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -105,15 +105,15 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 16px;
   line-height: normal;
-  letter-spacing: 0%;
-  font-weight: 400;
+  
+  font-weight: 450;
 }
 
 .typography--variant-text-body-l-bold {
   font-family: 'Futura PT', sans-serif;
   font-size: 16px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -121,7 +121,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 16px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -137,7 +137,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 16px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -145,7 +145,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 14px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -153,7 +153,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 14px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -161,7 +161,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 14px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -169,7 +169,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 14px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -177,7 +177,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 14px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -185,7 +185,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 14px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -193,7 +193,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 12px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -201,7 +201,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 12px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -209,7 +209,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 12px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -217,7 +217,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 12px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -225,7 +225,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 12px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -233,7 +233,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 10px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -241,7 +241,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 10px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -249,7 +249,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 10px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -257,7 +257,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 10px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -265,7 +265,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 8px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -273,7 +273,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 8px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -281,7 +281,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 20px;
   line-height: 32px;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -289,7 +289,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 18px;
   line-height: 28px;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -297,7 +297,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 18px;
   line-height: 28px;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -305,7 +305,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 18px;
   line-height: 28px;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -313,31 +313,31 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 16px;
   line-height: 24px;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
 .typography--variant-paragraph-l-medium {
   font-family: 'Futura PT', sans-serif;
   font-size: 16px;
-  line-height: 24px;
-  letter-spacing: 0%;
-  font-weight: 400;
+  font-style: normal;
+  font-weight: 450;
+  line-height: 24px; /* 150% */
 }
 
 .typography--variant-paragraph-l-bold {
   font-family: 'Futura PT', sans-serif;
   font-size: 16px;
   line-height: 24px;
-  letter-spacing: 0%;
-  font-weight: 400;
+  
+  font-weight: 700  ;
 }
 
 .typography--variant-paragraph-m-regular {
   font-family: 'Futura PT', sans-serif;
   font-size: 14px;
   line-height: 20px;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -345,7 +345,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 14px;
   line-height: 20px;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -353,7 +353,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 12px;
   line-height: 18px;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -361,7 +361,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 10px;
   line-height: 15px;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -369,7 +369,7 @@
   font-family: bubbleboddy;
   font-size: 20px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 
@@ -377,7 +377,7 @@
   font-family: bubbleboddy;
   font-size: 24px;
   line-height: normal;
-  letter-spacing: 0%;
+  
   font-weight: 400;
 }
 

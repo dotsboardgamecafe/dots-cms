@@ -14,17 +14,24 @@ const config = {
       center: true,
       padding: "165px",
     },
+    fontFamily: {
+      'sans': [ 'Futura PT', 'sans-serif' ],
+    },
     extend: {
       boxShadow: {
         'general-s': '0px 2px 12px 0px rgba(20, 20, 43, 0.08)'
       },
+      backgroundImage: {
+        'button-midnight-black': 'linear-gradient(90deg, rgba(35, 37, 38, 1),rgba(67, 67, 67, 1))',
+      },
       colors: {
         // custom colors specific to dots
+
         'brand-yellow': '#F8EA0EFF',
         'brand-red': '#FB1515FF',
         'brand-blue-electric': '#2F3190FF',
         'brand-neon-color': 'linear-gradient(90deg, 0.1706144423224032% rgba(62, 68, 134, 1), 52.127617597579956% rgba(236, 226, 112, 1), 99.37495589256287% rgba(183, 63, 64, 1))',
-        'button-midnight-black': 'linear-gradient(90deg, 0% rgba(35, 37, 38, 1), 100% rgba(67, 67, 67, 1))',
+
         'button-hover': '#434343FF',
         'neutral-ink': '#232526FF',
         'neutral-smoke-white': '#FAFAFAFF',

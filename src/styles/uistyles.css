@@ -1,0 +1,11 @@
+.sidebar-menu-container {
+  @apply flex flex-col gap-3
+}
+
+.sidebar-menu-item a{
+  @apply grid grid-cols-[24px_1fr] items-center gap-4 p-3
+}
+
+.sidebar-menu-item.active{
+  @apply bg-accent-soft-blue rounded-r-xl border-l-[3px] border-brand-blue-electric box-border text-brand-blue-electric
+}

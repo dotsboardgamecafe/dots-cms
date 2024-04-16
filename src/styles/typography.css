@@ -297,8 +297,7 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 18px;
   line-height: 28px;
-  
-  font-weight: 400;
+  font-weight: 700;
 }
 
 .typography--variant-paragraph-xl-medium {
@@ -377,9 +376,17 @@
   font-family: bubbleboddy;
   font-size: 24px;
   line-height: normal;
-  
   font-weight: 400;
 }
+
+
+.typography--variant-bubble-brand {
+  font-family: bubbleboddy;
+  font-size: 24px;
+  line-height: normal;
+  font-weight: 1000;
+}
+
 
 .typography--variant-emoji {
   

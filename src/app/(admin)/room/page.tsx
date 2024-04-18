@@ -1,11 +1,17 @@
-import { PropsWithChildren, PropsWithRef } from 'react';
+'use client';
 
-type Props = PropsWithRef<PropsWithChildren>;
 
-const RoomPage = ( { children }: Props ) => {
+import RoomTable from '@/components/PageComponents/RoomPage/DataTable';
+
+
+const RoomPage = () => {
 
   return (
-    <>Room Component</>
+    <div>
+      <div>
+        <RoomTable />
+      </div>
+    </div>
   );
 };
 

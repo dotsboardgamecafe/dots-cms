@@ -1,5 +1,5 @@
 .sidebar-menu-container {
-  @apply flex flex-col gap-3
+  @apply flex flex-col gap-3 min-w-[232px]
 }
 
 .sidebar-menu-item a{
@@ -8,4 +8,65 @@
 
 .sidebar-menu-item.active{
   @apply bg-accent-soft-blue rounded-r-xl border-l-[3px] border-brand-blue-electric box-border text-brand-blue-electric
+}
+
+.page-container{
+  @apply rounded-2xl border-gray-200 border-[1px] p-5
+}
+
+.pagination-wrapper{
+  @apply flex flex-row items-center justify-between
+}
+
+.pagination-page-size{
+  @apply flex flex-row items-center gap-[20px]
+}
+
+.pagination-navigation{
+  @apply flex flex-row items-center gap-[10px]
+}
+
+.pagination-pages{
+  @apply flex flex-row gap-[5px]
+}
+
+.pagination-pages button{
+  @apply py-[7px] px-[12px]
+}
+.pagination-pages button:hover{
+  @apply outline-1 outline-gray-500 rounded-xl outline
+}
+.pagination-pages button.active{
+  @apply rounded-xl border-brand-blue-electric border-[1px]
+}
+.pagination-pages button.active p{
+  @apply text-brand-blue-electric font-bold
+}
+
+.table-action{
+  @apply flex flex-row justify-between
+}
+
+/* default style for text input element */
+input[type=text],
+input[type=password],
+input[type=email]
+{
+  /* empty */
+}
+
+.input-wrapper:focus-within
+{
+  @apply outline-none border-[1px] border-brand-blue-electric;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05), 0px 0px 0px 4px #DBDBEE;
+}
+
+input[type=text]:focus,
+input[type=password]:focus,
+input[type=email]:focus{
+  @apply outline-none
+}
+
+.input-wrapper{
+  @apply gap-[8px] border-gray-300 rounded-xl border-[1px] px-[14px] py-[10px] w-full flex items-center;
 }

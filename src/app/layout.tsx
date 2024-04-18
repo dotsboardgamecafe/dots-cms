@@ -44,13 +44,7 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     images: [ `${siteConfig.url}/images/og.jpg` ],
     creator: 'https://vereintech.com',
-  },
-  // authors: [
-  //   {
-  //     name: 'Theodorus Clarence',
-  //     url: 'https://theodorusclarence.com',
-  //   },
-  // ],
+  }
 };
 
 export default function RootLayout ( {

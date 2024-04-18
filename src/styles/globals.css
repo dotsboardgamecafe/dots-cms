@@ -69,26 +69,6 @@
   }
 }
 
-/* default style for text input element */
-input[type=text],
-input[type=password],
-input[type=email]
-{
-  @apply rounded-lg py-[10px] px-[14px] 
-}
-
-.input-wrapper:focus-within
-{
-  @apply outline-none border-[1px] border-brand-blue-electric;
-  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05), 0px 0px 0px 4px #DBDBEE;
-}
-
-input[type=text]:focus,
-input[type=password]:focus,
-input[type=email]:focus{
-  @apply outline-none
-}
-
 
 
 @layer base {

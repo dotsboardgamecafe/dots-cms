@@ -9,7 +9,8 @@ import { InputProps } from '@/types/Inputs';
 
 type Props = PropsWithRef<PropsWithChildren<InputProps & React.InputHTMLAttributes<HTMLInputElement>>>;
 
-const Text = ( { prefixIcon, suffixIcon, label, ...props }: Props ) => {
+const Text = ( { prefixIcon, suffixIcon, label, className, ...props }: Props ) => {
+  const inputRef = React.useRef<HTMLInputElement>( null );
 
   return (
     <div className='w-full flex flex-col gap-2'>
@@ -19,13 +20,14 @@ const Text = ( { prefixIcon, suffixIcon, label, ...props }: Props ) => {
           { label }
         </Typography>
       }
-      <InputWrapper>
+      <InputWrapper className={ className } onClick={ () => console.log( 'clicked' ) }>
+        { prefixIcon }
         <input type='text' className={
           cn( [
             'w-full',
-            props.className
           ] )
-        } { ...props } />
+        } { ...props } ref={ inputRef } />
+        { suffixIcon }
       </InputWrapper>
     </div>
   );

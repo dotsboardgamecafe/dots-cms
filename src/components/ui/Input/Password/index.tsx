@@ -28,7 +28,7 @@ const Password = ( { prefixIcon, suffixIcon, toggler, label, ...props }: Props )
           { label }
         </Typography>
       }
-      <InputWrapper prefixIcon={ prefixIcon } >
+      <InputWrapper >
         <input type={ type } className={
           cn( [
             'w-full',

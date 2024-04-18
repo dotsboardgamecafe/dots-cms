@@ -70,8 +70,18 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        error: {
+          '700': 'rgba(180, 35, 24, 1)',
+          '50': 'rgba(254, 243, 242, 1)'
+        },
+        blue: {
+          '700': 'rgba(23, 92, 211, 1)',
+          '50': 'rgba(239, 248, 255, 1)'
+        },
         gray: {
-          '500': '#667085'
+          '500': '#667085',
+          '100': '#F2F4F7',
+          '200': '#EAECF0'
         }
       },
       borderRadius: {

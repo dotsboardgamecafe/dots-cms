@@ -8,9 +8,11 @@ const Layout = ( { children }: Props ) => {
 
   return (
     <>
-      <div className='p-6 flex gap-8'>
+      <div className='p-6 flex gap-8 w-full'>
         <Sidebar />
-        { children }
+        <section className='flex flex-col w-full gap-8'>
+          { children }
+        </section>
       </div>
     </>
   );

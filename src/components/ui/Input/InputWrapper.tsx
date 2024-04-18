@@ -1,16 +1,16 @@
-import { PropsWithChildren, PropsWithRef } from 'react';
+import { HTMLAttributes, PropsWithChildren, PropsWithRef } from 'react';
 
 import { cn } from '@/lib/utils';
 
-import { InputExtras } from '@/types/Inputs';
 
-type Props = PropsWithRef<PropsWithChildren<InputExtras>>;
+type Props = PropsWithRef<PropsWithChildren<HTMLAttributes<HTMLDivElement>>>;
 
-const InputWrapper = ( { children }: Props ) => {
+const InputWrapper = ( { children, ...props }: Props ) => {
 
   return (
     <div className={ cn( [
-      'input-wrapper border-gray-300 rounded-lg border-[1px] w-full typography--variant-paragraph-l-regular flex items-center',
+      'input-wrapper typography--variant-paragraph-l-regular ',
+      props.className
     ] ) }>
       { children }
     </div>

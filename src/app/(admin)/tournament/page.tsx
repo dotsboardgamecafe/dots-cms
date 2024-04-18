@@ -1,8 +1,7 @@
-import { PropsWithChildren, PropsWithRef } from 'react';
 
-type Props = PropsWithRef<PropsWithChildren>;
+// type Props = PropsWithRef<PropsWithChildren>;
 
-const TournamentPage = ( { children }: Props ) => {
+const TournamentPage = () => {
 
   return (
     <>TournamentPage Component</>

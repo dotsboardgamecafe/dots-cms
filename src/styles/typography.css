@@ -1,3 +1,16 @@
+.typography-placeholder>span{
+  font-family: 'Futura PT', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+.typography-placeholder>span>p{
+  font-family: 'Futura PT', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  color: black;
+}
 /* Text Styles  */
 .typography--variant-heading-h1 {
   font-family: var(--font-open-sans);
@@ -313,7 +326,6 @@
   font-family: 'Futura PT', sans-serif;
   font-size: 16px;
   line-height: 24px;
-  
   font-weight: 400;
 }
 

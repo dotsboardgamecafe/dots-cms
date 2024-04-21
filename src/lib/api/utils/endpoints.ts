@@ -1,14 +1,14 @@
 
 // These are endpoints that will be used to call Backend endpoints services
 const endpointData = {
-	auth: { path: '/auths/login', method: 'POST' },
 
 	// GET
 
 
 
 	// POST
-
+	auth: { path: '/auths/login', method: 'POST' },
+	upload: { path: '/api/upload', method: 'POST' }
 } as const;
 
 // Typing schema, do not modify if not necessary

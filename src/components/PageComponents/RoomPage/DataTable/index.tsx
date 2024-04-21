@@ -1,6 +1,7 @@
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { AddCircle, Edit, Eye, SearchNormal1 } from 'iconsax-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
 
@@ -170,14 +171,17 @@ const RoomTable = () => {
     <div className='flex flex-col gap-6'>
       <section className='table-action'>
         <Text className='max-w-[300px]' prefixIcon={ <SearchNormal1 size={ 20 } className='text-gray-500 ' /> } placeholder='Search...' />
-        <button
-          className="rounded-[8px] gap-[8px] px-5 py-3 bg-button-midnight-black flex flex-row items-center text-nowrap"
-        >
-          <AddCircle className='text-white' />
-          <Typography variant='paragraph-l-bold' className='text-white'>
-            Add New Room
-          </Typography>
-        </button>
+        <Link href='/room/add'>
+          <button
+            className="rounded-[8px] gap-[8px] px-5 py-3 bg-button-midnight-black flex flex-row items-center text-nowrap"
+          >
+            <AddCircle className='text-white' />
+
+            <Typography variant='paragraph-l-bold' className='text-white'>
+              Add New Room
+            </Typography>
+          </button>
+        </Link>
       </section>
       <Table>
         <TableHeader>

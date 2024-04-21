@@ -58,6 +58,7 @@ export default function RootLayout ( {
         <main>
           { children }
         </main>
+        <section id="portal"></section>
       </body>
     </html>
   );

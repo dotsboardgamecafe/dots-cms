@@ -27,7 +27,7 @@ const SelectTrigger = React.forwardRef<
     ref={ ref }
     className={ cn(
       {
-        "gap-2 flex h-9 w-full items-center justify-between whitespace-nowrap rounded-xl border border-input bg-transparent p-[14px] text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1": variant === 'default',
+        "gap-2 flex h-[46px] typography-placeholder [&>span]:text-gray-500 border-gray-300 rounded-xl border w-full items-center justify-between whitespace-nowrap bg-transparent p-[14px] text-sm shadow-sm  placeholder:text-gray-500 focus:outline-none select-input disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1": variant === 'default',
         "flex gap-[4px] items-center flex-row bg-gray-300 py-[2px] px-[10px] rounded-2xl": variant === 'badge'
       },
       className

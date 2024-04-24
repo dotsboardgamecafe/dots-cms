@@ -68,6 +68,7 @@ input[type=email]
 }
 
 input[type=text]:focus,
+input[type=tel]:focus,
 input[type=password]:focus,
 input[type=email]:focus{
   @apply outline-none
@@ -89,8 +90,16 @@ textarea:focus{
   @apply grid grid-cols-3 gap-8;
 }
 
-.upload-wrapper{
+.upload-wrapper--default{
   @apply flex flex-col w-full h-[245px] gap-[5px] border border-dashed  border-brand-blue-electric rounded-xl items-center justify-center cursor-pointer;
+}
+
+.upload-wrapper--small{
+  @apply flex flex-col h-[100px] w-[100px] gap-[5px] border border-dashed border-gray-300 bg-gray-100 rounded-xl items-center justify-center cursor-pointer;
+}
+
+.upload-icon--small{
+  @apply w-10 h-10 rounded-xl flex items-center justify-center 
 }
 .upload-icon{
   @apply w-10 h-10 rounded-xl flex items-center justify-center  bg-brand-blue-electric mb-[5px]
@@ -105,4 +114,5 @@ textarea:focus{
 }
 .image-viewer-close{
   z-index: 1000;
-  @apply absolute top-10 right-10 text-white h-12 w-12 bg-slate-800 rounded-full flex items-center justify-center cursor-pointer}
+  @apply absolute top-10 right-10 text-white h-12 w-12 bg-slate-800 rounded-full flex items-center justify-center cursor-pointer
+}

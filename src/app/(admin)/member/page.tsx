@@ -1,11 +1,19 @@
-import { PropsWithChildren, PropsWithRef } from 'react';
 
-type Props = PropsWithRef<PropsWithChildren>;
+import { getMembers } from '@/lib/api/room';
 
-const MemberPage = ( { children }: Props ) => {
+import MemberTable from '@/components/PageComponents/MemberPage/MemberTable';
+type Props = {
+  searchParams: {
+    keyword?: string;
+  };
+};
 
+const MemberPage = async ( { searchParams }: Props ) => {
+  const members = await getMembers( { query: searchParams } );
   return (
-    <>MemberPage Component</>
+    <div>
+      <MemberTable data={ members.data } pagination={ members.pagination } />
+    </div>
   );
 };
 

@@ -7,7 +7,7 @@ type Props = PropsWithRef<PropsWithChildren<
     label: string;
   }>>;
 
-const Checkbox = ( { label, children }: Props ) => {
+const Checkbox = ( { label }: Props ) => {
 
   return (
     <>

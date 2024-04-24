@@ -13,33 +13,20 @@ import Upload from '@/components/ui/Input/Upload';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import Typography from '@/components/ui/Typography';
 
-const FormSchema = z.object( {
-  room_type: z.enum( [ "general", "event" ], {
-    required_error: "You need to select a room type.",
-  } ),
-  game_name: z.string( { required_error: "You need to select a game.", } ),
-  game_master: z.string( { required_error: "You need to select a game master.", } ),
-  schedule: z.string( { required_error: "You need to select a schedule.", } ),
-  location: z.string( { required_error: "You need to select a location.", } ),
-  level: z.string( { required_error: "You need to select a level.", } ),
-  player_slot: z.string( { required_error: "You need to set a player slot availability.", } ),
-  price: z.string( { required_error: "You need enter a price for the game room.", } ),
-  points: z.string( { required_error: "You need select a points for the game room.", } ),
-  description: z.string( { required_error: "You need to enter a description for the game room.", } ),
-  banner: z.string( { required_error: "You need to upload banner for the game room.", } ),
-} );
+import { AddRoomSchema } from '@/types/room';
+
 const AddRoomForm = () => {
 
-  const form = useForm<z.infer<typeof FormSchema>>( {
+  const form = useForm<z.infer<typeof AddRoomSchema>>( {
     defaultValues: {
       player_slot: '',
       price: '',
       points: '',
     },
-    resolver: zodResolver( FormSchema ),
+    resolver: zodResolver( AddRoomSchema ),
   } );
 
-  const onSubmit = ( data: z.infer<typeof FormSchema> ) => {
+  const onSubmit = ( data: z.infer<typeof AddRoomSchema> ) => {
     // eslint-disable-next-line no-console
     console.log( data );
   };

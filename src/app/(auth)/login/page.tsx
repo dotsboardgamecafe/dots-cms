@@ -27,7 +27,6 @@ export default async function LoginPage () {
       <div className='w-[465px] flex-col gap-10 flex '>
         <Image src="/images/logo.png" alt='logo image' width={ 140 } height={ 64 } style={ { width: '140px', height: '64px' } } />
         <LoginForm />
-
       </div>
     </section>
   );

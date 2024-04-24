@@ -8,9 +8,7 @@ const RoomPage = () => {
 
   return (
     <div>
-      <div>
-        <RoomTable />
-      </div>
+      <RoomTable />
     </div>
   );
 };

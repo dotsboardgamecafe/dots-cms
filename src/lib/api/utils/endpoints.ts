@@ -3,12 +3,16 @@
 const endpointData = {
 
 	// GET
-
-
+	getMembers: { path: '/users', method: 'GET', prefix: '' },
+	getAdmins: { path: '/admins', method: 'GET', prefix: '' },
 
 	// POST
-	auth: { path: '/auths/login', method: 'POST' },
-	upload: { path: '/api/upload', method: 'POST' }
+	auth: { path: '/auths/login', method: 'POST', prefix: '' },
+	upload: { path: '/api/upload', method: 'POST', prefix: '' },
+	login: { path: '/auths/login', method: 'POST', prefix: '' },
+
+	// PUT
+	changeStatusMember: { path: '/users', method: 'PUT', prefix: 'status' },
 } as const;
 
 // Typing schema, do not modify if not necessary

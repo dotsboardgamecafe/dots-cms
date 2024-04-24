@@ -8,7 +8,7 @@ const MemberLayout = ( { children }: Props ) => {
 
   return (
     <>
-      <Header title='User Control' subtitle='All Member Information' />
+      <Header title='Member Control' subtitle='All Member Information' />
       { children }
     </>
   );

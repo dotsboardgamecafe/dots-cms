@@ -1,11 +1,20 @@
-import { PropsWithChildren, PropsWithRef } from 'react';
 
-type Props = PropsWithRef<PropsWithChildren>;
 
-const AdminPage = ( { children }: Props ) => {
+import { getAdmins } from '@/lib/api/admin';
 
+import AdminTable from '@/components/PageComponents/AdminPage/AdminTable';
+type Props = {
+  searchParams: {
+    keyword?: string;
+  };
+};
+
+const AdminPage = async ( { searchParams }: Props ) => {
+  const admins = await getAdmins( { query: searchParams } );
   return (
-    <>AdminPage Component</>
+    <div>
+      <AdminTable data={ admins.data } pagination={ admins.pagination } />
+    </div>
   );
 };
 

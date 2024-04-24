@@ -29,14 +29,20 @@ const fetcher = async <Response> ( endpointKey: EndpointKey, options?: ApiOption
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const headers: Record<string, any> = {
 		// ...Authorization ? { Authorization } : {},
-		'X-Channel': 'website',
-		// 'Content-Type': options?.isUpload ? 'multipart/form-data' : 'application/json',
+		'X-Actor-Type': 'admin',
+		'User-Agent': 'PostmanRuntime/7.37.3'
 	};
+	// if ( !options?.isUpload ) {
+	// 	headers[ 'Content-Type' ] = 'application/json';
+	// }
 
 	let url = baseUrl + endpoint.path;
 
 	if ( options?.param ) {
 		url += `/${options.param}`;
+	}
+	if ( endpoint.prefix ) {
+		url += `/${endpoint.prefix}`;
 	}
 
 	url += '?' + generateQueryString( {

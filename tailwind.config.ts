@@ -45,6 +45,8 @@ const config = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          '600': '#7F56D9',
+
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -81,7 +83,8 @@ const config = {
         gray: {
           '500': '#667085',
           '100': '#F2F4F7',
-          '200': '#EAECF0'
+          '200': '#EAECF0',
+          '300': '#D0D5DD'
         }
       },
       borderRadius: {

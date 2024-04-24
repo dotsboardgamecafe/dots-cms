@@ -4,15 +4,19 @@ import Image from 'next/image';
 import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 
 import { upload } from '@/lib/api/upload';
+import { cn } from '@/lib/utils';
 
 import ImageViewer from '@/components/ui/ImageViewer';
 import Typography from '@/components/ui/Typography';
 
+type Variants = 'default' | 'small';
+
 type Props = {
   onChange: ( value: string ) => void;
+  variant?: Variants;
 };
 
-const Upload = ( { onChange }: Props ) => {
+const Upload = ( { onChange, variant = 'default' }: Props ) => {
   const [ selectedFile, setSelectedFile ] = useState<File>();
   const [ preview, setPreview ] = useState<string>();
   const [ imageViewerOpen, setImageViewerOpen ] = useState<boolean>( false );
@@ -59,9 +63,9 @@ const Upload = ( { onChange }: Props ) => {
 
   return (
     <>
-      <div className='upload-wrapper ' onClick={ ( e ) => onClickWrapper( e ) }>
+      <div className={ cn( `upload-wrapper--${variant}` ) } onClick={ ( e ) => onClickWrapper( e ) }>
         {
-          !preview && <>
+          !preview && variant === 'default' && <>
             <div className='upload-icon'>
               <GalleryAdd className='text-white' size={ 24 } />
             </div>
@@ -71,6 +75,14 @@ const Upload = ( { onChange }: Props ) => {
             <Typography variant='text-body-m-regular' className='text-gray-500'>
               JPG or PNG max 800KB
             </Typography>
+          </>
+        }
+        {
+          !preview && variant === 'small' && <>
+            <div className='upload-icon--small'>
+              <GalleryAdd size={ 24 } />
+            </div>
+
           </>
         }
         { preview && (
@@ -95,5 +107,6 @@ const Upload = ( { onChange }: Props ) => {
     </>
   );
 };
+
 
 export default Upload;

@@ -1,8 +1,6 @@
-import { PropsWithChildren, PropsWithRef } from 'react';
 
-type Props = PropsWithRef<PropsWithChildren>;
 
-const GamePage = ( { children }: Props ) => {
+const GamePage = () => {
 
   return (
     <>GamePage Component</>

@@ -29,8 +29,8 @@ type Props = PropsWithRef<{
 
 
 
-const MemberTable = ( { data, pagination }: Props ) => {
 
+const MemberTable = ( { data, pagination }: Props ) => {
   const [ filterModalOpen, setFilterModalOpen ] = useState<boolean>( false );
   const [ detailModalOpen, setDetailModalOpen ] = useState<boolean>( false );
   const [ confirmationModalOpen, setConfirmationModalOpen ] = useState<boolean>( false );

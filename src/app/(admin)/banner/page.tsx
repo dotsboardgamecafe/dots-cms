@@ -1,8 +1,6 @@
-import { PropsWithChildren, PropsWithRef } from 'react';
 
-type Props = PropsWithRef<PropsWithChildren>;
 
-const BannerPage = ( { children }: Props ) => {
+const BannerPage = () => {
 
   return (
     <>BannerPage Component</>

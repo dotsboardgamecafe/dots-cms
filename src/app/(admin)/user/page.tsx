@@ -1,8 +1,5 @@
-import { PropsWithChildren, PropsWithRef } from 'react';
 
-type Props = PropsWithRef<PropsWithChildren>;
-
-const UserPage = ( { children }: Props ) => {
+const UserPage = () => {
 
   return (
     <>UserPage Component</>

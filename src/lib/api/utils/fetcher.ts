@@ -1,13 +1,14 @@
 
 import { config } from '@/constant/config';
+import { cookiesHelper } from '@/helper';
 import generateQueryString from '@/helper/generateQueryString';
 
 import endpoints, { EndpointKey } from './endpoints';
 
 import { Pagination, ResponseType as SuccessResponse } from '@/types/network';
 
-export type ApiOptions = {
-	body?: unknown,
+export type ApiOptions<T = unknown> = {
+	body?: T,
 	param?: string;
 	query?: Record<string, unknown>,
 	pagination?: Pagination;
@@ -25,10 +26,10 @@ const fetcher = async <Response> ( endpointKey: EndpointKey, options?: ApiOption
 	const fetchOpt: Record<string, unknown> = {};
 	const safeQueryParam = options?.query ?? {};
 	const safePagination = options?.pagination ?? {};
-	// const Authorization = await cookiesHelper.getToken();
+	const Authorization = await cookiesHelper.getToken();
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const headers: Record<string, any> = {
-		// ...Authorization ? { Authorization } : {},
+		...Authorization ? { Authorization } : {},
 		'X-Actor-Type': 'admin',
 		'User-Agent': 'PostmanRuntime/7.37.3'
 	};

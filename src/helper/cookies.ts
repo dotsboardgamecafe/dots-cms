@@ -2,6 +2,8 @@
 
 import { cookies } from 'next/headers';
 
+import { UserData } from '@/types/users';
+
 export const getToken = async () => {
   const token = cookies().get( 'token' )?.value ?? '';
 
@@ -20,7 +22,7 @@ export const setUserData = async ( userData: string ) => {
   return cookies().set( 'userData', userData );
 };
 
-export const getUserData = () => {
+export const getUserData = (): Promise<UserData> => {
   const userData = cookies().get( 'userData' )?.value;
 
   return userData && JSON.parse( userData );

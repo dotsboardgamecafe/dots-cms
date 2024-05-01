@@ -1,7 +1,11 @@
+'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
+import dayjs from 'dayjs';
+import dayjsFormats from 'dayjs/plugin/advancedFormat';
 import { AddCircle, Edit, Eye, SearchNormal1 } from 'iconsax-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useMemo } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -11,172 +15,170 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
 
+import { Pagination as PaginationType } from '@/types/network';
 import { RoomType } from '@/types/room';
+
+dayjs.extend( dayjsFormats );
 
 // type Props = PropsWithRef<PropsWithChildren<{
 //   data: RoomType[];
 // }>>;
 
+type Props = {
+  data: RoomType[];
+  pagination: PaginationType;
+};
 
-const dummyData: RoomType[] = Array.from( { length: 20 } ).map( () => ( {
-  type: [ 'General Room', 'Special Event', 'Event Room', 'Closed Room' ][ Math.floor( Math.random() * 4 ) ],
-  gameName: [ 'Rising Sun', 'Dungeons & Dragons', 'ISS Vanguard', 'Splendor', 'China Town', 'Spyfall' ][ Math.floor( Math.random() * 6 ) ],
-  schedule: `${[ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ][ Math.floor( Math.random() * 12 ) ]} ${Math.floor( Math.random() * 28 ) + 1}${Math.floor( Math.random() * 10 ) === 0 ? 'th' : Math.floor( Math.random() * 10 ) >= 1 ? 'st' : 'nd'}${Math.floor( Math.random() * 10 ) === 0 ? 'th' : 'rd'} ${Math.floor( Math.random() * 24 )}:${String( Math.floor( Math.random() * 60 ) ).padStart( 2, '0' )} - ${Math.floor( Math.random() * 24 ) + 1}${Math.floor( Math.random() * 10 ) === 0 ? ':00' : ':'}${String( Math.floor( Math.random() * 60 ) ).padStart( 2, '0' )}`,
-  location: [ 'Bandung, Paskal', 'Jakarta, PIK' ][ Math.floor( Math.random() * 2 ) ],
-  level: [ 'Beginner', 'Intermediate', 'Advanced' ][ Math.floor( Math.random() * 3 ) ],
-  slot: `${Math.floor( Math.random() * 10 ) + 1}/${Math.floor( Math.random() * 20 ) + 1} Players`,
-  status: [ 'Active', 'Closed' ][ Math.floor( Math.random() * 2 ) ],
-  gameMaster: {
-    name: `${[ 'Henry', 'Smith', 'Johnson' ][ Math.floor( Math.random() * 3 ) ]}`,
-    profileImage: 'https://i.pravatar.cc/500'
-  }
-} ) );
+const RoomTable = ( { data, pagination }: Props ) => {
 
-const columns: ColumnDef<RoomType>[] = [
-  {
-    accessorKey: 'type',
-    header: 'Room Type',
-    cell: ( { row } ) => {
-      return (
-        <Typography variant='paragraph-l-regular'>
-          { row.original.type }
-        </Typography>
-      );
-    }
-  },
-  {
-    accessorKey: 'gameName',
-    header: 'Game Name',
-    cell: ( { row } ) => {
-      return (
-        <Typography variant='paragraph-l-regular'>
-          { row.original.gameName }
-        </Typography>
-      );
-    }
-  },
-  {
-    accessorKey: 'schedule',
-    header: 'Schedule',
-    cell: ( { row } ) => {
-      return (
-        <Typography variant='paragraph-l-regular'>
-          { row.original.schedule }
-        </Typography>
-      );
-    }
-  },
-  {
-    accessorKey: 'location',
-    header: 'Location',
-    cell: ( { row } ) => {
-      return (
-        <Typography variant='paragraph-l-regular'>
-          { row.original.location }
-        </Typography>
-      );
-    }
-  },
-  {
-    accessorKey: 'level',
-    header: 'Level',
-    cell: ( { row } ) => {
-      return (
-        <Typography variant='paragraph-l-regular'>
-          { row.original.level }
-        </Typography>
-      );
-    }
-  },
-  {
-    accessorKey: 'slot',
-    header: 'Updated Slot',
-    cell: ( { row } ) => {
-      return (
-        <Typography variant='paragraph-l-regular'>
-          { row.original.slot }
-        </Typography>
-      );
-    }
-  },
-  {
-    accessorKey: 'gameMaster',
-    header: 'Game Master',
-    cell: ( { row } ) => {
-      return (
-        <div className='flex flex-row items-center gap-[10px]'>
-          <Image width={ 36 } height={ 36 } src={ row.original.gameMaster.profileImage } alt='profile image' className='rounded-full' />
+  const columns: ColumnDef<RoomType>[] = useMemo( () => [
+    {
+      accessorKey: 'type',
+      header: 'Room Type',
+      cell: ( { row } ) => {
+        return (
           <Typography variant='paragraph-l-regular'>
-            { row.original.gameMaster.name }
+            { row.original.room_type }
           </Typography>
-        </div>
-      );
-    }
-  },
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ( { row } ) => {
-      return (
-        <Select value={ row.original.status }>
-          <SelectTrigger variant='badge' className={ cn(
-            {
-              'bg-error-50': row.original.status === 'Closed',
-              'bg-blue-50': row.original.status === 'Active'
-            }
-          ) }>
-            <SelectValue aria-label={ row.original.status }>
-              <Typography variant='text-body-l-medium' className={ cn(
-                {
-                  'text-error-700': row.original.status === 'Closed',
-                  'text-blue-700': row.original.status === 'Active'
-                }
-              ) }>
-                { row.original.status }
-              </Typography>
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent >
-            <SelectItem value="Active">Active</SelectItem>
-            <SelectItem value="Closed">Closed</SelectItem>
-          </SelectContent>
-        </Select>
+        );
+      }
+    },
+    {
+      accessorKey: 'gameName',
+      header: 'Game Name',
+      cell: ( { row } ) => {
+        return (
+          <Typography variant='paragraph-l-regular'>
+            { row.original.name }
+          </Typography>
+        );
+      }
+    },
+    {
+      accessorKey: 'schedule',
+      header: 'Schedule',
+      cell: ( { row } ) => {
+        return (
+          <Typography variant='paragraph-l-regular'>
+            { dayjs( row.original.start_date ).format( 'ddd Do, HH:mm' ) } - { dayjs( row.original.end_date ).format( 'HH:mm' ) }
+          </Typography>
+        );
+      }
+    },
+    {
+      accessorKey: 'location',
+      header: 'Location',
+      cell: ( { row } ) => {
+        return (
+          <Typography variant='paragraph-l-regular'>
+            { row.original.cafe_name }
+          </Typography>
+        );
+      }
+    },
+    {
+      accessorKey: 'level',
+      header: 'Level',
+      cell: ( { row } ) => {
+        return (
+          <Typography variant='paragraph-l-regular'>
+            { row.original.difficulty }
+          </Typography>
+        );
+      }
+    },
+    {
+      accessorKey: 'slot',
+      header: 'Updated Slot',
+      cell: ( { row } ) => {
+        return (
+          <Typography variant='paragraph-l-regular'>
+            { row.original.current_used_slot } / { row.original.maximum_participant }
+          </Typography>
+        );
+      }
+    },
+    {
+      accessorKey: 'gameMaster',
+      header: 'Game Master',
+      cell: ( { row } ) => {
+        return (
+          <div className='flex flex-row items-center gap-[10px]'>
+            <Image width={ 36 } height={ 36 } src={ row.original.game_master_image_url || '/images/avatar-not-found.png' } alt='profile image' className='rounded-full' />
+            <Typography variant='paragraph-l-regular'>
+              { row.original.game_master_name }
+            </Typography>
+          </div>
+        );
+      }
+    },
+    {
+      accessorKey: 'status',
+      accessorFn: ( row ) => row.status,
+      header: 'Status',
+      cell: ( { row } ) => {
+        return (
+          <Select value={ row.original.status }>
+            <SelectTrigger variant='badge' className={ cn(
+              {
+                'bg-error-50': row.original.status === 'inactive',
+                'bg-blue-50': row.original.status === 'active'
+              }
+            ) }>
+              <SelectValue aria-label={ row.original.status }>
+                <Typography variant='text-body-l-medium' className={ cn(
+                  'capitalize',
+                  {
+                    'text-error-700': row.original.status === 'inactive',
+                    'text-blue-700': row.original.status === 'active'
+                  }
+                ) }>
+                  { row.original.status }
+                </Typography>
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent >
+              <SelectItem value="active">Active</SelectItem>
+              <SelectItem value="inactive">In-Active</SelectItem>
+            </SelectContent>
+          </Select>
 
-      );
+        );
+      }
+    },
+    {
+      id: 'action',
+      header: 'Action',
+      cell: ( { row } ) => {
+        return (
+          <div className='flex flex-row items-center gap-4'>
+            <Eye className='cursor-pointer' />
+            <Link href={ `/room/edit/${row.original.room_code}` } >
+              <Edit className='cursor-pointer' />
+            </Link>
+          </div>
+        );
+      }
     }
-  },
-  {
-    id: 'action',
-    header: 'Action',
-    cell: ( { row } ) => {
-      return (
-        <div className='flex flex-row items-center gap-4'>
-          <Eye className='cursor-pointer' />
-          <Edit className='cursor-pointer' />
-        </div>
-      );
-    }
-  }
-];
+  ]
+    , [] );
 
-const RoomTable = () => {
   const table = useReactTable( {
-    data: dummyData,
+    data: data,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     columns,
+
   } );
+
 
   return (
     <div className='flex flex-col gap-6'>
       <section className='table-action'>
         <Text className='max-w-[300px]' prefixIcon={ <SearchNormal1 size={ 20 } className='text-gray-500 ' /> } placeholder='Search...' />
         <Link href='/room/add'>
-          <button
-            className="rounded-[8px] gap-[8px] px-5 py-3 bg-button-midnight-black flex flex-row items-center text-nowrap"
-          >
+          <button className="rounded-[8px] gap-[8px] px-5 py-3 bg-button-midnight-black flex flex-row items-center text-nowrap">
             <AddCircle className='text-white' />
-
             <Typography variant='paragraph-l-bold' className='text-white'>
               Add New Room
             </Typography>

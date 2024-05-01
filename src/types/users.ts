@@ -4,7 +4,7 @@ export type UserData = {
   token: string;
   user_code: string;
   image_url: string;
-  full_name: string;
+  fullname: string;
   phone_number: string;
   email: string;
   expired_at: string;

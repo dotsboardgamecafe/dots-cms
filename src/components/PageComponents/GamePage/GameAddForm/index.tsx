@@ -1,16 +1,11 @@
 'use client';
 // type Props = PropsWithRef<PropsWithChildren>;
 import { zodResolver } from "@hookform/resolvers/zod";
-import dayjs from 'dayjs';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { createRoom } from '@/lib/api/room';
-
 import { Button } from '@/components/ui/Buttons';
-import DateTime from '@/components/ui/DateTime';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
-import Number from '@/components/ui/Input/Number';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/Input/RadioGroup';
 import Text from '@/components/ui/Input/Text';
 import Textarea from '@/components/ui/Input/TextArea';
@@ -18,53 +13,31 @@ import Upload from '@/components/ui/Input/Upload';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import Typography from '@/components/ui/Typography';
 
-import { AdminType } from '@/types/admin';
-import { CafeType } from '@/types/cafes';
-import { GameType } from '@/types/game';
-import { AddRoomPayload, AddRoomSchema } from '@/types/room';
+import { AddGameSchema } from '@/types/game';
 
-type Props = {
-  games: GameType[];
-  admins: AdminType[];
-  cafes: CafeType[];
-};
+const AddGameForm = () => {
 
-const AddRoomForm = ( { games, admins, cafes }: Props ) => {
-
-  const form = useForm<z.infer<typeof AddRoomSchema>>( {
+  const form = useForm<z.infer<typeof AddGameSchema>>( {
     defaultValues: {
-      player_slot: '',
-      room_name: '',
-      price: '',
-      points: '',
-      schedule: {
-        start_date: undefined,
-        end_date: undefined,
-      }
+      cafe_code: '',
+      game_type: '',
+      name: '',
+      image_url: '',
+      collection_url: '',
+      description: '',
+      status: '',
+      game_categories: [],
+      game_characteristics: [],
     },
-    resolver: zodResolver( AddRoomSchema ),
+    resolver: zodResolver( AddGameSchema ),
+
   } );
 
-  const onSubmit = async ( data: z.infer<typeof AddRoomSchema> ) => {
+  const onSubmit = ( data: z.infer<typeof AddGameSchema> ) => {
     // eslint-disable-next-line no-console
-    const payload: AddRoomPayload = {
-      booking_price: +data.price,
-      difficulty: data.level,
-      end_date: dayjs( data.schedule.end_date ).toISOString(),
-      start_date: dayjs( data.schedule.start_date ).toISOString(),
-      game_id: 2,
-      game_master_id: 5,
-      instruction: 'instruction',
-      maximum_participant: +data.player_slot,
-      name: data.room_name,
-      reward_point: +data.points,
-      room_type: data.room_type,
-      status: 'active',
-      description: data.description,
-      location_code: data.location
-    };
-    await createRoom( { body: payload } );
+    console.log( data );
   };
+
   return (
     <>
       <Form { ...form }>
@@ -88,7 +61,7 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
                     >
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
-                          <RadioGroupItem value="normal" />
+                          <RadioGroupItem value="general" />
                         </FormControl>
                         <FormLabel className="font-normal">
                           <Typography variant='text-body-l-regular'>
@@ -98,7 +71,7 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
-                          <RadioGroupItem value="special_event" />
+                          <RadioGroupItem value="event" />
                         </FormControl>
                         <FormLabel className="font-normal">
                           <Typography variant='text-body-l-regular'>
@@ -114,29 +87,12 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
             />
             <FormField
               control={ form.control }
-              name="room_name"
-              render={ ( { field } ) => (
-                <FormItem className="space-y-3">
-                  <FormLabel>
-                    <Typography variant='paragraph-l-medium'>
-                      Room Name
-                    </Typography>
-                  </FormLabel>
-                  <FormControl>
-                    <Text placeholder='Enter Room Name' { ...field } />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              ) }
-            />
-            <FormField
-              control={ form.control }
               name="game_name"
               render={ ( { field } ) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
                     <Typography variant='paragraph-l-medium'>
-                      Game
+                      Game Type
                     </Typography>
                   </FormLabel>
                   <FormControl>
@@ -144,18 +100,13 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
                       <SelectTrigger>
                         <SelectValue aria-label={ field.value } placeholder='Select Game'>
                           <Typography variant='text-body-l-medium' >
-                            {
-                              games.find( game => game.game_code === field.value )?.name || ''
-                            }
+                            { field.value }
                           </Typography>
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent >
-                        {
-                          games.map( game => (
-                            <SelectItem value={ game.game_code } key={ game.game_code }>{ game.name }</SelectItem>
-                          ) )
-                        }
+                        <SelectItem value="splendor">Splendor</SelectItem>
+                        <SelectItem value="spyfall">Spyfall</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -178,16 +129,13 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
                       <SelectTrigger>
                         <SelectValue aria-label={ field.value } placeholder='Select Game Master'>
                           <Typography variant='text-body-l-medium' >
-                            { admins.find( admin => admin.admin_code === field.value )?.name || '' }
+                            { field.value }
                           </Typography>
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent >
-                        {
-                          admins.map( admin => (
-                            <SelectItem value={ admin.admin_code } key={ admin.admin_code }>{ admin.name }</SelectItem>
-                          ) )
-                        }
+                        <SelectItem value="Andre">Andre</SelectItem>
+                        <SelectItem value="Henry">Henry</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -206,16 +154,19 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <DateTime
-                      onDateChange={ ( date ) => {
-                        field.onChange( { ...field.value, start_date: date } );
-                      } }
-                      onEndDateChange={ ( date ) => {
-                        field.onChange( { ...field.value, end_date: date } );
-                      } }
-                      end_date={ field.value?.end_date }
-                      start_date={ field.value?.start_date }
-                    />
+                    <Select value={ field.value } onValueChange={ field.onChange }>
+                      <SelectTrigger>
+                        <SelectValue aria-label={ field.value } placeholder='Set Schedule'>
+                          <Typography variant='text-body-l-medium' >
+                            { field.value }
+                          </Typography>
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent >
+                        <SelectItem value="Andre">Andre</SelectItem>
+                        <SelectItem value="Henry">Henry</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -236,16 +187,13 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
                       <SelectTrigger>
                         <SelectValue aria-label={ field.value } placeholder='Select Location'>
                           <Typography variant='text-body-l-medium' >
-                            { cafes.find( cafe => cafe.cafe_code === field.value )?.name || '' }
+                            { field.value }
                           </Typography>
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent >
-                        {
-                          cafes.map( ( cafe, index ) => (
-                            <SelectItem value={ cafe.cafe_code } key={ `${cafe.cafe_code}-${index}` }>{ cafe.name }</SelectItem>
-                          ) )
-                        }
+                        <SelectItem value="Andre">Andre</SelectItem>
+                        <SelectItem value="Henry">Henry</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -267,16 +215,14 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
                     <Select value={ field.value } onValueChange={ field.onChange }>
                       <SelectTrigger>
                         <SelectValue aria-label={ field.value } placeholder='Select Level'>
-                          <Typography variant='text-body-l-medium' className='capitalize' >
+                          <Typography variant='text-body-l-medium' >
                             { field.value }
                           </Typography>
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent >
-                        <SelectItem value="easy">Easy</SelectItem>
-                        <SelectItem value="intermediate">Intermediate</SelectItem>
-                        <SelectItem value="advanced">Advanced</SelectItem>
-                        <SelectItem value="master">Master</SelectItem>
+                        <SelectItem value="Andre">Andre</SelectItem>
+                        <SelectItem value="Henry">Henry</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -295,7 +241,7 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Number placeholder='Set player slot' onChange={ field.onChange } value={ field.value } />
+                    <Text placeholder='Set Slot Availability' onChange={ field.onChange } value={ field.value } />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -312,7 +258,7 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Number placeholder='Set Price' onChange={ field.onChange } value={ field.value } />
+                    <Text placeholder='Set Price' onChange={ field.onChange } value={ field.value } />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -329,7 +275,19 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Number placeholder='Set Points' onChange={ field.onChange } value={ field.value } />
+                    <Select value={ field.value } onValueChange={ field.onChange }>
+                      <SelectTrigger>
+                        <SelectValue aria-label={ field.value } placeholder='Set Points'>
+                          <Typography variant='text-body-l-medium' className='text-neutral-ink' >
+                            { field.value }
+                          </Typography>
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent >
+                        <SelectItem value="Andre">Andre</SelectItem>
+                        <SelectItem value="Henry">Henry</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -384,4 +342,4 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
   );
 };
 
-export default AddRoomForm;
+export default AddGameForm;

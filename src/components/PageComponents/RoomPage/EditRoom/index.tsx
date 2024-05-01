@@ -21,26 +21,34 @@ import Typography from '@/components/ui/Typography';
 import { AdminType } from '@/types/admin';
 import { CafeType } from '@/types/cafes';
 import { GameType } from '@/types/game';
-import { AddRoomPayload, AddRoomSchema } from '@/types/room';
+import { AddRoomPayload, AddRoomSchema, RoomDetailType } from '@/types/room';
 
 type Props = {
   games: GameType[];
   admins: AdminType[];
   cafes: CafeType[];
+  roomDetail: RoomDetailType;
 };
 
-const AddRoomForm = ( { games, admins, cafes }: Props ) => {
+const EditRoomForm = ( { games, admins, cafes, roomDetail }: Props ) => {
 
   const form = useForm<z.infer<typeof AddRoomSchema>>( {
     defaultValues: {
-      player_slot: '',
-      room_name: '',
-      price: '',
-      points: '',
+      player_slot: String( roomDetail.maximum_participant ),
+      room_name: roomDetail.name,
+      price: String( roomDetail.booking_price ),
+      points: String( roomDetail.reward_point ),
       schedule: {
-        start_date: undefined,
-        end_date: undefined,
-      }
+        start_date: dayjs( roomDetail.start_date ).toDate(),
+        end_date: dayjs( roomDetail.end_date ).toDate(),
+      },
+      banner: "",
+      description: roomDetail.description,
+      level: roomDetail.difficulty,
+      room_type: roomDetail.room_type,
+      location: '',
+      game_master: roomDetail.game_master_code,
+      game_name: roomDetail.game_code,
     },
     resolver: zodResolver( AddRoomSchema ),
   } );
@@ -166,34 +174,36 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
             <FormField
               control={ form.control }
               name="game_master"
-              render={ ( { field } ) => (
-                <FormItem className="space-y-3">
-                  <FormLabel>
-                    <Typography variant='paragraph-l-medium'>
-                      Game Master
-                    </Typography>
-                  </FormLabel>
-                  <FormControl>
-                    <Select value={ field.value } onValueChange={ field.onChange }>
-                      <SelectTrigger>
-                        <SelectValue aria-label={ field.value } placeholder='Select Game Master'>
-                          <Typography variant='text-body-l-medium' >
-                            { admins.find( admin => admin.admin_code === field.value )?.name || '' }
-                          </Typography>
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent >
-                        {
-                          admins.map( admin => (
-                            <SelectItem value={ admin.admin_code } key={ admin.admin_code }>{ admin.name }</SelectItem>
-                          ) )
-                        }
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              ) }
+              render={ ( { field } ) => {
+                return (
+                  <FormItem className="space-y-3">
+                    <FormLabel>
+                      <Typography variant='paragraph-l-medium'>
+                        Game Master
+                      </Typography>
+                    </FormLabel>
+                    <FormControl>
+                      <Select value={ field.value } onValueChange={ field.onChange }>
+                        <SelectTrigger>
+                          <SelectValue aria-label={ field.value } placeholder='Select Game Master'>
+                            <Typography variant='text-body-l-medium' >
+                              { admins.find( admin => admin.admin_code === field.value )?.name || '' }
+                            </Typography>
+                          </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent >
+                          {
+                            admins.map( admin => (
+                              <SelectItem value={ admin.admin_code } key={ admin.admin_code }>{ admin.name }</SelectItem>
+                            ) )
+                          }
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              } }
             />
             <FormField
               control={ form.control }
@@ -384,4 +394,4 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
   );
 };
 
-export default AddRoomForm;
+export default EditRoomForm;

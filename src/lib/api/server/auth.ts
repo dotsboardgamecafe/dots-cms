@@ -1,3 +1,4 @@
+'use server';
 import fetcher from '@/lib/api/utils/fetcher';
 
 import { cookiesHelper } from '@/helper';

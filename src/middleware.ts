@@ -1,17 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { authRoutes } from '@/constant/auth_routes';
+
 
 
 export function middleware ( request: NextRequest ) {
   const pathname = request.nextUrl.pathname;
+  const token = request.cookies.get( 'token' );
 
-  // if ( !authRoutes?.some( path => pathname.includes( path ) ) ) {
-  //   const token = request.cookies.get( 'token' );
-  //   if ( !token ) {
-  //     const url = new URL( '/login', request.url );
-  //     return NextResponse.redirect( url );
-  //   }
-  // }
+  if ( !authRoutes?.some( path => pathname.includes( path ) ) ) {
+    if ( !token ) {
+      const url = new URL( '/login', request.url );
+      return NextResponse.redirect( url );
+    }
+  } else {
+    if ( token ) {
+      const url = new URL( '/room', request.url );
+      return NextResponse.redirect( url );
+    }
+  }
 
   return NextResponse.next();
 }

@@ -1,7 +1,7 @@
 
 import { Suspense } from 'react';
 
-import { getMembers } from '@/lib/api/room';
+import { getMembers } from '@/lib/api/member';
 
 import MemberTable from '@/components/PageComponents/MemberPage/MemberTable';
 type Props = {

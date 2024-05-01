@@ -1,11 +1,15 @@
 import fetcher, { ApiOptions } from '@/lib/api/utils/fetcher';
 
-import { MemberType } from '@/types/member';
+import { AddRoomPayload, RoomDetailType, RoomType } from '@/types/room';
 
-export const getMembers = async ( options?: ApiOptions ) => {
-  return await fetcher<MemberType[]>( 'getMembers', options );
+export const getRooms = async ( options?: ApiOptions ) => {
+  return await fetcher<RoomType[]>( 'getRooms', options );
 };
 
-export const updateStatusMembers = async ( options: ApiOptions ) => {
-  return await fetcher( 'changeStatusMember', options );
+export const getRoomDetail = async ( options: ApiOptions ) => {
+  return await fetcher<RoomDetailType>( 'getRoomDetail', options );
+};
+
+export const createRoom = async ( options: ApiOptions<AddRoomPayload> ) => {
+  return await fetcher( 'createRoom', options );
 };

@@ -8,6 +8,7 @@ import {
   FieldValues,
   FormProvider,
   useFormContext,
+  useFormState,
 } from "react-hook-form";
 
 import { cn } from "@/lib/utils";
@@ -166,6 +167,25 @@ const FormMessage = React.forwardRef<
 } );
 FormMessage.displayName = "FormMessage";
 
+const FormMessageRoot = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>( ( { className, ...props }, ref ) => {
+  const { errors } = useFormState();
+  const rootError = errors.root;
+  if ( !rootError ) {
+    return null;
+  }
+
+  return (
+    <p ref={ ref }
+      className={ cn( "text-destructive text-sm font-medium", className ) }   >
+      { rootError.message }
+    </p>
+  );
+} );
+FormMessage.displayName = "FormMessageRoot";
+
 export {
   Form,
   FormControl,
@@ -174,5 +194,6 @@ export {
   FormItem,
   FormLabel,
   FormMessage,
-  useFormField,
+  FormMessageRoot,
+  useFormField
 };

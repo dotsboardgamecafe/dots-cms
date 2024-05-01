@@ -1,14 +1,17 @@
-'use client';
+'use server';
 
+
+import { getRooms } from '@/lib/api/room';
 
 import RoomTable from '@/components/PageComponents/RoomPage/DataTable';
 
+const RoomPage = async () => {
 
-const RoomPage = () => {
+  const rooms = await getRooms();
 
   return (
     <div>
-      <RoomTable />
+      <RoomTable data={ rooms.data } pagination={ rooms.pagination } />
     </div>
   );
 };

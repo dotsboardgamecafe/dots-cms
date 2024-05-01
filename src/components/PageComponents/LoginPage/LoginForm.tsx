@@ -1,21 +1,24 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
 import { login } from '@/lib/api/server/auth';
 
 import { Button } from '@/components/ui/Buttons';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormMessageRoot } from '@/components/ui/Form';
 import Checkbox from '@/components/ui/Input/Checkbox';
 import Password from '@/components/ui/Input/Password';
 import Text from '@/components/ui/Input/Text';
 import Typography from '@/components/ui/Typography';
 
+import { ResponseCode } from '@/constant/response_code';
+
 import { LoginPayload, LoginSchema } from '@/types/users';
 
 const LoginForm = () => {
-
+  const router = useRouter();
   const form = useForm<LoginPayload>( {
     defaultValues: {
       email: '',
@@ -25,15 +28,20 @@ const LoginForm = () => {
   } );
 
   const onSubmit = async ( data: LoginPayload ) => {
-    // eslint-disable-next-line no-console
-    const res = await login( data );
-    console.log( res );
+    try {
+      const res = await login( data );
+      if ( res.stat_code === ResponseCode.ERROR ) throw res.stat_msg;
+      router.push( '/room' );
+    } catch ( error: any ) {
+      form.setError( 'root', { message: error || 'Something went wrong' } );
+    }
   };
 
 
   return (
     <Form { ...form }>
       <form onSubmit={ form.handleSubmit( onSubmit ) }>
+
         <section>
           <section id='login-heading' className='flex flex-col mb-[30px]'>
             <Typography variant='heading-h3' color='neutral-ink'>
@@ -42,8 +50,11 @@ const LoginForm = () => {
             <Typography variant='text-body-l-regular' className='text-gray-500'>
               Please login here
             </Typography>
+
           </section>
           <section id='login-form' className='flex flex-col gap-5'>
+            <FormMessageRoot />
+
             <FormField
               control={ form.control }
               name="email"

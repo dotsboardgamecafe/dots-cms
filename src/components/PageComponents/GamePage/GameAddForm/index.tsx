@@ -9,7 +9,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import Number from '@/components/ui/Input/Number';
 import Text from '@/components/ui/Input/Text';
 import Textarea from '@/components/ui/Input/TextArea';
-import Upload from '@/components/ui/Input/Upload';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import Typography from '@/components/ui/Typography';
 
@@ -46,7 +45,7 @@ const AddGameForm = () => {
 
             <FormField
               control={ form.control }
-              name="game_name"
+              name="name"
               render={ ( { field } ) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
@@ -92,7 +91,7 @@ const AddGameForm = () => {
             />
             <FormField
               control={ form.control }
-              name="game_mechanics"
+              name="game_master"
               render={ ( { field } ) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
@@ -222,7 +221,7 @@ const AddGameForm = () => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                  <Select value={ field.value } onValueChange={ field.onChange }>
+                    <Select value={ field.value } onValueChange={ field.onChange }>
                       <SelectTrigger>
                         <SelectValue aria-label={ field.value } placeholder='Select Level'>
                           <Typography variant='text-body-l-medium' >
@@ -240,7 +239,7 @@ const AddGameForm = () => {
                 </FormItem>
               ) }
             />
-            
+
             <FormField
               control={ form.control }
               name="description"

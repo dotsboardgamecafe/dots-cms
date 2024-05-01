@@ -38,6 +38,7 @@ const fetcher = async <Response> ( endpointKey: EndpointKey, options?: ApiOption
 	// }
 
 	let url = baseUrl + endpoint.path;
+	console.info( url );
 
 	if ( options?.param ) {
 		url += `/${options.param}`;

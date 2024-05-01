@@ -2,10 +2,11 @@
 // type Props = PropsWithRef<PropsWithChildren>;
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from 'dayjs';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { createRoom } from '@/lib/api/room';
+import { updateRoom } from '@/lib/api/room';
 
 import { Button } from '@/components/ui/Buttons';
 import DateTime from '@/components/ui/DateTime';
@@ -31,7 +32,7 @@ type Props = {
 };
 
 const EditRoomForm = ( { games, admins, cafes, roomDetail }: Props ) => {
-
+  const router = useRouter();
   const form = useForm<z.infer<typeof AddRoomSchema>>( {
     defaultValues: {
       player_slot: String( roomDetail.maximum_participant ),
@@ -42,13 +43,13 @@ const EditRoomForm = ( { games, admins, cafes, roomDetail }: Props ) => {
         start_date: dayjs( roomDetail.start_date ).toDate(),
         end_date: dayjs( roomDetail.end_date ).toDate(),
       },
-      banner: "",
+      banner: roomDetail.room_banner_url,
       description: roomDetail.description,
       level: roomDetail.difficulty,
       room_type: roomDetail.room_type,
-      location: '',
+      location: roomDetail.cafe_code,
       game_master: roomDetail.game_master_code,
-      game_name: roomDetail.game_code,
+      game_code: roomDetail.game_code,
     },
     resolver: zodResolver( AddRoomSchema ),
   } );
@@ -60,8 +61,8 @@ const EditRoomForm = ( { games, admins, cafes, roomDetail }: Props ) => {
       difficulty: data.level,
       end_date: dayjs( data.schedule.end_date ).toISOString(),
       start_date: dayjs( data.schedule.start_date ).toISOString(),
-      game_id: 2,
-      game_master_id: 5,
+      game_code: data.game_code,
+      game_master_code: data.game_master,
       instruction: 'instruction',
       maximum_participant: +data.player_slot,
       name: data.room_name,
@@ -69,9 +70,11 @@ const EditRoomForm = ( { games, admins, cafes, roomDetail }: Props ) => {
       room_type: data.room_type,
       status: 'active',
       description: data.description,
-      location_code: data.location
+      location_code: data.location,
+      image_url: data.banner,
+      cafe_code: data.location,
     };
-    await createRoom( { body: payload } );
+    await updateRoom( { body: payload, param: roomDetail.room_code } );
   };
   return (
     <>
@@ -139,7 +142,7 @@ const EditRoomForm = ( { games, admins, cafes, roomDetail }: Props ) => {
             />
             <FormField
               control={ form.control }
-              name="game_name"
+              name="game_code"
               render={ ( { field } ) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
@@ -356,7 +359,7 @@ const EditRoomForm = ( { games, admins, cafes, roomDetail }: Props ) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Upload onChange={ field.onChange } />
+                    <Upload onChange={ field.onChange } value={ field.value } />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -381,11 +384,11 @@ const EditRoomForm = ( { games, admins, cafes, roomDetail }: Props ) => {
             />
           </section>
           <section className='w-full flex justify-end gap-[16px]'>
-            <Button variant='secondary' size="xl" onClick={ ( evt ) => { evt.preventDefault(); form.reset(); } }>
+            <Button variant='secondary' size="xl" onClick={ ( evt ) => { router.back(); } }>
               Cancel
             </Button>
             <Button variant='default' size="xl" type='submit'>
-              Add
+              Save
             </Button>
           </section>
         </form>

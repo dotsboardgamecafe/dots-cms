@@ -47,6 +47,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'i.pravatar.cc',
+      },
+      {
+        protocol: 'https',
+        hostname: 'vereintech-assets.s3.ap-southeast-1.amazonaws.com',
       }
     ]
   }

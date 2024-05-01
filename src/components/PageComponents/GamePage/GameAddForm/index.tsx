@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { Button } from '@/components/ui/Buttons';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/Input/RadioGroup';
+import Number from '@/components/ui/Input/Number';
 import Text from '@/components/ui/Input/Text';
 import Textarea from '@/components/ui/Input/TextArea';
 import Upload from '@/components/ui/Input/Upload';
@@ -43,48 +43,7 @@ const AddGameForm = () => {
       <Form { ...form }>
         <form onSubmit={ form.handleSubmit( onSubmit ) } className='flex flex-col gap-8'>
           <section className='form-add-room-wrapper'>
-            <FormField
-              control={ form.control }
-              name="room_type"
-              render={ ( { field } ) => (
-                <FormItem className="space-y-3">
-                  <FormLabel>
-                    <Typography variant='paragraph-l-medium'>
-                      Room Type
-                    </Typography>
-                  </FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={ field.onChange }
-                      defaultValue={ field.value }
-                      className="flex flex-row "
-                    >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="general" />
-                        </FormControl>
-                        <FormLabel className="font-normal">
-                          <Typography variant='text-body-l-regular'>
-                            General Room
-                          </Typography>
-                        </FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="event" />
-                        </FormControl>
-                        <FormLabel className="font-normal">
-                          <Typography variant='text-body-l-regular'>
-                            Special Event
-                          </Typography>
-                        </FormLabel>
-                      </FormItem>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              ) }
-            />
+
             <FormField
               control={ form.control }
               name="game_name"
@@ -96,19 +55,7 @@ const AddGameForm = () => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Select value={ field.value } onValueChange={ field.onChange }>
-                      <SelectTrigger>
-                        <SelectValue aria-label={ field.value } placeholder='Select Game'>
-                          <Typography variant='text-body-l-medium' >
-                            { field.value }
-                          </Typography>
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent >
-                        <SelectItem value="splendor">Splendor</SelectItem>
-                        <SelectItem value="spyfall">Spyfall</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Text placeholder='Game Name' />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -116,12 +63,12 @@ const AddGameForm = () => {
             />
             <FormField
               control={ form.control }
-              name="game_master"
+              name="game_type"
               render={ ( { field } ) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
                     <Typography variant='paragraph-l-medium'>
-                      Game Master
+                      Game Type
                     </Typography>
                   </FormLabel>
                   <FormControl>
@@ -145,47 +92,18 @@ const AddGameForm = () => {
             />
             <FormField
               control={ form.control }
-              name="schedule"
+              name="game_mechanics"
               render={ ( { field } ) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
                     <Typography variant='paragraph-l-medium'>
-                      Schedule
+                      Game Mechanics
                     </Typography>
                   </FormLabel>
                   <FormControl>
                     <Select value={ field.value } onValueChange={ field.onChange }>
                       <SelectTrigger>
                         <SelectValue aria-label={ field.value } placeholder='Set Schedule'>
-                          <Typography variant='text-body-l-medium' >
-                            { field.value }
-                          </Typography>
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent >
-                        <SelectItem value="Andre">Andre</SelectItem>
-                        <SelectItem value="Henry">Henry</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              ) }
-            />
-            <FormField
-              control={ form.control }
-              name="location"
-              render={ ( { field } ) => (
-                <FormItem className="space-y-3">
-                  <FormLabel>
-                    <Typography variant='paragraph-l-medium'>
-                      Location
-                    </Typography>
-                  </FormLabel>
-                  <FormControl>
-                    <Select value={ field.value } onValueChange={ field.onChange }>
-                      <SelectTrigger>
-                        <SelectValue aria-label={ field.value } placeholder='Select Location'>
                           <Typography variant='text-body-l-medium' >
                             { field.value }
                           </Typography>
@@ -232,16 +150,16 @@ const AddGameForm = () => {
             />
             <FormField
               control={ form.control }
-              name="player_slot"
+              name="duration"
               render={ ( { field } ) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
                     <Typography variant='paragraph-l-medium'>
-                      Player Slot
+                      Game Duration
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Text placeholder='Set Slot Availability' onChange={ field.onChange } value={ field.value } />
+                    <Number placeholder='Set Duration' />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -249,16 +167,16 @@ const AddGameForm = () => {
             />
             <FormField
               control={ form.control }
-              name="price"
+              name="players"
               render={ ( { field } ) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
                     <Typography variant='paragraph-l-medium'>
-                      Price
+                      Players
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Text placeholder='Set Price' onChange={ field.onChange } value={ field.value } />
+                    <Text placeholder='Set Total Players' onChange={ field.onChange } value={ field.value } />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -266,19 +184,19 @@ const AddGameForm = () => {
             />
             <FormField
               control={ form.control }
-              name="points"
+              name="cafe_code"
               render={ ( { field } ) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
                     <Typography variant='paragraph-l-medium'>
-                      Points
+                      Cafe Location
                     </Typography>
                   </FormLabel>
                   <FormControl>
                     <Select value={ field.value } onValueChange={ field.onChange }>
                       <SelectTrigger>
-                        <SelectValue aria-label={ field.value } placeholder='Set Points'>
-                          <Typography variant='text-body-l-medium' className='text-neutral-ink' >
+                        <SelectValue aria-label={ field.value } placeholder='Select Level'>
+                          <Typography variant='text-body-l-medium' >
                             { field.value }
                           </Typography>
                         </SelectValue>
@@ -295,21 +213,34 @@ const AddGameForm = () => {
             />
             <FormField
               control={ form.control }
-              name="banner"
+              name="game_master"
               render={ ( { field } ) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
                     <Typography variant='paragraph-l-medium'>
-                      Banner
+                      Price
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Upload onChange={ field.onChange } />
+                  <Select value={ field.value } onValueChange={ field.onChange }>
+                      <SelectTrigger>
+                        <SelectValue aria-label={ field.value } placeholder='Select Level'>
+                          <Typography variant='text-body-l-medium' >
+                            { field.value }
+                          </Typography>
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent >
+                        <SelectItem value="Andre">Andre</SelectItem>
+                        <SelectItem value="Henry">Henry</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               ) }
             />
+            
             <FormField
               control={ form.control }
               name="description"

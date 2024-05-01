@@ -31,6 +31,7 @@ export type RoomDetailType = {
   game_img_url: string;
   cafe_name: string;
   cafe_address: string;
+  cafe_code: string;
   room_code: string;
   room_type: 'normal' | 'special_event';
   name: string;
@@ -45,6 +46,7 @@ export type RoomDetailType = {
   reward_point: number;
   current_used_slot: number;
   room_participants: unknown[];
+  room_banner_url: string;
 };
 
 export const AddRoomSchema = z.object( {
@@ -52,7 +54,7 @@ export const AddRoomSchema = z.object( {
     required_error: "You need to select a room type.",
   } ),
   room_name: z.string( { required_error: "You need to enter a room name.", } ),
-  game_name: z.string( { required_error: "You need to select a game.", } ),
+  game_code: z.string( { required_error: "You need to select a game.", } ),
   game_master: z.string( { required_error: "You need to select a game master.", } ),
   schedule: z.object( {
     start_date: z.date(),
@@ -68,8 +70,9 @@ export const AddRoomSchema = z.object( {
 } );
 
 export type AddRoomPayload = {
-  game_master_id?: number,
-  game_id?: number,
+  game_master_code?: string,
+  game_code?: string;
+  cafe_code?: string;
   room_type?: string;
   name?: string;
   description?: string;

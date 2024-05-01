@@ -13,3 +13,7 @@ export const getRoomDetail = async ( options: ApiOptions ) => {
 export const createRoom = async ( options: ApiOptions<AddRoomPayload> ) => {
   return await fetcher( 'createRoom', options );
 };
+
+export const updateRoom = async ( options: ApiOptions<AddRoomPayload> ) => {
+  return await fetcher( 'updateRoom', options );
+};

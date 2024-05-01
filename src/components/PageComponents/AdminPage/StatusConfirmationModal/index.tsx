@@ -2,7 +2,7 @@
 import { Danger } from 'iconsax-react';
 import { PropsWithRef } from 'react';
 
-import { updateStatusMembers } from '@/lib/api/room';
+import { updateStatusMembers } from '@/lib/api/member';
 
 import { Button } from '@/components/ui/Buttons';
 import { Modal, ModalContent } from '@/components/ui/Modal';

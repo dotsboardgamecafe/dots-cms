@@ -14,15 +14,22 @@ type Variants = 'default' | 'small';
 type Props = {
   onChange: ( value: string ) => void;
   variant?: Variants;
+  value?: string;
 };
 
-const Upload = ( { onChange, variant = 'default' }: Props ) => {
+const Upload = ( { onChange, variant = 'default', value }: Props ) => {
   const [ selectedFile, setSelectedFile ] = useState<File>();
   const [ preview, setPreview ] = useState<string>();
   const [ imageViewerOpen, setImageViewerOpen ] = useState<boolean>( false );
   const ref = useRef<HTMLInputElement>( null );
 
   useEffect( () => {
+
+    if ( value ) {
+      setPreview( value );
+      return;
+    }
+
     if ( !selectedFile ) {
       setPreview( undefined );
       return;
@@ -33,7 +40,7 @@ const Upload = ( { onChange, variant = 'default' }: Props ) => {
 
     // free memory when ever this component is unmounted
     return () => URL.revokeObjectURL( objectUrl );
-  }, [ selectedFile ] );
+  }, [ selectedFile, value ] );
 
   const onClickWrapper = ( evt: MouseEvent<HTMLDivElement> ) => {
     evt.stopPropagation();

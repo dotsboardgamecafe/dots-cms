@@ -52,8 +52,7 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
       difficulty: data.level,
       end_date: dayjs( data.schedule.end_date ).toISOString(),
       start_date: dayjs( data.schedule.start_date ).toISOString(),
-      game_id: 2,
-      game_master_id: 5,
+      game_master_code: data.game_master,
       instruction: 'instruction',
       maximum_participant: +data.player_slot,
       name: data.room_name,
@@ -61,7 +60,9 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
       room_type: data.room_type,
       status: 'active',
       description: data.description,
-      location_code: data.location
+      location_code: data.location,
+      game_code: data.game_code,
+      image_url: data.banner
     };
     await createRoom( { body: payload } );
   };
@@ -131,7 +132,7 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
             />
             <FormField
               control={ form.control }
-              name="game_name"
+              name="game_code"
               render={ ( { field } ) => (
                 <FormItem className="space-y-3">
                   <FormLabel>

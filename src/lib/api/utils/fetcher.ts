@@ -70,7 +70,7 @@ const fetcher = async <Response> ( endpointKey: EndpointKey, options?: ApiOption
 			console.error( { endpoint, response, options } );
 		} else {
 			// if client rendered we can safely use throw
-			throw new Error( response.stat_msg );
+			// throw new Error( response.stat_msg );
 		}
 	}
 

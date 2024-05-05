@@ -12,7 +12,7 @@ export const login = async ( loginPayload: LoginPayload ) => {
     const userLogin = loginRes?.data;
     await cookiesHelper.setTokenUser( userLogin.token || '' );
 
-    cookiesHelper.setUserData( JSON.stringify( {
+    await cookiesHelper.setUserData( JSON.stringify( {
       ...userLogin
     } ) );
   }

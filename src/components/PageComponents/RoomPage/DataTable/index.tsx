@@ -152,7 +152,9 @@ const RoomTable = ( { data, pagination }: Props ) => {
       cell: ( { row } ) => {
         return (
           <div className='flex flex-row items-center gap-4'>
-            <Eye className='cursor-pointer' />
+            <Link href={ `/room/view/${row.original.room_code}` } >
+              <Eye className='cursor-pointer' />
+            </Link>
             <Link href={ `/room/edit/${row.original.room_code}` } >
               <Edit className='cursor-pointer' />
             </Link>

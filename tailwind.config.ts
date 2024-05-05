@@ -26,7 +26,6 @@ const config = {
       },
       colors: {
         // custom colors specific to dots
-
         'brand-yellow': '#F8EA0EFF',
         'brand-red': '#FB1515FF',
         'brand-blue-electric': '#2F3190FF',
@@ -46,7 +45,6 @@ const config = {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
           '600': '#7F56D9',
-
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -87,11 +85,13 @@ const config = {
           '300': '#D0D5DD'
         }
       },
+
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

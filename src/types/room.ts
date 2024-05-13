@@ -45,9 +45,31 @@ export type RoomDetailType = {
   maximum_participant: number;
   reward_point: number;
   current_used_slot: number;
-  room_participants: unknown[];
+  room_participants: RoomParticipant[];
   room_banner_url: string;
 };
+
+export type RoomParticipant = {
+  user_code: string;
+  user_name: string;
+  user_image_url: string;
+  status_winner: boolean,
+  status: string;
+  additional_info: string;
+  position: number;
+  reward_point: number;
+};
+
+export const RoomParticipantSchema = z.array( z.object( {
+  user_code: z.string(),
+  user_name: z.string(),
+  user_image_url: z.string(),
+  status_winner: z.boolean(),
+  status: z.string(),
+  additional_info: z.string(),
+  position: z.number(),
+  reward_point: z.number(),
+} ) );
 
 export const AddRoomSchema = z.object( {
   room_type: z.enum( [ "normal", "special_event" ], {
@@ -87,4 +109,10 @@ export type AddRoomPayload = {
   image_url?: string;
   status?: string;
   location_code?: string;
+};
+
+export type SetRoomWinnerPayload = {
+  position: number;
+  badge_code: string;
+  user_code: string;
 };

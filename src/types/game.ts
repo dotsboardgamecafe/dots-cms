@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { RoomParticipantSchema } from '@/types/room';
+
 export type GameType = {
   "cafe_name": string,
   "cafe_code": string,
@@ -45,5 +47,10 @@ export const AddGameSchema = z.object( {
     value: z.number( { required_error: 'Game characteristic value is required' } ),
   } ) )
 } );
+
+export const JoinedPlayersSchema = z.object( {
+  players: RoomParticipantSchema
+}
+);
 
 export type AddGamePayload = z.infer<typeof AddGameSchema>;

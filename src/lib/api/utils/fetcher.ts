@@ -1,4 +1,5 @@
 
+
 import { config } from '@/constant/config';
 import { cookiesHelper } from '@/helper';
 import generateQueryString from '@/helper/generateQueryString';
@@ -68,9 +69,13 @@ const fetcher = async <Response> ( endpointKey: EndpointKey, options?: ApiOption
 			// just use console.error since throw, would result in crashing the service
 			// eslint-disable-next-line no-console
 			console.error( { endpoint, response, options } );
+			// if ( response.stat_msg.toLowerCase() === 'token is invalid' ) {
+			// 	redirect( '/login' );
+			// }
+			throw new Error( JSON.stringify( { url, endpoint, response, options, } ) );
 		} else {
 			// if client rendered we can safely use throw
-			// throw new Error( response.stat_msg );
+			throw new Error( response.stat_msg );
 		}
 	}
 

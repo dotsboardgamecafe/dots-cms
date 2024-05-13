@@ -36,7 +36,7 @@ const columns: ColumnDef<GameType>[] = [
     header: 'Type',
     cell: ( { row } ) => {
       return (
-        <Typography variant='paragraph-l-regular'>
+        <Typography variant='paragraph-l-regular' className='capitalize'>
           { row.original.game_type }
         </Typography>
       );
@@ -49,9 +49,12 @@ const columns: ColumnDef<GameType>[] = [
       return (
         <>
           { row.original.game_categories.map( ( category, index ) => (
-            <Typography variant='paragraph-l-regular' key={ `game-mechanics-${index}` }>
-              { category.category_name }
-            </Typography>
+            <div className='bg-gray-100 rounded-xl'>
+              <Typography variant='paragraph-l-regular' key={ `game-mechanics-${index}` }>
+                { category.category_name }
+              </Typography>
+            </div>
+            
           ) ) }
         </>
       );

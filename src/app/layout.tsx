@@ -8,6 +8,8 @@ import '@/styles/uistyles.css';
 // !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
 import '@/styles/colors.css';
 
+import { Toaster } from '@/components/ui/Toast/toaster';
+
 import { Lexend, OpenSans } from '@/app/fonts';
 import { siteConfig } from '@/constant/config';
 
@@ -59,6 +61,7 @@ export default function RootLayout ( {
           { children }
         </main>
         <section id="portal"></section>
+        <Toaster />
       </body>
     </html>
   );

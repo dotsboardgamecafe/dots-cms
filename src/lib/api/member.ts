@@ -7,5 +7,5 @@ export const getMembers = async ( options?: ApiOptions ) => {
 };
 
 export const updateStatusMembers = async ( options: ApiOptions ) => {
-  return await fetcher( 'changeStatusMember', options );
+  return await fetcher( 'updateRoomStatus', options );
 };

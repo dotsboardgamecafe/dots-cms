@@ -5,10 +5,11 @@ import dayjsFormats from 'dayjs/plugin/advancedFormat';
 import { AddCircle, Edit, Eye, SearchNormal1 } from 'iconsax-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
+import StatusConfirmationModal from '@/components/PageComponents/RoomPage/StatusConfirmationModal';
 import Text from '@/components/ui/Input/Text';
 import Pagination from '@/components/ui/Pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
@@ -20,9 +21,6 @@ import { RoomType } from '@/types/room';
 
 dayjs.extend( dayjsFormats );
 
-// type Props = PropsWithRef<PropsWithChildren<{
-//   data: RoomType[];
-// }>>;
 
 type Props = {
   data: RoomType[];
@@ -31,13 +29,17 @@ type Props = {
 
 const RoomTable = ( { data, pagination }: Props ) => {
 
+  const [ statusConfirmationModalOpen, setStatusConfirmationModalOpen ] = useState<boolean>( false );
+  const [ selectedRow, setSelectedRow ] = useState<RoomType>();
+
+
   const columns: ColumnDef<RoomType>[] = useMemo( () => [
     {
       accessorKey: 'type',
       header: 'Room Type',
       cell: ( { row } ) => {
         return (
-          <Typography variant='paragraph-l-regular'>
+          <Typography variant='paragraph-l-regular' className='capitalize'>
             { row.original.room_type }
           </Typography>
         );
@@ -48,7 +50,7 @@ const RoomTable = ( { data, pagination }: Props ) => {
       header: 'Game Name',
       cell: ( { row } ) => {
         return (
-          <Typography variant='paragraph-l-regular'>
+          <Typography variant='paragraph-l-regular' className='capitalize'>
             { row.original.name }
           </Typography>
         );
@@ -118,7 +120,14 @@ const RoomTable = ( { data, pagination }: Props ) => {
       header: 'Status',
       cell: ( { row } ) => {
         return (
-          <Select value={ row.original.status }>
+          <Select value={ row.original.status }
+            onValueChange={ ( value ) => {
+              if ( value === 'inactive' ) {
+                setStatusConfirmationModalOpen( true );
+                setSelectedRow( row.original );
+              }
+            } }
+          >
             <SelectTrigger variant='badge' className={ cn(
               {
                 'bg-error-50': row.original.status === 'inactive',
@@ -139,10 +148,9 @@ const RoomTable = ( { data, pagination }: Props ) => {
             </SelectTrigger>
             <SelectContent >
               <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="inactive">In-Active</SelectItem>
+              <SelectItem value="inactive">Close Registration</SelectItem>
             </SelectContent>
           </Select>
-
         );
       }
     },
@@ -244,6 +252,11 @@ const RoomTable = ( { data, pagination }: Props ) => {
         onChangePage={ ( page ) => table.setPageIndex( page ) }
         from={ table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1 }
         to={ table.getState().pagination.pageIndex * table.getState().pagination.pageSize + table.getState().pagination.pageSize }
+      />
+      <StatusConfirmationModal
+        open={ statusConfirmationModalOpen }
+        onOpenChange={ ( value ) => setStatusConfirmationModalOpen( value ) }
+        roomData={ selectedRow }
       />
     </div>
   );

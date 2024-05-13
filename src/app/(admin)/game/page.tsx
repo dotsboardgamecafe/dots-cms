@@ -1,6 +1,8 @@
 import { getGameList } from '@/lib/api/games';
 
 import GameTable from '@/components/PageComponents/GamePage/GameTable';
+import Header from '@/components/LayoutComponents/Header';
+import PageContainer from '@/components/LayoutComponents/PageContainer';
 
 
 const GamePage = async () => {
@@ -9,7 +11,13 @@ const GamePage = async () => {
 
   return (
     <>
-      <GameTable data={ games.data } pagination={ games.pagination } />
+      <Header title='Game Catalog' subtitle={ [ {
+        label: 'All Game Information',
+        link: '/game'
+      } ] } />
+      <PageContainer>
+        <GameTable data={ games.data } pagination={ games.pagination } />
+      </PageContainer>
     </>
   );
 };

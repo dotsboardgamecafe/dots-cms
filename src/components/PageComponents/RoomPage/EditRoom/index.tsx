@@ -30,7 +30,6 @@ type Props = {
   cafes: CafeType[];
   roomDetail: RoomDetailType;
 };
-
 const EditRoomForm = ( { games, admins, cafes, roomDetail }: Props ) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof AddRoomSchema>>( {

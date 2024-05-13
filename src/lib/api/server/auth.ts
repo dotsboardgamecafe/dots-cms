@@ -1,4 +1,6 @@
 'use server';
+import { redirect, RedirectType } from 'next/navigation';
+
 import fetcher from '@/lib/api/utils/fetcher';
 
 import { cookiesHelper } from '@/helper';
@@ -18,4 +20,10 @@ export const login = async ( loginPayload: LoginPayload ) => {
   }
 
   return loginRes;
+};
+
+export const logOut = async () => {
+  await cookiesHelper.clearStorage();
+  await cookiesHelper.clearToken();
+  redirect( '/login', RedirectType.push );
 };

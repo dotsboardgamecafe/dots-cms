@@ -20,6 +20,8 @@ const endpointData = {
 	// PUT
 	changeStatusMember: { path: '/users', method: 'PUT', prefix: 'status' },
 	updateRoom: { path: '/rooms', method: 'PUT', prefix: '' },
+	updateRoomStatus: { path: '/rooms', method: 'PUT', prefix: 'status' },
+	setRoomWinner: { path: '/rooms', method: 'PUT', prefix: 'close' },
 } as const;
 
 // Typing schema, do not modify if not necessary
@@ -39,3 +41,4 @@ export type EndpointDefs = EndpointDefinition<EndpointKey>;
 const endpoints = endpointData;
 
 export default endpoints;
+

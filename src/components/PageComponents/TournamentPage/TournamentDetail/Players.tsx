@@ -37,14 +37,13 @@ const PlayersTab = ( { players }: Props ) => {
 
   const onSubmit = async ( data: z.infer<typeof JoinedPlayersSchema> ) => {
     try {
-      const body: SetRoomWinnerPayload = {
-        room_participant: data.players.map( ( player ) => {
-          return {
-            user_code: player.user_code,
-            position: player.position,
-          };
-        } )
-      };
+      const body: SetRoomWinnerPayload[] = data.players.map( ( player ) => {
+        return {
+          user_code: player.user_code,
+          position: player.position,
+          badge_code: '',
+        };
+      } );
       const res = await setRoomWinner( { body, param: param.room_code as string } );
     } catch ( error ) {
       if ( error instanceof Error ) {

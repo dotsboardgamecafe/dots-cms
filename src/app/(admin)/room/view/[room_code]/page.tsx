@@ -12,6 +12,8 @@ const ViewRoomPage = async ( { params: { room_code } }: { params: { room_code: s
   const admins = await getAdmins( { limit: 999999 } );
   const cafes = await getCafes( { limit: 999999 } );
   const roomDetail = await getRoomDetail( { param: room_code } );
+  console.log( roomDetail.data.room_participants );
+
   return (
     <>
       <Header

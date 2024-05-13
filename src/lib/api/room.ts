@@ -1,3 +1,6 @@
+'use server';
+import { revalidateTag } from 'next/cache';
+
 import fetcher, { ApiOptions } from '@/lib/api/utils/fetcher';
 
 import { AddRoomPayload, RoomDetailType, RoomType, SetRoomWinnerPayload } from '@/types/room';
@@ -7,7 +10,7 @@ export const getRooms = async ( options?: ApiOptions ) => {
 };
 
 export const getRoomDetail = async ( options: ApiOptions ) => {
-  return await fetcher<RoomDetailType>( 'getRoomDetail', options );
+  return await fetcher<RoomDetailType>( 'getRoomDetail', { ...options, requestOpt: { next: { tags: [ 'room-detail' ] } } } );
 };
 
 export const createRoom = async ( options: ApiOptions<AddRoomPayload> ) => {
@@ -22,6 +25,7 @@ export const updateRoomStatus = async ( options: ApiOptions ) => {
   return await fetcher( 'updateRoomStatus', options );
 };
 
-export const setRoomWinner = async ( options: ApiOptions<SetRoomWinnerPayload[]> ) => {
-  return await fetcher( 'setRoomWinner', options );
+export const setRoomWinner = async ( options: ApiOptions<SetRoomWinnerPayload> ) => {
+  await fetcher( 'setRoomWinner', options );
+  revalidateTag( 'room-detail' );
 };

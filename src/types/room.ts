@@ -112,7 +112,8 @@ export type AddRoomPayload = {
 };
 
 export type SetRoomWinnerPayload = {
-  position: number;
-  badge_code: string;
-  user_code: string;
+  room_participant: {
+    position: number,
+    user_code: string;
+  }[];
 };

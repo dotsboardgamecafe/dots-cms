@@ -83,7 +83,7 @@ const RoomTable = ( { data, pagination }: Props ) => {
       header: 'Level',
       cell: ( { row } ) => {
         return (
-          <Typography variant='paragraph-l-regular'>
+          <Typography variant='paragraph-l-regular' className='capitalize'>
             { row.original.difficulty }
           </Typography>
         );

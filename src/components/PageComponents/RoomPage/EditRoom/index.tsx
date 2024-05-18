@@ -11,7 +11,7 @@ import { updateRoom } from '@/lib/api/room';
 import { Button } from '@/components/ui/Buttons';
 import DateTime from '@/components/ui/DateTime';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
-import Number from '@/components/ui/Input/Number';
+import InputNumber from '@/components/ui/Input/Number';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/Input/RadioGroup';
 import Text from '@/components/ui/Input/Text';
 import Textarea from '@/components/ui/Input/TextArea';
@@ -307,7 +307,7 @@ const EditRoomForm = ( { games, admins, cafes, roomDetail }: Props ) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Number placeholder='Set player slot' onChange={ field.onChange } value={ field.value } />
+                    <InputNumber placeholder='Set player slot' onChange={ field.onChange } value={ field.value } />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -324,7 +324,7 @@ const EditRoomForm = ( { games, admins, cafes, roomDetail }: Props ) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Number placeholder='Set Price' onChange={ field.onChange } value={ field.value } />
+                    <InputNumber placeholder='Set Price' onChange={ field.onChange } value={ field.value } />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -341,7 +341,7 @@ const EditRoomForm = ( { games, admins, cafes, roomDetail }: Props ) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Number placeholder='Set Points' onChange={ field.onChange } value={ field.value } />
+                    <InputNumber placeholder='Set Points' onChange={ field.onChange } value={ field.value } />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -1,19 +1,16 @@
 'use client';
 // type Props = PropsWithRef<PropsWithChildren>;
 import { zodResolver } from "@hookform/resolvers/zod";
-import dayjs from 'dayjs';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { createRoom } from '@/lib/api/room';
-
 import { Button } from '@/components/ui/Buttons';
-import DateTime from '@/components/ui/DateTime';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
-import Number from '@/components/ui/Input/Number';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/Input/RadioGroup';
+import { DateRangePicker } from '@/components/ui/Input/DateRange';
+import InputNumber from '@/components/ui/Input/Number';
 import Text from '@/components/ui/Input/Text';
 import Textarea from '@/components/ui/Input/TextArea';
+import TimeRangeInput from '@/components/ui/Input/TimeRangeInput';
 import Upload from '@/components/ui/Input/Upload';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import Typography from '@/components/ui/Typography';
@@ -21,7 +18,7 @@ import Typography from '@/components/ui/Typography';
 import { AdminType } from '@/types/admin';
 import { CafeType } from '@/types/cafes';
 import { GameType } from '@/types/game';
-import { AddRoomPayload, AddRoomSchema } from '@/types/room';
+import { AddTournamentSchema } from '@/types/tournament';
 
 type Props = {
   games: GameType[];
@@ -29,42 +26,39 @@ type Props = {
   cafes: CafeType[];
 };
 
-const AddRoomForm = ( { games, admins, cafes }: Props ) => {
+const AddTournamentForm = ( { games, admins, cafes }: Props ) => {
 
-  const form = useForm<z.infer<typeof AddRoomSchema>>( {
+  const form = useForm<z.infer<typeof AddTournamentSchema>>( {
     defaultValues: {
-      player_slot: '',
-      room_name: '',
-      price: '',
-      points: '',
-      schedule: {
-        start_date: undefined,
-        end_date: undefined,
+      time: {
+        start_time: '',
+        end_time: ''
       }
     },
-    resolver: zodResolver( AddRoomSchema ),
+    resolver: zodResolver( AddTournamentSchema ),
   } );
 
-  const onSubmit = async ( data: z.infer<typeof AddRoomSchema> ) => {
+  const onSubmit = async ( data: z.infer<typeof AddTournamentSchema> ) => {
     // eslint-disable-next-line no-console
-    const payload: AddRoomPayload = {
-      booking_price: +data.price,
-      difficulty: data.level,
-      end_date: dayjs( data.schedule.end_date ).toISOString(),
-      start_date: dayjs( data.schedule.start_date ).toISOString(),
-      game_master_code: data.game_master,
-      instruction: 'instruction',
-      maximum_participant: +data.player_slot,
-      name: data.room_name,
-      reward_point: +data.points,
-      room_type: data.room_type,
-      status: 'active',
-      description: data.description,
-      location_code: data.location,
-      game_code: data.game_code,
-      image_url: data.banner
-    };
-    await createRoom( { body: payload } );
+    console.log( data );
+    // const payload: AddRoomPayload = {
+    //   booking_price: +data.price,
+    //   difficulty: data.level,
+    //   end_date: dayjs( data.schedule.end_date ).toISOString(),
+    //   start_date: dayjs( data.schedule.start_date ).toISOString(),
+    //   game_master_code: data.game_master,
+    //   instruction: 'instruction',
+    //   maximum_participant: +data.player_slot,
+    //   name: data.room_name,
+    //   reward_point: +data.points,
+    //   room_type: data.room_type,
+    //   status: 'active',
+    //   description: data.description,
+    //   location_code: data.location,
+    //   game_code: data.game_code,
+    //   image_url: data.banner
+    // };
+    // await createRoom( { body: payload } );
   };
   return (
     <>
@@ -73,63 +67,22 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
           <section className='form-add-room-wrapper'>
             <FormField
               control={ form.control }
-              name="room_type"
+              name="name"
               render={ ( { field } ) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
                     <Typography variant='paragraph-l-medium'>
-                      Room Type
+                      Tournament Name
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <RadioGroup
-                      onValueChange={ field.onChange }
-                      defaultValue={ field.value }
-                      className="flex flex-row "
-                    >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="normal" />
-                        </FormControl>
-                        <FormLabel className="font-normal">
-                          <Typography variant='text-body-l-regular'>
-                            General Room
-                          </Typography>
-                        </FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="special_event" />
-                        </FormControl>
-                        <FormLabel className="font-normal">
-                          <Typography variant='text-body-l-regular'>
-                            Special Event
-                          </Typography>
-                        </FormLabel>
-                      </FormItem>
-                    </RadioGroup>
+                    <Text placeholder='Enter Tournament Name' { ...field } />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               ) }
             />
-            <FormField
-              control={ form.control }
-              name="room_name"
-              render={ ( { field } ) => (
-                <FormItem className="space-y-3">
-                  <FormLabel>
-                    <Typography variant='paragraph-l-medium'>
-                      Room Name
-                    </Typography>
-                  </FormLabel>
-                  <FormControl>
-                    <Text placeholder='Enter Room Name' { ...field } />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              ) }
-            />
+
             <FormField
               control={ form.control }
               name="game_code"
@@ -137,7 +90,7 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
                 <FormItem className="space-y-3">
                   <FormLabel>
                     <Typography variant='paragraph-l-medium'>
-                      Game
+                      Game Name
                     </Typography>
                   </FormLabel>
                   <FormControl>
@@ -166,31 +119,16 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
             />
             <FormField
               control={ form.control }
-              name="game_master"
+              name="player_slot"
               render={ ( { field } ) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
                     <Typography variant='paragraph-l-medium'>
-                      Game Master
+                      Player Slot
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Select value={ field.value } onValueChange={ field.onChange }>
-                      <SelectTrigger>
-                        <SelectValue aria-label={ field.value } placeholder='Select Game Master'>
-                          <Typography variant='text-body-l-medium' >
-                            { admins.find( admin => admin.admin_code === field.value )?.name || '' }
-                          </Typography>
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent >
-                        {
-                          admins.map( admin => (
-                            <SelectItem value={ admin.admin_code } key={ admin.admin_code }>{ admin.name }</SelectItem>
-                          ) )
-                        }
-                      </SelectContent>
-                    </Select>
+                    <InputNumber placeholder='Enter Slot' onChange={ ( e ) => field.onChange( +e.target.value ) } value={ field.value } />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -198,7 +136,7 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
             />
             <FormField
               control={ form.control }
-              name="schedule"
+              name="booking_price"
               render={ ( { field } ) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
@@ -207,7 +145,7 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <DateTime
+                    {/* <DateTime
                       onDateChange={ ( date ) => {
                         field.onChange( { ...field.value, start_date: date } );
                       } }
@@ -216,6 +154,29 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
                       } }
                       end_date={ field.value?.end_date }
                       start_date={ field.value?.start_date }
+                    /> */}
+                    <DateRangePicker />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              ) }
+            />
+            <FormField
+              control={ form.control }
+              name="time"
+              render={ ( { field } ) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>
+                    <Typography variant='paragraph-l-medium'>
+                      Time
+                    </Typography>
+                  </FormLabel>
+                  <FormControl>
+                    <TimeRangeInput
+                      start_time={ field.value.start_time }
+                      end_time={ field.value.end_time }
+                      onStartTimeChange={ ( time ) => field.onChange( { ...field.value, start_time: time } ) }
+                      onEndTimeChange={ ( time ) => field.onChange( { ...field.value, end_time: time } ) }
                     />
                   </FormControl>
                   <FormMessage />
@@ -224,31 +185,16 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
             />
             <FormField
               control={ form.control }
-              name="location"
+              name="booking_price"
               render={ ( { field } ) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
                     <Typography variant='paragraph-l-medium'>
-                      Location
+                      Price
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Select value={ field.value } onValueChange={ field.onChange }>
-                      <SelectTrigger>
-                        <SelectValue aria-label={ field.value } placeholder='Select Location'>
-                          <Typography variant='text-body-l-medium' >
-                            { cafes.find( cafe => cafe.cafe_code === field.value )?.name || '' }
-                          </Typography>
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent >
-                        {
-                          cafes.map( ( cafe, index ) => (
-                            <SelectItem value={ cafe.cafe_code } key={ `${cafe.cafe_code}-${index}` }>{ cafe.name }</SelectItem>
-                          ) )
-                        }
-                      </SelectContent>
-                    </Select>
+                    <InputNumber placeholder='Set Price' onChange={ field.onChange } value={ field.value } />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -287,63 +233,46 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
             />
             <FormField
               control={ form.control }
-              name="player_slot"
+              name="location"
               render={ ( { field } ) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
                     <Typography variant='paragraph-l-medium'>
-                      Player Slot
+                      Location
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Number placeholder='Set player slot' onChange={ field.onChange } value={ field.value } />
+                    <Select value={ field.value } onValueChange={ field.onChange }>
+                      <SelectTrigger>
+                        <SelectValue aria-label={ field.value } placeholder='Select Location'>
+                          <Typography variant='text-body-l-medium' className='capitalize' >
+                            { cafes.find( cafe => cafe.cafe_code === field.value )?.name || '' }
+                          </Typography>
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent >
+                        {
+                          cafes.map( cafe => (
+                            <SelectItem value={ cafe.cafe_code } key={ cafe.cafe_code }>{ cafe.name }</SelectItem>
+                          ) )
+                        }
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               ) }
             />
+            {/* empty div for separator */ }
+            <div></div>
             <FormField
               control={ form.control }
-              name="price"
+              name="image_url"
               render={ ( { field } ) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
                     <Typography variant='paragraph-l-medium'>
-                      Price
-                    </Typography>
-                  </FormLabel>
-                  <FormControl>
-                    <Number placeholder='Set Price' onChange={ field.onChange } value={ field.value } />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              ) }
-            />
-            <FormField
-              control={ form.control }
-              name="points"
-              render={ ( { field } ) => (
-                <FormItem className="space-y-3">
-                  <FormLabel>
-                    <Typography variant='paragraph-l-medium'>
-                      Points
-                    </Typography>
-                  </FormLabel>
-                  <FormControl>
-                    <Number placeholder='Set Points' onChange={ field.onChange } value={ field.value } />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              ) }
-            />
-            <FormField
-              control={ form.control }
-              name="banner"
-              render={ ( { field } ) => (
-                <FormItem className="space-y-3">
-                  <FormLabel>
-                    <Typography variant='paragraph-l-medium'>
-                      Banner
+                      Upload Banner
                     </Typography>
                   </FormLabel>
                   <FormControl>
@@ -355,12 +284,12 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
             />
             <FormField
               control={ form.control }
-              name="description"
+              name="tournament_rules"
               render={ ( { field } ) => (
-                <FormItem className="space-y-3">
+                <FormItem className="space-y-3 col-span-2">
                   <FormLabel>
                     <Typography variant='paragraph-l-medium'>
-                      Short Description
+                      Tournament Rules
                     </Typography>
                   </FormLabel>
                   <FormControl>
@@ -385,4 +314,4 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
   );
 };
 
-export default AddRoomForm;
+export default AddTournamentForm;

@@ -9,9 +9,7 @@ import { InputProps } from '@/types/Inputs';
 
 type Props = React.InputHTMLAttributes<HTMLInputElement> & InputProps;
 
-const Number = React.forwardRef<HTMLInputElement, Props>( ( { prefixIcon, suffixIcon, label, className, ...props }, ref ) => {
-
-
+const InputNumber = React.forwardRef<HTMLInputElement, Props>( ( { prefixIcon, suffixIcon, label, className, ...props }, ref ) => {
 
   return (
     <div className='w-full flex flex-col gap-2'>
@@ -46,4 +44,4 @@ const Number = React.forwardRef<HTMLInputElement, Props>( ( { prefixIcon, suffix
   );
 } );
 
-export default Number;
+export default InputNumber;

@@ -8,19 +8,19 @@ import { Button } from '@/components/ui/Buttons';
 import { Modal, ModalContent } from '@/components/ui/Modal';
 import Typography from '@/components/ui/Typography';
 
-import { RoomType } from '@/types/room';
+import { TournamentType } from '@/types/tournament';
 
 type Props = PropsWithRef<{
   open: boolean;
   onOpenChange: ( open: boolean ) => void;
-  roomData?: RoomType;
+  tournamentData?: TournamentType;
 }>;
 
-const StatusConfirmationModal = ( { open, onOpenChange, roomData }: Props ) => {
+const StatusConfirmationModal = ( { open, onOpenChange, tournamentData }: Props ) => {
 
 
   const onConfirm = async () => {
-    await updateStatusMembers( { param: roomData?.room_code, body: { status: 'inactive' } } );
+    await updateStatusMembers( { param: tournamentData?.tournament_code, body: { status: 'inactive' } } );
     onOpenChange( false );
   };
 

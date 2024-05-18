@@ -1,15 +1,16 @@
 'use server';
 
 
-import { getRooms } from '@/lib/api/room';
+
+import { getTournaments } from '@/lib/api/tournament';
 
 import Header from '@/components/LayoutComponents/Header';
 import PageContainer from '@/components/LayoutComponents/PageContainer';
-import RoomTable from '@/components/PageComponents/RoomPage/DataTable';
+import TournamentTable from '@/components/PageComponents/TournamentPage/DataTable';
 
 const RoomPage = async () => {
 
-  const rooms = await getRooms();
+  const tournaments = await getTournaments();
 
   return (
     <>
@@ -18,7 +19,7 @@ const RoomPage = async () => {
         link: '/tournament'
       } ] } />
       <PageContainer>
-        <RoomTable data={ rooms.data } pagination={ rooms.pagination } />
+        <TournamentTable data={ tournaments.data } pagination={ tournaments.pagination } />
       </PageContainer>
     </>
 

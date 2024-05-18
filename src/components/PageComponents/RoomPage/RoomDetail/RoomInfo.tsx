@@ -1,6 +1,6 @@
 import TextLabel from '@/components/ui/TextLabel';
 
-import { formatRoomSchedule } from '@/helper/roomSchedule';
+import { formatRoomSchedule } from '@/helper/datetime';
 import { currencyFormat } from '@/helper/string';
 
 import { RoomDetailType } from '@/types/room';

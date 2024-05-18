@@ -3,51 +3,40 @@ import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReact
 import dayjs from 'dayjs';
 import dayjsFormats from 'dayjs/plugin/advancedFormat';
 import { AddCircle, Edit, Eye, SearchNormal1 } from 'iconsax-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
-import StatusConfirmationModal from '@/components/PageComponents/RoomPage/StatusConfirmationModal';
+import StatusConfirmationModal from '@/components/PageComponents/TournamentPage/StatusConfirmationModal';
 import Text from '@/components/ui/Input/Text';
 import Pagination from '@/components/ui/Pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
 
+import { formatTournamentDate } from '@/helper/datetime';
+
 import { Pagination as PaginationType } from '@/types/network';
-import { RoomType } from '@/types/room';
+import { TournamentType } from '@/types/tournament';
 
 dayjs.extend( dayjsFormats );
 
 
 type Props = {
-  data: RoomType[];
+  data: TournamentType[];
   pagination: PaginationType;
 };
 
-const RoomTable = ( { data, pagination }: Props ) => {
+const TournamentTable = ( { data, pagination }: Props ) => {
 
   const [ statusConfirmationModalOpen, setStatusConfirmationModalOpen ] = useState<boolean>( false );
-  const [ selectedRow, setSelectedRow ] = useState<RoomType>();
+  const [ selectedRow, setSelectedRow ] = useState<TournamentType>();
 
 
-  const columns: ColumnDef<RoomType>[] = useMemo( () => [
+  const columns: ColumnDef<TournamentType>[] = useMemo( () => [
     {
-      accessorKey: 'type',
-      header: 'Room Type',
-      cell: ( { row } ) => {
-        return (
-          <Typography variant='paragraph-l-regular' className='capitalize'>
-            { row.original.room_type }
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'gameName',
-      header: 'Game Name',
+      header: 'Tournament Title',
       cell: ( { row } ) => {
         return (
           <Typography variant='paragraph-l-regular' className='capitalize'>
@@ -57,29 +46,6 @@ const RoomTable = ( { data, pagination }: Props ) => {
       }
     },
     {
-      accessorKey: 'schedule',
-      header: 'Schedule',
-      cell: ( { row } ) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            { dayjs( row.original.start_date ).format( 'ddd Do, HH:mm' ) } - { dayjs( row.original.end_date ).format( 'HH:mm' ) }
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'location',
-      header: 'Location',
-      cell: ( { row } ) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            { row.original.cafe_name }
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'level',
       header: 'Level',
       cell: ( { row } ) => {
         return (
@@ -90,27 +56,42 @@ const RoomTable = ( { data, pagination }: Props ) => {
       }
     },
     {
-      accessorKey: 'slot',
-      header: 'Updated Slot',
+      header: 'Date',
       cell: ( { row } ) => {
         return (
           <Typography variant='paragraph-l-regular'>
-            { row.original.current_used_slot } / { row.original.maximum_participant }
+            { formatTournamentDate( row.original.start_date, row.original.end_date ) }
           </Typography>
         );
       }
     },
     {
-      accessorKey: 'gameMaster',
-      header: 'Game Master',
+      header: 'Time',
       cell: ( { row } ) => {
         return (
-          <div className='flex flex-row items-center gap-[10px]'>
-            <Image width={ 36 } height={ 36 } src={ row.original.game_master_image_url || '/images/avatar-not-found.png' } alt='profile image' className='rounded-full' />
-            <Typography variant='paragraph-l-regular'>
-              { row.original.game_master_name }
-            </Typography>
-          </div>
+          <Typography variant='paragraph-l-regular'>
+            { `${row.original.start_time} - ${row.original.end_time}` }
+          </Typography>
+        );
+      }
+    },
+    {
+      header: 'Location',
+      cell: ( { row } ) => {
+        return (
+          <Typography variant='paragraph-l-regular' className='capitalize'>
+            { row.original.cafe_name }
+          </Typography>
+        );
+      }
+    },
+    {
+      header: 'Updated Slot',
+      cell: ( { row } ) => {
+        return (
+          <Typography variant='paragraph-l-regular'>
+            { row.original.current_used_slot } / { row.original.player_slot } Players
+          </Typography>
         );
       }
     },
@@ -160,10 +141,10 @@ const RoomTable = ( { data, pagination }: Props ) => {
       cell: ( { row } ) => {
         return (
           <div className='flex flex-row items-center gap-4'>
-            <Link href={ `/room/view/${row.original.room_code}` } >
+            <Link href={ `/tournament/view/${row.original.tournament_code}` } >
               <Eye className='cursor-pointer' />
             </Link>
-            <Link href={ `/room/edit/${row.original.room_code}` } >
+            <Link href={ `/tournament/edit/${row.original.tournament_code}` } >
               <Edit className='cursor-pointer' />
             </Link>
           </div>
@@ -178,7 +159,6 @@ const RoomTable = ( { data, pagination }: Props ) => {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     columns,
-
   } );
 
 
@@ -186,11 +166,11 @@ const RoomTable = ( { data, pagination }: Props ) => {
     <div className='flex flex-col gap-6'>
       <section className='table-action'>
         <Text className='max-w-[300px]' prefixIcon={ <SearchNormal1 size={ 20 } className='text-gray-500 ' /> } placeholder='Search...' />
-        <Link href='/room/add'>
+        <Link href='/tournament/add'>
           <button className="rounded-[8px] gap-[8px] px-5 py-3 bg-button-midnight-black flex flex-row items-center text-nowrap">
             <AddCircle className='text-white' />
             <Typography variant='paragraph-l-bold' className='text-white'>
-              Add New Room
+              Add New Tournament
             </Typography>
           </button>
         </Link>
@@ -256,10 +236,10 @@ const RoomTable = ( { data, pagination }: Props ) => {
       <StatusConfirmationModal
         open={ statusConfirmationModalOpen }
         onOpenChange={ ( value ) => setStatusConfirmationModalOpen( value ) }
-        roomData={ selectedRow }
+        tournamentData={ selectedRow }
       />
     </div>
   );
 };
 
-export default RoomTable;
+export default TournamentTable;

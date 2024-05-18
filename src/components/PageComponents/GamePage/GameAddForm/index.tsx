@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { Button } from '@/components/ui/Buttons';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
-import Number from '@/components/ui/Input/Number';
+import InputNumber from '@/components/ui/Input/Number';
 import Text from '@/components/ui/Input/Text';
 import Textarea from '@/components/ui/Input/TextArea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
@@ -158,7 +158,7 @@ const AddGameForm = () => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Number placeholder='Set Duration' />
+                    <InputNumber placeholder='Set Duration' />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

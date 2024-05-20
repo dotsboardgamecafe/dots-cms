@@ -67,6 +67,17 @@ input[type=email]
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05), 0px 0px 0px 4px #DBDBEE;
 }
 
+.input-select-multiple{
+  @apply gap-[8px] border-gray-300 rounded-xl border-[1px]  w-full flex items-center;
+}
+
+.input-select-multiple:focus-within
+{
+  @apply outline-none border-[1px] border-brand-blue-electric;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05), 0px 0px 0px 4px #DBDBEE;
+}
+
+
 input[type=text]:focus,
 input[type=tel]:focus,
 input[type=password]:focus,
@@ -98,6 +109,10 @@ textarea:focus{
 .form-add-room-wrapper{
   @apply grid grid-cols-3 gap-8;
 }
+.form-3-cols{
+  @apply grid grid-cols-3 gap-8;
+}
+
 
 .upload-wrapper--default{
   @apply flex flex-col w-full h-[245px] gap-[5px] border border-dashed  border-brand-blue-electric rounded-xl items-center justify-center cursor-pointer;

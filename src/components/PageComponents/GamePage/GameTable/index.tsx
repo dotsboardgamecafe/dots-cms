@@ -48,14 +48,16 @@ const columns: ColumnDef<GameType>[] = [
     cell: ( { row } ) => {
       return (
         <>
-          { row.original.game_categories.map( ( category, index ) => (
-            <div className='bg-gray-100 rounded-xl'>
-              <Typography variant='paragraph-l-regular' key={ `game-mechanics-${index}` }>
-                { category.category_name }
-              </Typography>
-            </div>
-            
-          ) ) }
+          <div className='flex flex-row gap-2 flex-wrap'>
+            { row.original.game_categories.map( ( category, index ) => (
+              <div className='bg-gray-100 rounded-xl px-4' key={ `game-mechanics-${index}` }>
+                <Typography variant='paragraph-l-regular' >
+                  { category.category_name }
+                </Typography>
+              </div>
+
+            ) ) }
+          </div>
         </>
       );
     }
@@ -66,7 +68,7 @@ const columns: ColumnDef<GameType>[] = [
     cell: ( { row } ) => {
       return (
         <Typography variant='paragraph-l-regular'>
-          { row.original.duration }
+          { row.original.duration } Min
         </Typography>
       );
     }
@@ -99,7 +101,7 @@ const columns: ColumnDef<GameType>[] = [
                 {
                   'text-error-700': row.original.status === 'Closed',
                   'text-blue-700': row.original.status === 'Active'
-                }
+                }, 'capitalize'
               ) }>
                 { row.original.status }
               </Typography>
@@ -128,7 +130,7 @@ const columns: ColumnDef<GameType>[] = [
   }
 ];
 
-const GameTable = ( { data }: Props ) => {
+const GameTable = ( { data, pagination }: Props ) => {
 
   const table = useReactTable( {
     data,

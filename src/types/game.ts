@@ -28,24 +28,18 @@ export type GameCategory = {
 
 export const AddGameSchema = z.object( {
   cafe_code: z.string( { required_error: 'Cafe code is required' } ),
-  game_type: z.string( { required_error: 'Game type is required' } ),
+  admin_code: z.string( { required_error: 'Game master is required' } ),
   name: z.string( { required_error: 'Game name is required' } ),
   image_url: z.string( { required_error: 'Game image is required' } ),
+  image_url_collection: z.array( z.string( { required_error: 'Game image is required' } ) ),
   collection_url: z.string( { required_error: 'Game collection url is required' } ),
   description: z.string( { required_error: 'Game description is required' } ),
   level: z.string( { required_error: 'Game level is required' } ),
-  duration: z.number( { required_error: 'Game duration is required' } ),
-  players: z.number( { required_error: 'Game player is required' } ),
+  duration: z.string( { required_error: 'Game duration is required' } ),
+  players: z.string( { required_error: 'Game player is required' } ),
   status: z.string( { required_error: 'Game status is required' } ),
-  game_master: z.string( { required_error: 'Game master is required' } ),
-  game_categories: z.array( z.object( {
-    category_name: z.string( { required_error: 'Game category is required' } ),
-  } ) ),
-  game_characteristics: z.array( z.object( {
-    characteristic_left: z.string( { required_error: 'Game characteristic left is required' } ),
-    characteristic_right: z.string( { required_error: 'Game characteristic right is required' } ),
-    value: z.number( { required_error: 'Game characteristic value is required' } ),
-  } ) )
+  game_categories: z.array( z.string() ),
+  // game_characteristics: z.array( z.string() )
 } );
 
 export const JoinedPlayersSchema = z.object( {

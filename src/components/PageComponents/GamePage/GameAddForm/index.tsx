@@ -9,6 +9,7 @@ import { z } from 'zod';
 
 import { Button } from '@/components/ui/Buttons';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
+import MultiUpload from '@/components/ui/Input/MultiUpload';
 import InputNumber from '@/components/ui/Input/Number';
 import SelectMultiple from '@/components/ui/Input/SelectMultiple';
 import Text from '@/components/ui/Input/Text';
@@ -343,7 +344,7 @@ const AddGameForm = ( { cafes, admins }: Props ) => {
                         </Typography>
                       </FormLabel>
                       <FormControl>
-                        <Upload onChange={ ( value ) => field.onChange( [ value ] ) } />
+                        <MultiUpload onChange={ ( value ) => field.onChange( value ) } value={ field.value } />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

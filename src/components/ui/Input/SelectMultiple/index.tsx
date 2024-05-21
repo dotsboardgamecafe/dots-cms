@@ -32,7 +32,7 @@ const SelectMultiple = React.forwardRef<
             ...base,
             padding: '0px',
           } ),
-          control: ( base, props ) => ( {
+          control: ( base ) => ( {
             ...base,
             borderRadius: '3px',
             border: 'none',

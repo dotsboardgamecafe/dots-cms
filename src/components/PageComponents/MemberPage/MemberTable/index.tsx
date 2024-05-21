@@ -13,7 +13,7 @@ import MemberFilterModal from '@/components/PageComponents/MemberPage/FilterModa
 import StatusConfirmationModal from '@/components/PageComponents/MemberPage/StatusConfirmationModal';
 import { Button } from '@/components/ui/Buttons';
 import Text from '@/components/ui/Input/Text';
-import Pagination from '@/components/ui/Pagination';
+import PaginationDeprecated from '@/components/ui/Pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
@@ -221,7 +221,7 @@ const MemberTable = ( { data, pagination }: Props ) => {
           ) }
         </TableBody>
       </Table>
-      <Pagination
+      <PaginationDeprecated
         totalPages={ table.getPageCount() }
         currentPage={ table.getState().pagination.pageIndex + 1 }
         itemsPerPage={ table.getState().pagination.pageSize }

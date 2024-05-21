@@ -1,10 +1,20 @@
+import Header from '@/components/LayoutComponents/Header';
+import PageContainer from '@/components/LayoutComponents/PageContainer';
 
 
-const RewardsPage = () => {
+const Rewards = () => {
 
   return (
-    <>RewardsPage Component</>
+    <>
+      <Header title='Rewards' subtitle={ [ {
+        label: 'All Rewards Information',
+        link: '/badge'
+      } ] } />
+      <PageContainer>
+        Forbidden
+      </PageContainer>
+    </>
   );
 };
 
-export default RewardsPage;
+export default Rewards;

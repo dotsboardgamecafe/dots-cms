@@ -8,10 +8,11 @@ import Header from '@/components/LayoutComponents/Header';
 import PageContainer from '@/components/LayoutComponents/PageContainer';
 import TournamentTable from '@/components/PageComponents/TournamentPage/DataTable';
 
-const RoomPage = async () => {
+import { PageProps } from '@/types/common';
+import { Pagination } from '@/types/network';
 
-  const tournaments = await getTournaments();
-
+const RoomPage = async ( { searchParams }: PageProps ) => {
+  const tournaments = await getTournaments( { pagination: searchParams as Pagination } );
   return (
     <>
       <Header title='Tournament' subtitle={ [ {

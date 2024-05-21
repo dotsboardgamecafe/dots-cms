@@ -32,13 +32,13 @@ export const AddGameSchema = z.object( {
   name: z.string( { required_error: 'Game name is required' } ),
   image_url: z.string( { required_error: 'Game image is required' } ),
   image_url_collection: z.array( z.string( { required_error: 'Game image is required' } ) ),
-  collection_url: z.string( { required_error: 'Game collection url is required' } ),
   description: z.string( { required_error: 'Game description is required' } ),
   level: z.string( { required_error: 'Game level is required' } ),
   duration: z.string( { required_error: 'Game duration is required' } ),
   players: z.string( { required_error: 'Game player is required' } ),
   status: z.string( { required_error: 'Game status is required' } ),
   game_categories: z.array( z.string() ),
+  game_type: z.string( { required_error: 'Game type is required' } ),
   // game_characteristics: z.array( z.string() )
 } );
 
@@ -47,4 +47,17 @@ export const JoinedPlayersSchema = z.object( {
 }
 );
 
-export type AddGamePayload = z.infer<typeof AddGameSchema>;
+export type AddGamePayload = {
+  "cafe_code": string;
+  "game_type": string;
+  "name": string;
+  "image_url": string;
+  "collection_url": string;
+  "description": string;
+  "status": string;
+  "game_categories":
+  {
+    "category_name": string;
+  }[],
+  "game_characteristics": [];
+};

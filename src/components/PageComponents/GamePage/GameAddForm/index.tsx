@@ -36,12 +36,12 @@ const AddGameForm = ( { cafes, admins }: Props ) => {
       name: '',
       image_url: '',
       duration: '',
-      collection_url: '',
       description: '',
       status: '',
       game_categories: [],
       game_type: '',
-      image_url_collection: []
+      image_url_collection: [],
+      players: 'f'
     },
     resolver: zodResolver( AddGameSchema ),
 
@@ -59,7 +59,17 @@ const AddGameForm = ( { cafes, admins }: Props ) => {
 
   const gameTypeOptions = [ 'Board Game', 'Card Game', 'Dice Game', 'Role Play', 'Trivia Game' ];
   const onSubmit = ( data: z.infer<typeof AddGameSchema> ) => {
-    // eslint-disable-next-line no-console
+    // eslint-disable-next-line no-console, unused-imports/no-unused-vars
+    // const payload: AddGamePayload = {
+    //   cafe_code: data.cafe_code,
+    //   name: data.name,
+    //   image_url: data.image_url,
+    //   description: data.description,
+    //   status: data.status,
+    //   game_categories: data.game_categories.map( ( category ) => ( { category_name: category } ) ),
+    //   game_type: data.game_type,
+    //   collection_url: data.image_url_collection[ 0 ],
+    // };
     console.log( data );
   };
 
@@ -92,7 +102,7 @@ const AddGameForm = ( { cafes, admins }: Props ) => {
                     <FormItem className="space-y-3">
                       <FormLabel>
                         <Typography variant='paragraph-l-medium'>
-                          Game Type
+                          Game Name
                         </Typography>
                       </FormLabel>
                       <FormControl>

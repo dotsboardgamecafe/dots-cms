@@ -19,7 +19,7 @@ type Props = PropsWithRef<PropsWithChildren<{
   to?: number;
 }>>;
 
-const Pagination = ( {
+const PaginationDeprecated = ( {
   onNext,
   onPrevious,
   prevDisabled = false,
@@ -70,7 +70,7 @@ const Pagination = ( {
         <section className='pagination-pages'>
           {
             Array.from( { length: totalPages ?? 1 } ).map( ( _, index ) => (
-              <button className={ index + 1 === currentPage ? 'active' : '' } key={ index } onClick={ () => onChangePage?.( index ) }>
+              <button className={ index + 1 === currentPage ? 'active' : '' } key={ index } onClick={ () => onChangePage?.( index + 1 ) }>
                 <Typography variant='text-body-l-regular'>
                   { index + 1 }
                 </Typography>
@@ -86,4 +86,4 @@ const Pagination = ( {
   );
 };
 
-export default Pagination;
+export default PaginationDeprecated;

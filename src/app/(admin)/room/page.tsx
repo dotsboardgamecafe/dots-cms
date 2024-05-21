@@ -7,10 +7,10 @@ import Header from '@/components/LayoutComponents/Header';
 import PageContainer from '@/components/LayoutComponents/PageContainer';
 import RoomTable from '@/components/PageComponents/RoomPage/DataTable';
 
-const RoomPage = async () => {
+import { Pagination } from '@/types/network';
 
-  const rooms = await getRooms();
-
+const RoomPage = async ( { searchParams }: { searchParams: Pagination; } ) => {
+  const rooms = await getRooms( { pagination: searchParams } );
   return (
     <>
       <Header title='Room Play' subtitle={ [ {

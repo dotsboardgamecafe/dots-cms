@@ -1,9 +1,19 @@
+import Header from '@/components/LayoutComponents/Header';
+import PageContainer from '@/components/LayoutComponents/PageContainer';
 
 
 const CafePage = () => {
 
   return (
-    <>CafePage Component</>
+    <>
+      <Header title='Cafes' subtitle={ [ {
+        label: 'All cafe Information',
+        link: '/cafe'
+      } ] } />
+      <PageContainer>
+        Forbidden
+      </PageContainer>
+    </>
   );
 };
 

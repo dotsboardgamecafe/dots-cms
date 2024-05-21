@@ -33,7 +33,7 @@ const SidebarMenus: MenuItems[] = [
     title: 'Banner', href: '/banner', icon: ( active ) => <Like variant={ active ? 'Bold' : 'Outline' } />
   },
   {
-    title: 'User Control', href: '/user', icon: ( active ) => <Profile2User variant={ active ? 'Bold' : 'Outline' } />
+    title: 'User Control', href: '#', icon: ( active ) => <Profile2User variant={ active ? 'Bold' : 'Outline' } />
   },
   {
     title: 'Member', href: '/member', icon: () => <span />

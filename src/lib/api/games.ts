@@ -1,6 +1,6 @@
 import fetcher, { ApiOptions } from '@/lib/api/utils/fetcher';
 
-import { GameType } from '@/types/game';
+import { AddGamePayload, GameType } from '@/types/game';
 
 
 export const getGameList = async ( options?: ApiOptions ) => {
@@ -8,5 +8,5 @@ export const getGameList = async ( options?: ApiOptions ) => {
 };
 
 export const addGame = async ( options: ApiOptions ) => {
-  return await fetcher<GameType>( 'addGame', options );
+  return await fetcher<AddGamePayload>( 'addGame', options );
 };

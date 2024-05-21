@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
 import Text from '@/components/ui/Input/Text';
-import Pagination from '@/components/ui/Pagination';
+import PaginationDeprecated from '@/components/ui/Pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
@@ -196,7 +196,7 @@ const GameTable = ( { data, pagination }: Props ) => {
           ) }
         </TableBody>
       </Table>
-      <Pagination
+      <PaginationDeprecated
         totalPages={ table.getPageCount() }
         currentPage={ table.getState().pagination.pageIndex + 1 }
         itemsPerPage={ table.getState().pagination.pageSize }

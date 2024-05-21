@@ -6,7 +6,7 @@ const PageContainer = ( { children }: Props ) => {
 
   return (
     <>
-      <section className='page-container'>
+      <section className='page-container mt-4'>
         { children }
       </section>
     </>

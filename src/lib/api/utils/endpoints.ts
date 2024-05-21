@@ -10,6 +10,7 @@ const endpointData = {
 	getCafes: { path: '/cafes', method: 'GET', prefix: '' },
 	getRoomDetail: { path: '/rooms', method: 'GET', prefix: '' },
 	getTournaments: { path: '/tournaments', method: 'GET', prefix: '' },
+	getTiers: { path: '/tiers', method: 'GET', prefix: '' },
 
 	// POST
 	auth: { path: '/auths/login', method: 'POST', prefix: '' },

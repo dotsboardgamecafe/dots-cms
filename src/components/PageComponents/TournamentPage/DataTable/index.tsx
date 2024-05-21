@@ -4,13 +4,14 @@ import dayjs from 'dayjs';
 import dayjsFormats from 'dayjs/plugin/advancedFormat';
 import { AddCircle, Edit, Eye, SearchNormal1 } from 'iconsax-react';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ChangeEvent, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
 import StatusConfirmationModal from '@/components/PageComponents/TournamentPage/StatusConfirmationModal';
 import Text from '@/components/ui/Input/Text';
-import Pagination from '@/components/ui/Pagination';
+import Pagination from '@/components/ui/Pagination/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
@@ -29,11 +30,11 @@ type Props = {
 };
 
 const TournamentTable = ( { data, pagination }: Props ) => {
-
   const [ statusConfirmationModalOpen, setStatusConfirmationModalOpen ] = useState<boolean>( false );
   const [ selectedRow, setSelectedRow ] = useState<TournamentType>();
-
-
+  const [ keyword, setKeyword ] = useState<string>( '' );
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const columns: ColumnDef<TournamentType>[] = useMemo( () => [
     {
       header: 'Tournament Title',
@@ -158,14 +159,22 @@ const TournamentTable = ( { data, pagination }: Props ) => {
     data: data,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
     columns,
   } );
+  const onChangeKeyword = ( evt: ChangeEvent<HTMLInputElement> ) => {
+    const { value } = evt.target;
+    setKeyword( value );
+    const params = new URLSearchParams( searchParams );
+    params.set( 'keyword', value );
+    router.push( '/tournament?' + params.toString() );
+  };
 
 
   return (
     <div className='flex flex-col gap-6'>
       <section className='table-action'>
-        <Text className='max-w-[300px]' prefixIcon={ <SearchNormal1 size={ 20 } className='text-gray-500 ' /> } placeholder='Search...' />
+        <Text className='max-w-[300px]' value={ keyword } onChange={ onChangeKeyword } prefixIcon={ <SearchNormal1 size={ 20 } className='text-gray-500 ' /> } placeholder='Search...' />
         <Link href='/tournament/add'>
           <button className="rounded-[8px] gap-[8px] px-5 py-3 bg-button-midnight-black flex flex-row items-center text-nowrap">
             <AddCircle className='text-white' />
@@ -219,20 +228,8 @@ const TournamentTable = ( { data, pagination }: Props ) => {
           ) }
         </TableBody>
       </Table>
-      <Pagination
-        totalPages={ table.getPageCount() }
-        currentPage={ table.getState().pagination.pageIndex + 1 }
-        itemsPerPage={ table.getState().pagination.pageSize }
-        totalItems={ table.getFilteredRowModel().rows.length }
-        onChangeItemsPerPage={ ( items ) => table.setPageSize( items ) }
-        onNext={ () => table.nextPage() }
-        onPrevious={ () => table.previousPage() }
-        prevDisabled={ !table.getCanPreviousPage() }
-        nextDisabled={ !table.getCanNextPage() }
-        onChangePage={ ( page ) => table.setPageIndex( page ) }
-        from={ table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1 }
-        to={ table.getState().pagination.pageIndex * table.getState().pagination.pageSize + table.getState().pagination.pageSize }
-      />
+      <Pagination pagination={ pagination } />
+
       <StatusConfirmationModal
         open={ statusConfirmationModalOpen }
         onOpenChange={ ( value ) => setStatusConfirmationModalOpen( value ) }

@@ -2,7 +2,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { AddCircle, Edit, Eye, SearchNormal1 } from 'iconsax-react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { ChangeEvent, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -34,6 +34,7 @@ const BannerPageContent = ({ data, pagination }: Props) => {
   const [selectedBanner, setSelectedBanner] = useState<TBannerData>();
   const [keyword, setKeyword] = useState<string>('');
   const router = useRouter();
+  const pathName = usePathname()
 
   const columns: ColumnDef<TBannerData>[] = useMemo(() => [
     {
@@ -136,7 +137,7 @@ const BannerPageContent = ({ data, pagination }: Props) => {
   const onChangeKeyword = (evt: ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target;
     setKeyword(value);
-    router.push('/room?' + new URLSearchParams({ keyword: value }).toString());
+    router.push(pathName + '?' + new URLSearchParams({ keyword: value }).toString());
   };
 
   return (

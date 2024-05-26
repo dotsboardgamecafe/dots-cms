@@ -27,6 +27,10 @@ export const AddBannerForm = ({ onClose, defaultData, onSubmit }: Props) => {
 
   const form = useForm<TPostBannerPayload>(({
     defaultValues: {
+      banner_type: '',
+      description: '',
+      image_url: '',
+      title: '',
       status: 'unpublish',
       ...defaultData
     },

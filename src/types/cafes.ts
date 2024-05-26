@@ -4,4 +4,6 @@ export type CafeType = {
   address: string;
   description: string;
   status: string;
+  province: string;
+  city: string;
 };

@@ -1,9 +1,13 @@
+import { getCafes } from '@/lib/api/cafes';
+
 import Header from '@/components/LayoutComponents/Header';
 import PageContainer from '@/components/LayoutComponents/PageContainer';
+import CafeTable from '@/components/PageComponents/CafePage/DataTable';
 
+import { PageProps } from '@/types/common';
 
-const CafePage = () => {
-
+const CafePage = async ( { searchParams }: PageProps ) => {
+  const cafes = await getCafes( { query: searchParams } );
   return (
     <>
       <Header title='Cafes' subtitle={ [ {
@@ -11,7 +15,7 @@ const CafePage = () => {
         link: '/cafe'
       } ] } />
       <PageContainer>
-        Forbidden
+        <CafeTable data={ cafes.data } pagination={ cafes.pagination } />
       </PageContainer>
     </>
   );

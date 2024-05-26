@@ -10,29 +10,30 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { TBannerData } from '@/types/banner';
 import { Pagination as PaginationType } from '@/types/network';
 
-dayjs.extend(dayjsFormats);
+dayjs.extend( dayjsFormats );
 
 
 type Props = {
   data: TBannerData[];
   pagination: PaginationType;
-  columnConfig: ColumnDef<TBannerData>[]
+  columnConfig: ColumnDef<TBannerData>[];
 };
 
-const BannerListTable = ({ data, pagination, columnConfig }: Props) => {
+const BannerListTable = ( { data, pagination, columnConfig }: Props ) => {
   const router = useRouter();
-  const pathName = usePathname()
+  const pathName = usePathname();
 
-  const table = useReactTable({
+
+  const table = useReactTable( {
     data: data,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     columns: columnConfig,
-  });
+  } );
 
   const getMaxPage = () => {
-    if (pagination.count && pagination.limit) {
-      return Math.ceil(pagination?.count / pagination?.limit);
+    if ( pagination.count && pagination.limit ) {
+      return Math.ceil( pagination?.count / pagination?.limit );
     }
     return 1;
   };
@@ -42,63 +43,63 @@ const BannerListTable = ({ data, pagination, columnConfig }: Props) => {
       <Table>
         <TableHeader>
           {
-            table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+            table.getHeaderGroups().map( ( headerGroup ) => (
+              <TableRow key={ headerGroup.id }>
+                { headerGroup.headers.map( ( header ) => {
                   return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
+                    <TableHead key={ header.id }>
+                      { header.isPlaceholder
                         ? null
                         : flexRender(
                           header.column.columnDef.header,
                           header.getContext()
-                        )}
+                        ) }
                     </TableHead>
                   );
-                })}
+                } ) }
               </TableRow>
-            ))
+            ) )
           }
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
+          { table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map( ( row ) => (
               <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
+                key={ row.id }
+                data-state={ row.getIsSelected() && "selected" }
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                { row.getVisibleCells().map( ( cell ) => (
+                  <TableCell key={ cell.id }>
+                    { flexRender( cell.column.columnDef.cell, cell.getContext() ) }
                   </TableCell>
-                ))}
+                ) ) }
               </TableRow>
-            ))
+            ) )
           ) : (
             <TableRow>
-              <TableCell colSpan={columnConfig.length} className="h-24 text-center">
+              <TableCell colSpan={ columnConfig.length } className="h-24 text-center">
                 No results.
               </TableCell>
             </TableRow>
-          )}
+          ) }
         </TableBody>
       </Table>
       <PaginationDeprecated
-        totalPages={getMaxPage()}
-        currentPage={pagination.page}
-        itemsPerPage={pagination.limit ?? 0}
-        totalItems={pagination.count ?? 0}
-        onChangeItemsPerPage={(items) => {
-          router.push(`${pathName}?page=1&limit=${items}`);
-          table.setPageSize(items);
-        }}
-        onNext={() => router.push(`${pathName}?page=${(pagination.page ?? 1) + 1}`)}
-        onPrevious={() => router.push(`${pathName}?page=${(pagination.page ?? 1) - 1}`)}
-        prevDisabled={pagination.page === 1}
-        nextDisabled={pagination.page === getMaxPage()}
-        onChangePage={(page) => router.push(`${pathName}?page=${page}`)}
-        from={table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}
-        to={table.getState().pagination.pageIndex * table.getState().pagination.pageSize + table.getState().pagination.pageSize}
+        totalPages={ getMaxPage() }
+        currentPage={ pagination.page }
+        itemsPerPage={ pagination.limit ?? 0 }
+        totalItems={ pagination.count ?? 0 }
+        onChangeItemsPerPage={ ( items ) => {
+          router.push( `${pathName}?page=1&limit=${items}` );
+          table.setPageSize( items );
+        } }
+        onNext={ () => router.push( `${pathName}?page=${( pagination.page ?? 1 ) + 1}` ) }
+        onPrevious={ () => router.push( `${pathName}?page=${( pagination.page ?? 1 ) - 1}` ) }
+        prevDisabled={ pagination.page === 1 }
+        nextDisabled={ pagination.page === getMaxPage() }
+        onChangePage={ ( page ) => router.push( `${pathName}?page=${page}` ) }
+        from={ table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1 }
+        to={ table.getState().pagination.pageIndex * table.getState().pagination.pageSize + table.getState().pagination.pageSize }
       />
     </div>
   );

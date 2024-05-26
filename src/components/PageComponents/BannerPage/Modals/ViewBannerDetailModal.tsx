@@ -21,8 +21,8 @@ const ViewBannerDetailModal = ({ open, onOpenChange, bannerData, onEdit }: Props
     <Modal open={open} onOpenChange={onOpenChange} >
       <ModalContent hideCloseIcon>
         <div className='gap-6 flex flex-col'>
-          <section className='flex flex-col gap-1'>
-            <Typography variant='paragraph-xl-regular'>
+          <section className='flex flex-col gap-2'>
+            <Typography variant='text-body-xl-heavy'>
               {bannerData?.title}
             </Typography>
             <Image src={bannerData?.image_url || '/images/broken-image.png'} width={440} height={170} alt="member-detail-avatar" className='rounded-md object-cover object-center max-h-44' />

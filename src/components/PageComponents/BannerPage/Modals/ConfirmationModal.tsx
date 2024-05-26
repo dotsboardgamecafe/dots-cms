@@ -1,6 +1,5 @@
 'use client';
 import { Danger } from 'iconsax-react';
-import { useRouter } from 'next/navigation';
 import { PropsWithRef, useState } from 'react';
 
 import { updateBanners } from '@/lib/api/banner';
@@ -21,7 +20,6 @@ type Props = PropsWithRef<{
 const BannerStatusConfirmationModal = ({ open, onOpenChange, bannerData }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const { toast } = useToast()
-  const router = useRouter()
 
   if (!bannerData) return null
 
@@ -31,7 +29,6 @@ const BannerStatusConfirmationModal = ({ open, onOpenChange, bannerData }: Props
     setIsSubmitting(true)
     updateBanners({ param: bannerData?.banner_code, body: { ...bannerData, name: bannerData.title, status: actionName } })
       .then(() => {
-        router.refresh()
         toast({
           title: `Banner successfully ${actionName}ed`,
           variant: 'default',

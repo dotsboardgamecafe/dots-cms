@@ -11,6 +11,7 @@ const endpointData = {
 	getRoomDetail: { path: '/rooms', method: 'GET', prefix: '' },
 	getTournaments: { path: '/tournaments', method: 'GET', prefix: '' },
 	getTiers: { path: '/tiers', method: 'GET', prefix: '' },
+	getBanners: { path: '/banners', method: 'GET', prefix: '' },
 
 	// POST
 	auth: { path: '/auths/login', method: 'POST', prefix: '' },
@@ -18,18 +19,20 @@ const endpointData = {
 	login: { path: '/auths/login', method: 'POST', prefix: '' },
 	addGame: { path: '/games', method: 'POST', prefix: '' },
 	createRoom: { path: '/rooms', method: 'POST', prefix: '' },
+	addBanner: { path: '/banners', method: 'POST', prefix: '' },
 
 	// PUT
 	changeStatusMember: { path: '/users', method: 'PUT', prefix: 'status' },
 	updateRoom: { path: '/rooms', method: 'PUT', prefix: '' },
 	updateRoomStatus: { path: '/rooms', method: 'PUT', prefix: 'status' },
 	setRoomWinner: { path: '/rooms', method: 'PUT', prefix: 'close' },
+	updateBanner: { path: '/banners', method: 'PUT', prefix: '' },
 } as const;
 
 // Typing schema, do not modify if not necessary
 
 type EndpointDefinition<T extends string> = {
-	[ key in T ]: {
+	[key in T]: {
 		method: 'GET' | 'POST' | 'PUT' | 'DELETE';
 		path: string;
 		payload?: any;

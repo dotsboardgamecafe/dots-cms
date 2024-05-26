@@ -36,7 +36,7 @@ const EditRoomForm = ( { games, admins, cafes, roomDetail }: Props ) => {
     defaultValues: {
       player_slot: String( roomDetail.maximum_participant ),
       room_name: roomDetail.name,
-      price: String( roomDetail.booking_price ),
+      price: roomDetail.booking_price,
       points: String( roomDetail.reward_point ),
       schedule: {
         start_date: dayjs( roomDetail.start_date ).toDate(),
@@ -324,7 +324,7 @@ const EditRoomForm = ( { games, admins, cafes, roomDetail }: Props ) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <InputNumber placeholder='Set Price' onChange={ field.onChange } value={ field.value } />
+                    <InputNumber placeholder='Set Price' onChange={ ( e ) => field.onChange( +e.target.value ) } value={ field.value } />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

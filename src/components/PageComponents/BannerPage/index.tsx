@@ -143,7 +143,7 @@ const BannerPageContent = ({ data, pagination }: Props) => {
   return (
     <div className='flex flex-col gap-6'>
       <section className='table-action'>
-        <Text className='max-w-[300px]' value={keyword} onChange={onChangeKeyword} prefixIcon={<SearchNormal1 size={20} className='text-gray-500 ' />} placeholder='Search...' />
+        <Text className='max-w-[300px]' value={keyword} onChange={onChangeKeyword} prefixIcon={<SearchNormal1 size={20} className='text-gray-500 ' />} placeholder='Search...' defaultValue={pagination.keyword} />
 
         <Button variant='default' size='lg' onClick={() => setShowAddBannerModal(true)} className='gap-2'>
           <AddCircle className='text-white' />

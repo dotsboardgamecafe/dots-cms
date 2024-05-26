@@ -7,22 +7,24 @@ import fetcher, { ApiOptions } from "@/lib/api/utils/fetcher";
 import { TBannerData, TPostBannerPayload } from "@/types/banner";
 
 
-export const getBanners = async ( options?: ApiOptions ) => {
-  return await fetcher<TBannerData[]>( 'getBanners', {
+export const getBanners = async (options?: ApiOptions) => {
+  return await fetcher<TBannerData[]>('getBanners', {
     ...options, requestOpt: {
       next: {
-        tags: [ 'getBanners' ]
+        tags: ['getBanners']
       }
     }
-  } );
+  });
 };
 
-export const addBanners = async ( options: ApiOptions<TPostBannerPayload> ) => {
-  const res = await fetcher( 'addBanner', options );
-  revalidateTag( 'getBanners' );
+export const addBanners = async (options: ApiOptions<TPostBannerPayload>) => {
+  const res = await fetcher('addBanner', options);
+  revalidateTag('getBanners');
   return res;
 };
 
-export const updateBanners = async ( options: ApiOptions<TPostBannerPayload> ) => {
-  return await fetcher( 'updateBanner', options );
+export const updateBanners = async (options: ApiOptions<TPostBannerPayload>) => {
+  const res = await fetcher('updateBanner', options);
+  revalidateTag('getBanners');
+  return res
 };

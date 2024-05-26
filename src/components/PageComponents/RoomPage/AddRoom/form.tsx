@@ -2,6 +2,7 @@
 // type Props = PropsWithRef<PropsWithChildren>;
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from 'dayjs';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -16,6 +17,7 @@ import Text from '@/components/ui/Input/Text';
 import Textarea from '@/components/ui/Input/TextArea';
 import Upload from '@/components/ui/Input/Upload';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
+import { useToast } from '@/components/ui/Toast/use-toast';
 import Typography from '@/components/ui/Typography';
 
 import { AdminType } from '@/types/admin';
@@ -30,12 +32,14 @@ type Props = {
 };
 
 const AddRoomForm = ( { games, admins, cafes }: Props ) => {
+  const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof AddRoomSchema>>( {
     defaultValues: {
       player_slot: '',
       room_name: '',
-      price: '',
+      price: 0,
       points: '',
       schedule: {
         start_date: undefined,
@@ -46,25 +50,40 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
   } );
 
   const onSubmit = async ( data: z.infer<typeof AddRoomSchema> ) => {
-    // eslint-disable-next-line no-console
-    const payload: AddRoomPayload = {
-      booking_price: +data.price,
-      difficulty: data.level,
-      end_date: dayjs( data.schedule.end_date ).toISOString(),
-      start_date: dayjs( data.schedule.start_date ).toISOString(),
-      game_master_code: data.game_master,
-      instruction: 'instruction',
-      maximum_participant: +data.player_slot,
-      name: data.room_name,
-      reward_point: +data.points,
-      room_type: data.room_type,
-      status: 'active',
-      description: data.description,
-      location_code: data.location,
-      game_code: data.game_code,
-      image_url: data.banner
-    };
-    await createRoom( { body: payload } );
+    try {
+      // eslint-disable-next-line no-console
+      const payload: AddRoomPayload = {
+        booking_price: +data.price,
+        difficulty: data.level,
+        end_date: dayjs( data.schedule.end_date ).toISOString(),
+        start_date: dayjs( data.schedule.start_date ).toISOString(),
+        game_master_code: data.game_master,
+        instruction: 'instruction',
+        maximum_participant: +data.player_slot,
+        name: data.room_name,
+        reward_point: +data.points,
+        room_type: data.room_type,
+        status: 'active',
+        description: data.description,
+        location_code: data.location,
+        game_code: data.game_code,
+        image_url: data.banner,
+        instagram_link: '',
+      };
+      await createRoom( { body: payload } );
+      toast( {
+        title: `Room successfully Created`,
+        variant: 'default',
+      } );
+      router.push( '/room' );
+    } catch ( error: any ) {
+      toast( {
+        title: 'Something went wrong',
+        description: `failed to add new room, ${error.message}`,
+        variant: 'destructive',
+      } );
+    }
+
   };
   return (
     <>
@@ -313,7 +332,7 @@ const AddRoomForm = ( { games, admins, cafes }: Props ) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <InputNumber placeholder='Set Price' onChange={ field.onChange } value={ field.value } />
+                    <InputNumber placeholder='Set Price' onChange={ ( e ) => field.onChange( Number( e.target.value ) ) } value={ field.value } />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

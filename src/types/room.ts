@@ -85,7 +85,7 @@ export const AddRoomSchema = z.object( {
   location: z.string( { required_error: "You need to select a location.", } ),
   level: z.string( { required_error: "You need to select a level.", } ),
   player_slot: z.string( { required_error: "You need to set a player slot availability.", } ),
-  price: z.string( { required_error: "You need enter a price for the game room.", } ),
+  price: z.number( { required_error: "You need enter a price for the game room.", } ).min( 15000, "Min Price Rp. 15000" ),
   points: z.string( { required_error: "You need select a points for the game room.", } ),
   description: z.string( { required_error: "You need to enter a description for the game room.", } ),
   banner: z.string( { required_error: "You need to upload banner for the game room.", } ),

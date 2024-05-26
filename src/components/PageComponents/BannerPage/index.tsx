@@ -26,7 +26,6 @@ type Props = {
 };
 
 const BannerPageContent = ({ data, pagination }: Props) => {
-  console.log(data);
   const [showAddBannerModal, setShowAddBannerModal] = useState<boolean>(false);
   const [showViewDetailModal, setShowViewDetailModal] = useState<boolean>(false);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);

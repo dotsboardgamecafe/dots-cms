@@ -56,7 +56,7 @@ const ViewBannerDetailModal = ({ open, onOpenChange, bannerData, onEdit }: Props
           </section>
           <section>
             <Button variant='link' className='p-0' onClick={onEdit}>
-              <Typography variant='paragraph-xl-regular'>
+              <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
                 Click here to Edit
               </Typography>
             </Button>

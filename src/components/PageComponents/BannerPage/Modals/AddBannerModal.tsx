@@ -5,7 +5,6 @@ import { addBanners } from '@/lib/api/banner';
 import AddBannerForm from '@/components/PageComponents/BannerPage/Forms/AddBannerForm';
 import { Modal, ModalContent, ModalHeader, ModalTitle } from '@/components/ui/Modal';
 import { Separator } from '@/components/ui/Separator';
-import Typography from '@/components/ui/Typography';
 
 import { TPostBannerPayload } from '@/types/banner';
 
@@ -24,9 +23,7 @@ const AddBannerModal = ({ open, onOpenChange }: Props) => {
       <ModalContent hideCloseIcon>
         <ModalHeader>
           <ModalTitle>
-            <Typography variant='heading-h4'>
-              Add New Banner
-            </Typography>
+            Add New Banner
           </ModalTitle>
         </ModalHeader>
         <Separator />

@@ -32,7 +32,7 @@ const BannerPageContent = ({ data, pagination }: Props) => {
   const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false);
 
   const [selectedBanner, setSelectedBanner] = useState<TBannerData>();
-  const [keyword, setKeyword] = useState<string>('');
+  const [keyword, setKeyword] = useState<string>(pagination.keyword ?? '');
   const router = useRouter();
   const pathName = usePathname()
 

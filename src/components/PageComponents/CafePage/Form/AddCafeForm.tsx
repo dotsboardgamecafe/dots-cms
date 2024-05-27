@@ -120,7 +120,7 @@ export const AddCafeForm = ({ onClose, defaultData, onSubmit, settings }: Props)
                   </SelectTrigger>
                   <SelectContent >
                     {settings.province.map((dataProvince) => (
-                      <SelectItem key={dataProvince.setting_code} value={dataProvince.content_value}>{dataProvince.content_value}</SelectItem>
+                      <SelectItem className='capitalize' key={dataProvince.setting_code} value={dataProvince.content_value}>{dataProvince.content_value}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -150,7 +150,7 @@ export const AddCafeForm = ({ onClose, defaultData, onSubmit, settings }: Props)
                   </SelectTrigger>
                   <SelectContent >
                     {settings.city.map((dataCity) => (
-                      <SelectItem key={dataCity.setting_code} value={dataCity.content_value}>{dataCity.content_value}</SelectItem>
+                      <SelectItem className='capitalize' key={dataCity.setting_code} value={dataCity.content_value}>{dataCity.content_value}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>

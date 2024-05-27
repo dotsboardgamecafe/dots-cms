@@ -1,38 +1,36 @@
 'use client';
-import Image from 'next/image';
 import { PropsWithRef } from 'react';
 
 import { Button } from '@/components/ui/Buttons';
-import { Modal, ModalContent } from '@/components/ui/Modal';
+import { Modal, ModalContent, ModalHeader, ModalTitle } from '@/components/ui/Modal';
 import { Separator } from '@/components/ui/Separator';
 import Typography from '@/components/ui/Typography';
 
-import { TBannerData } from '@/types/banner';
+import { CafeType } from '@/types/cafes';
 
 type Props = PropsWithRef<{
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  bannerData?: TBannerData;
+  cafeData?: CafeType;
   onEdit: (event: React.MouseEvent<HTMLButtonElement>) => void
 }>;
 
-const ViewBannerDetailModal = ({ open, onOpenChange, bannerData, onEdit }: Props) => {
+const ViewCafeDetailModal = ({ open, onOpenChange, cafeData, onEdit }: Props) => {
   return (
     <Modal open={open} onOpenChange={onOpenChange} >
       <ModalContent hideCloseIcon>
+        <ModalHeader>
+          <ModalTitle>
+            {cafeData?.name || '-'}
+          </ModalTitle>
+        </ModalHeader>
         <div className='gap-6 flex flex-col'>
-          <section className='flex flex-col gap-2'>
-            <Typography variant='text-body-xl-heavy'>
-              {bannerData?.title}
-            </Typography>
-            <Image src={bannerData?.image_url || '/images/broken-image.png'} width={440} height={170} alt="member-detail-avatar" className='rounded-md object-cover object-center max-h-44' />
-          </section>
           <section className='flex flex-col  gap-1'>
             <Typography variant='paragraph-l-regular'>
-              Category
+              Address
             </Typography>
             <Typography variant='paragraph-xl-regular'>
-              {bannerData?.banner_type || '-'}
+              {cafeData?.address || '-'}
             </Typography>
             <Separator className='mt-1' />
           </section>
@@ -41,7 +39,7 @@ const ViewBannerDetailModal = ({ open, onOpenChange, bannerData, onEdit }: Props
               Description
             </Typography>
             <Typography variant='paragraph-xl-regular'>
-              {bannerData?.description || '-'}
+              {cafeData?.description || '-'}
             </Typography>
             <Separator className='mt-1' />
           </section>
@@ -50,7 +48,7 @@ const ViewBannerDetailModal = ({ open, onOpenChange, bannerData, onEdit }: Props
               Status
             </Typography>
             <Typography variant='paragraph-xl-regular' className='capitalize'>
-              {bannerData?.status}
+              {cafeData?.status}
             </Typography>
             <Separator className='mt-1' />
           </section>
@@ -67,4 +65,4 @@ const ViewBannerDetailModal = ({ open, onOpenChange, bannerData, onEdit }: Props
   );
 };
 
-export default ViewBannerDetailModal;
+export default ViewCafeDetailModal;

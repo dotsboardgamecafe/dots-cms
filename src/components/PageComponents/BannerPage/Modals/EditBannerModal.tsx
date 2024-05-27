@@ -5,7 +5,6 @@ import { updateBanners } from '@/lib/api/banner';
 import AddBannerForm from '@/components/PageComponents/BannerPage/Forms/AddBannerForm';
 import { Modal, ModalContent, ModalHeader, ModalTitle } from '@/components/ui/Modal';
 import { Separator } from '@/components/ui/Separator';
-import Typography from '@/components/ui/Typography';
 
 import { TBannerData, TPostBannerPayload } from '@/types/banner';
 
@@ -25,9 +24,7 @@ const EditBannerModal = ({ open, onOpenChange, bannerData }: Props) => {
       <ModalContent hideCloseIcon>
         <ModalHeader>
           <ModalTitle>
-            <Typography variant='heading-h4'>
-              Edit Banner
-            </Typography>
+            Edit Banner
           </ModalTitle>
         </ModalHeader>
         <Separator />

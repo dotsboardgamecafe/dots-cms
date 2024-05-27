@@ -62,11 +62,6 @@ export const AddCafeForm = ({ onClose, defaultData, onSubmit, settings }: Props)
       .finally(() => setIsSubmitting(false));
   };
 
-  const getSettingDisplay = (type: keyof Props['settings'], settingCode: string) => {
-    const listSearch = settings[type]
-    return listSearch.find((setting) => setting.setting_code === settingCode)?.content_value || '-'
-  }
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleFormSubmit)} className='flex flex-col gap-6'>
@@ -119,13 +114,13 @@ export const AddCafeForm = ({ onClose, defaultData, onSubmit, settings }: Props)
                   <SelectTrigger>
                     <SelectValue aria-label={field.value} placeholder='Select province'>
                       <Typography variant='text-body-l-medium' className="capitalize" >
-                        {getSettingDisplay('province', field.value)}
+                        {field.value}
                       </Typography>
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent >
                     {settings.province.map((dataProvince) => (
-                      <SelectItem key={dataProvince.setting_code} value={dataProvince.setting_code}>{dataProvince.content_value}</SelectItem>
+                      <SelectItem key={dataProvince.setting_code} value={dataProvince.content_value}>{dataProvince.content_value}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -149,13 +144,13 @@ export const AddCafeForm = ({ onClose, defaultData, onSubmit, settings }: Props)
                   <SelectTrigger>
                     <SelectValue aria-label={field.value} placeholder='Select city'>
                       <Typography variant='text-body-l-medium' className="capitalize" >
-                        {getSettingDisplay('city', field.value)}
+                        {field.value}
                       </Typography>
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent >
                     {settings.city.map((dataCity) => (
-                      <SelectItem key={dataCity.setting_code} value={dataCity.setting_code}>{dataCity.content_value}</SelectItem>
+                      <SelectItem key={dataCity.setting_code} value={dataCity.content_value}>{dataCity.content_value}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>

@@ -1,8 +1,8 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { login } from '@/lib/api/server/auth';
@@ -20,7 +20,15 @@ import { LoginPayload, LoginSchema } from '@/types/users';
 
 const LoginForm = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [ loading, setLoading ] = useState( false );
+
+  useEffect( () => {
+    if ( searchParams.get( 'err' ) === 'expired_session' ) {
+      form.setError( 'root', { message: 'Session expired. Please login again' } );
+    }
+  }, [ searchParams ] );
+
   const form = useForm<LoginPayload>( {
     defaultValues: {
       email: '',

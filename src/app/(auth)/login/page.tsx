@@ -1,8 +1,10 @@
-
+'use server';
 import Image from 'next/image';
 import * as React from 'react';
 
 import LoginForm from '@/components/PageComponents/LoginPage/LoginForm';
+
+
 
 /**
  * SVGR Support
@@ -16,7 +18,8 @@ import LoginForm from '@/components/PageComponents/LoginPage/LoginForm';
 // Before you begin editing, follow all comments with `STARTERCONF`,
 // to customize the default configuration.
 
-export default async function LoginPage () {
+export default async function LoginPage ( { searchParams }: { searchParams: { err: string; }; } ) {
+
   return (
     <section className='h-screen grid grid-cols-[1fr_auto] gap-16 align-middle justify-center items-center p-8 pr-[103px]'>
       <div className='h-full rounded-[32px] bg-[#EEEEF9]  relative'>

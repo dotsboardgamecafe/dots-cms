@@ -26,3 +26,8 @@ export const logOut = async () => {
   await cookiesHelper.clearStorage();
   await cookiesHelper.clearToken();
 };
+
+export const clearCookies = async () => {
+  await cookiesHelper.clearToken();
+  await cookiesHelper.clearStorage();
+};

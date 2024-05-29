@@ -1,5 +1,3 @@
-
-
 import { redirect } from 'next/navigation';
 
 import { config } from '@/constant/config';

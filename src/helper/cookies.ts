@@ -34,9 +34,13 @@ export const getUserData = (): Promise<UserData> => {
 
 export const clearStorage = () => {
   clearToken();
+  clearPermissions();
   cookies().delete( 'userData' );
 };
 
+export const clearPermissions = () => {
+  cookies().set( 'permissions', '' );
+};
 export const getCurrentLocale = async () => {
   const nextLocale = cookies().get( 'Next-Locale' )?.value;
 

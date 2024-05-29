@@ -5,6 +5,12 @@ import { authRoutes } from '@/constant/auth_routes';
 
 
 export function middleware ( request: NextRequest ) {
+  const err = request.nextUrl.searchParams.get( 'err' );
+  // handle session error related first before processing token
+  if ( err === 'expired_session' ) {
+    request.cookies.clear();
+  }
+
   const pathname = request.nextUrl.pathname;
   const token = request.cookies.get( 'token' );
 

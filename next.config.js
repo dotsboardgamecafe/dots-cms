@@ -51,6 +51,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'vereintech-assets.s3.ap-southeast-1.amazonaws.com',
+      },
+      {
+        protocol: 'http',
+        hostname: 'image.com'
       }
     ]
   }

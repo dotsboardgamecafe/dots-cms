@@ -72,7 +72,6 @@ const fetcher = async <Response> ( endpointKey: EndpointKey, options?: ApiOption
 			// if ( response.stat_msg.toLowerCase() === 'token is invalid' ) {
 			// 	redirect( '/login' );
 			// }
-			throw new Error( JSON.stringify( { url, endpoint, response, options, } ) );
 		} else {
 			// if client rendered we can safely use throw
 			throw new Error( response.stat_msg );

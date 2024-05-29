@@ -1,5 +1,4 @@
 'use server';
-import { redirect, RedirectType } from 'next/navigation';
 
 import fetcher from '@/lib/api/utils/fetcher';
 
@@ -11,11 +10,12 @@ export const login = async ( loginPayload: LoginPayload ) => {
   const loginRes = await fetcher<UserData>( 'login', { body: loginPayload } );
 
   if ( loginRes.stat_code === 'APP:SUCCESS' ) {
-    const userLogin = loginRes?.data;
-    await cookiesHelper.setTokenUser( userLogin.token || '' );
-
+    const { token, permissions, ...rest } = loginRes.data;
+    const permission_string = permissions.map( perm => perm.name );
+    await cookiesHelper.setTokenUser( token || '' );
+    await cookiesHelper.setUserPermissions( permission_string );
     await cookiesHelper.setUserData( JSON.stringify( {
-      ...userLogin
+      ...rest
     } ) );
   }
 
@@ -25,5 +25,4 @@ export const login = async ( loginPayload: LoginPayload ) => {
 export const logOut = async () => {
   await cookiesHelper.clearStorage();
   await cookiesHelper.clearToken();
-  redirect( '/login', RedirectType.push );
 };

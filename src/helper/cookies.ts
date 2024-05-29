@@ -22,6 +22,10 @@ export const setUserData = async ( userData: string ) => {
   return cookies().set( 'userData', userData );
 };
 
+export const setUserPermissions = async ( permissions: string[] ) => {
+  return cookies().set( 'permissions', permissions.join( ',' ) );
+};
+
 export const getUserData = (): Promise<UserData> => {
   const userData = cookies().get( 'userData' )?.value;
 

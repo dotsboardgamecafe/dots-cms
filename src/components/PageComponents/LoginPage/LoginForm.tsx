@@ -2,6 +2,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { login } from '@/lib/api/server/auth';
@@ -19,6 +20,7 @@ import { LoginPayload, LoginSchema } from '@/types/users';
 
 const LoginForm = () => {
   const router = useRouter();
+  const [ loading, setLoading ] = useState( false );
   const form = useForm<LoginPayload>( {
     defaultValues: {
       email: '',
@@ -29,11 +31,15 @@ const LoginForm = () => {
 
   const onSubmit = async ( data: LoginPayload ) => {
     try {
+      setLoading( true );
       const res = await login( data );
       if ( res.stat_code === ResponseCode.ERROR ) throw res.stat_msg;
       router.push( '/room' );
     } catch ( error: any ) {
       form.setError( 'root', { message: error || 'Something went wrong' } );
+      setLoading( false );
+    } finally {
+      setLoading( false );
     }
   };
 
@@ -54,7 +60,6 @@ const LoginForm = () => {
           </section>
           <section id='login-form' className='flex flex-col gap-5'>
             <FormMessageRoot />
-
             <FormField
               control={ form.control }
               name="email"
@@ -97,7 +102,7 @@ const LoginForm = () => {
                 </Typography>
               </Link>
             </div>
-            <Button variant="default" size="lg" type='submit'>
+            <Button variant="default" size="lg" type='submit' loading={ loading }>
               <Typography variant='paragraph-l-bold' className='text-white'>
                 Log In
               </Typography>

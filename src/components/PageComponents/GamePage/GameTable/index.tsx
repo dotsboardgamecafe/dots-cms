@@ -49,7 +49,7 @@ const columns: ColumnDef<GameType>[] = [
       return (
         <>
           <div className='flex flex-row gap-2 flex-wrap'>
-            { row.original.game_categories.map( ( category, index ) => (
+            { row.original.game_categories?.map( ( category, index ) => (
               <div className='bg-gray-100 rounded-xl px-4' key={ `game-mechanics-${index}` }>
                 <Typography variant='paragraph-l-regular' >
                   { category.category_name }

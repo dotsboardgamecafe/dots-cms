@@ -9,17 +9,17 @@ export type GameType = {
   "game_type": string,
   "name": string,
   "image_url": string,
-  "collection_url": string,
+  "collection_url": string[],
   "description": string,
   "status": string,
   "difficulty": number,
   "duration": number,
   "minimal_participant": number,
   "maximum_participant": number,
-  "game_categories": GameCategory[];
-  "game_related": string,
-  "game_rooms": string,
-  "game_masters": string;
+  "game_categories"?: GameCategory[];
+  "game_related"?: string,
+  "game_rooms"?: string,
+  "game_masters"?: string;
 };
 
 export type GameCategory = {

@@ -132,11 +132,11 @@ const SpecificBoardGameCriteriaInput: React.FC<{ parentPath: string, onRemove?: 
                   </Typography>
                 </FormLabel>
                 <FormControl>
-                  <Select value={field.value} onValueChange={(value) => field.onChange(Boolean(value))}>
+                  <Select value={field.value} onValueChange={(value) => field.onChange(Boolean(value === 'true' ? true : false))}>
                     <SelectTrigger>
                       <SelectValue aria-label={field.value} placeholder='Choose yes or no'>
                         <Typography variant='text-body-l-medium' className="capitalize" >
-                          {field.value === 'true' ? 'Yes' : 'No'}
+                          {field.value ? 'Yes' : 'No'}
                         </Typography>
                       </SelectValue>
                     </SelectTrigger>

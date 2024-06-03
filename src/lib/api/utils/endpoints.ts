@@ -13,6 +13,8 @@ const endpointData = {
 	getTiers: { path: '/tiers', method: 'GET', prefix: '' },
 	getBanners: { path: '/banners', method: 'GET', prefix: '' },
 	getSettings: { path: '/settings', method: 'GET', prefix: '' },
+	getBadges: { path: '/badges', method: 'GET', prefix: '' },
+	getTournamentBadgeDetails: { path: '/tournament-badges', method: 'GET', prefix: '' },
 
 	// POST
 	auth: { path: '/auths/login', method: 'POST', prefix: '' },
@@ -22,6 +24,8 @@ const endpointData = {
 	createRoom: { path: '/rooms', method: 'POST', prefix: '' },
 	addBanner: { path: '/banners', method: 'POST', prefix: '' },
 	addCafe: { path: '/cafes', method: 'POST', prefix: '' },
+	addBadges: { path: '/badges', method: 'POST', prefix: '' },
+	addTournamentBadge: { path: '/tournament-badges', method: 'POST', prefix: '' },
 
 	// PUT
 	changeStatusMember: { path: '/users', method: 'PUT', prefix: 'status' },
@@ -30,6 +34,8 @@ const endpointData = {
 	setRoomWinner: { path: '/rooms', method: 'PUT', prefix: 'close' },
 	updateBanner: { path: '/banners', method: 'PUT', prefix: '' },
 	updateCafe: { path: '/cafes', method: 'PUT', prefix: '' },
+	editBadges: { path: '/badges', method: 'PUT', prefix: '' },
+	editTournamentBadge: { path: '/tournament-badges', method: 'PUT', prefix: '' },
 } as const;
 
 // Typing schema, do not modify if not necessary

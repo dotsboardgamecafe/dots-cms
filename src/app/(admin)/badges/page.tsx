@@ -1,17 +1,24 @@
+
+import { getBadges } from '@/lib/api/badge';
+
 import Header from '@/components/LayoutComponents/Header';
 import PageContainer from '@/components/LayoutComponents/PageContainer';
+import BadgePageContent from '@/components/PageComponents/BadgePage';
+
+import { Pagination } from '@/types/network';
 
 
-const BadgesPage = () => {
+const BadgesPage = async ({ searchParams }: { searchParams: Pagination; }) => {
+  const badges = await getBadges({ pagination: searchParams })
 
   return (
     <>
-      <Header title='Badges' subtitle={ [ {
+      <Header title='Badges' subtitle={[{
         label: 'All badges Information',
         link: '/badge'
-      } ] } />
+      }]} />
       <PageContainer>
-        Forbidden
+        <BadgePageContent data={badges.data} pagination={badges.pagination} />
       </PageContainer>
     </>
   );

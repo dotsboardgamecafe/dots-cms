@@ -102,7 +102,7 @@ textarea:focus{
 }
 
 .popover-content{
-  width: var(--radix-popover-trigger-width);
+  min-width: var(--radix-popover-trigger-width);
   @apply rounded-xl
 }
 

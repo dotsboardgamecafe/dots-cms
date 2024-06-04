@@ -4,7 +4,8 @@ import { memo, PropsWithChildren, useEffect, useMemo, useState } from "react";
 import { MultiValue, Options, ValueContainerProps } from "react-select";
 import { AsyncPaginate } from "react-select-async-paginate";
 
-import { getGameList, useMultiGameDetail } from "@/lib/api/games";
+import { getGameList } from "@/lib/api/games";
+import { useMultiGameDetail } from "@/lib/api/games/hooks";
 
 import { Button } from "@/components/ui/Buttons";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card/card"

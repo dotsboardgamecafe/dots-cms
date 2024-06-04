@@ -104,7 +104,8 @@ const TournamentTable = ({ data, pagination }: Props) => {
       cell: ({ row }) => {
         return (
           <Select value={row.original.status}
-            onValueChange={(value) => {
+            disabled={row.original.status === 'inactive'}
+            onValueChange={() => {
               setStatusConfirmationModalOpen(true);
               setSelectedRow(row.original);
             }}

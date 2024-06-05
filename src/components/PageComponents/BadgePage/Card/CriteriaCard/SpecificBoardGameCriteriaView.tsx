@@ -1,7 +1,7 @@
 
 import { useMemo } from 'react';
 
-import { useMultiGameDetail } from '@/lib/api/games';
+import { useMultiGameDetail } from '@/lib/api/games/hooks';
 
 import { Card, CardContent, CardHeader } from "@/components/ui/Card/card"
 import Typography from "@/components/ui/Typography"

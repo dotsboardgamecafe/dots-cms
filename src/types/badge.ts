@@ -8,7 +8,7 @@ export enum MappingBadgeRuleNameTypeToDisplay {
   time_limit = 'Time Limit'
 }
 
-export type BadgeRuleType<T = BadgeTimeLimitCriteriaValue | BadgeTotalSpendCriteriaValue | BadgeSpesificGameBoardCriteriaValue> = {
+export type BadgeRuleType<T = BadgeTimeLimitCriteriaValue | BadgeTotalSpendCriteriaValue | BadgeSpesificGameBoardCriteriaValue | { position: number }> = {
   badge_rule_code: string,
   badge_id: number,
   category_badge_rule: string,
@@ -32,13 +32,13 @@ export type BadgeSpesificGameBoardCriteriaValue = {
   total_played: number
 }
 
-export type BadgeType = {
+export type BadgeType<T = BadgeTimeLimitCriteriaValue | BadgeTotalSpendCriteriaValue | BadgeSpesificGameBoardCriteriaValue | { position: number }> = {
   badge_code: string,
   badge_category: string,
   parent_code: string,
   name: string,
   image_url: string,
-  badge_rules: BadgeRuleType[],
+  badge_rules: BadgeRuleType<T>[],
   vp_point: number,
   status: string,
   created_date: string,

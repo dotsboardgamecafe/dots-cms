@@ -92,18 +92,17 @@ const SelectMultiple = React.forwardRef<
     </InputWrapper>
   ));
 
-export const SelectOptionCheckBox: React.FC<OptionProps<SelectOptionType, true>> = memo(
-  ({ className, ...props }) => {
-    return (
-      <components.Option
-        className={cn("relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50", className)}
-        {...props}
-      >
-        <Checkbox id={props.innerProps.id} label={props.label} checked={props.isSelected} onChange={() => null} onClick={() => null} />
-      </components.Option>
-    )
-  }
-)
+export function SelectOptionCheckBox<OptionType = SelectOptionType, isMulti extends boolean = true>
+  ({ className, ...props }: OptionProps<OptionType, isMulti>) {
+  return (
+    <components.Option
+      className={cn("relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50", className)}
+      {...props}
+    >
+      <Checkbox id={props.innerProps.id} label={props.label} checked={props.isSelected} onChange={() => null} onClick={() => null} />
+    </components.Option>
+  )
+}
 
 export const SelectValueContainer: React.FC<PropsWithChildren<ValueContainerProps<SelectOptionType, true> & { renderValue: (options: Options<unknown>) => ReactNode }>> = memo(({ children, renderValue, ...props }) => {
   const containerRef = useRef<HTMLDivElement>(null)

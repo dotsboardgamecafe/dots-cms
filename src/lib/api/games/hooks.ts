@@ -1,20 +1,14 @@
+"use client"
+
 import { useEffect } from 'react';
 
 import fetcher, { ApiOptions } from '@/lib/api/utils/fetcher';
 
 import { useAsyncLoader, UseAsyncLoaderReturnType } from '@/helper/hooks/useAsyncLoader';
 
-import { AddGamePayload, GameType } from '@/types/game';
+import { GameType } from '@/types/game';
 import { ResponseType } from '@/types/network';
 
-
-export const getGameList = async (options?: ApiOptions) => {
-  return await fetcher<GameType[]>('getGames', options);
-};
-
-export const addGame = async (options: ApiOptions) => {
-  return await fetcher<AddGamePayload>('addGame', options);
-};
 
 export const useMultiGameDetail = (gameCodes: GameType['game_code'][], options?: ApiOptions): UseAsyncLoaderReturnType<GameType[]> => {
   const fetchReturn = useAsyncLoader<ResponseType<GameType>[]>(() => {

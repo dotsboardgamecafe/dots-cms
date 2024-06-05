@@ -26,6 +26,7 @@ const endpointData = {
 	addCafe: { path: '/cafes', method: 'POST', prefix: '' },
 	addBadges: { path: '/badges', method: 'POST', prefix: '' },
 	addTournamentBadge: { path: '/tournament-badges', method: 'POST', prefix: '' },
+	addTournaments: { path: '/tournaments', method: 'POST', prefix: '' },
 
 	// PUT
 	changeStatusMember: { path: '/users', method: 'PUT', prefix: 'status' },
@@ -36,6 +37,8 @@ const endpointData = {
 	updateCafe: { path: '/cafes', method: 'PUT', prefix: '' },
 	editBadges: { path: '/badges', method: 'PUT', prefix: '' },
 	editTournamentBadge: { path: '/tournament-badges', method: 'PUT', prefix: '' },
+	editTournaments: { path: '/tournaments', method: 'PUT', prefix: '' },
+	setTournamentWinner: { path: '/tournaments', method: 'PUT', prefix: 'close' },
 } as const;
 
 // Typing schema, do not modify if not necessary

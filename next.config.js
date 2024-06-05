@@ -55,6 +55,10 @@ const nextConfig = {
       {
         protocol: 'http',
         hostname: 'image.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'example.com'
       }
     ]
   }

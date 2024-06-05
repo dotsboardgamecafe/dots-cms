@@ -14,6 +14,7 @@ const endpointData = {
 	getBanners: { path: '/banners', method: 'GET', prefix: '' },
 	getSettings: { path: '/settings', method: 'GET', prefix: '' },
 	getBadges: { path: '/badges', method: 'GET', prefix: '' },
+	getRewards: { path: '/rewards', method: 'GET', prefix: '' },
 	getTournamentBadgeDetails: { path: '/tournament-badges', method: 'GET', prefix: '' },
 
 	// POST
@@ -44,7 +45,7 @@ const endpointData = {
 // Typing schema, do not modify if not necessary
 
 type EndpointDefinition<T extends string> = {
-	[key in T]: {
+	[ key in T ]: {
 		method: 'GET' | 'POST' | 'PUT' | 'DELETE';
 		path: string;
 		payload?: any;

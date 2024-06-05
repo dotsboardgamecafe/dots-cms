@@ -44,7 +44,7 @@
 }
 
 .table-action{
-  @apply flex flex-row justify-between
+  @apply flex flex-row justify-between gap-4
 }
 
 /* default style for text input element */

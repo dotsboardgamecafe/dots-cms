@@ -10,3 +10,7 @@ export const formatRoomSchedule = ( start_date: string, end_date: string ) => {
 export const formatTournamentDate = ( start_date: string, end_date: string ) => {
   return `${dayjs( start_date ).format( 'MMM, Do' )} - ${dayjs( end_date ).format( 'Do' )}`;
 };
+
+export const formatDate = ( date: string ) => {
+  return dayjs( date ).format( 'MMM Do, YYYY' );
+};

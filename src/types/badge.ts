@@ -88,21 +88,26 @@ export const badgePostPayloadSchema = z.object({
       })
     ).or(
       z.object({
-        category: z.string({ required_error: "You need to input the time limit category." }).min(1, "You need to input the time limit category."),  // time_limit || life_time 
-        name: z.string(),
-        start_date: z.string({ required_error: "You need to input the start date." }).min(1, 'You need to input the start date'),
-        end_date: z.string({ required_error: 'You need to input the start date' }).min(1, 'You need to input the start date')
-      }).superRefine(({ category, name }, ctx) => {
-        if (category === 'seasonal' && name.length === 0) ctx.addIssue({
-          type: 'string',
-          code: z.ZodIssueCode.too_small,
-          inclusive: true,
-          minimum: 1,
-          message: 'You need to input the event name',
-          path: ['name']
-        })
+        position: z.number()
       })
     )
+      .or(
+        z.object({
+          category: z.string({ required_error: "You need to input the time limit category." }).min(1, "You need to input the time limit category."),  // time_limit || life_time 
+          name: z.string(),
+          start_date: z.string({ required_error: "You need to input the start date." }).min(1, 'You need to input the start date'),
+          end_date: z.string({ required_error: 'You need to input the start date' }).min(1, 'You need to input the start date')
+        }).superRefine(({ category, name }, ctx) => {
+          if (category === 'seasonal' && name.length === 0) ctx.addIssue({
+            type: 'string',
+            code: z.ZodIssueCode.too_small,
+            inclusive: true,
+            minimum: 1,
+            message: 'You need to input the event name',
+            path: ['name']
+          })
+        })
+      )
   }).array().min(1, 'You need to atleast select 1 badge criteria')
 })
 

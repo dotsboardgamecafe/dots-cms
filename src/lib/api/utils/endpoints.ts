@@ -16,6 +16,7 @@ const endpointData = {
 	getBadges: { path: '/badges', method: 'GET', prefix: '' },
 	getRewards: { path: '/rewards', method: 'GET', prefix: '' },
 	getTournamentBadgeDetails: { path: '/tournament-badges', method: 'GET', prefix: '' },
+	getUserInvoices: { path: '/invoices', method: 'GET', prefix: 'history' },
 
 	// POST
 	auth: { path: '/auths/login', method: 'POST', prefix: '' },
@@ -29,6 +30,7 @@ const endpointData = {
 	addTournamentBadge: { path: '/tournament-badges', method: 'POST', prefix: '' },
 	addTournaments: { path: '/tournaments', method: 'POST', prefix: '' },
 	addReward: { path: '/rewards', method: 'POST', prefix: '' },
+	claimInvoice: { path: '/invoices', method: 'POST', prefix: 'claim' },
 
 	// PUT
 	changeStatusMember: { path: '/users', method: 'PUT', prefix: 'status' },
@@ -48,7 +50,7 @@ const endpointData = {
 // Typing schema, do not modify if not necessary
 
 type EndpointDefinition<T extends string> = {
-	[ key in T ]: {
+	[key in T]: {
 		method: 'GET' | 'POST' | 'PUT' | 'DELETE';
 		path: string;
 		payload?: any;

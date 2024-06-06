@@ -18,8 +18,29 @@ export type MemberType = {
   deleted_date: string;
 };
 
-export const AddMemberSchema = z.object( {
-  name: z.string( { required_error: 'Name is required' } ),
-  email: z.string( { required_error: 'Email is required' } ),
-  password: z.string( { required_error: 'Password is required' } ),
-} );
+export const AddMemberSchema = z.object({
+  name: z.string({ required_error: 'Name is required' }),
+  email: z.string({ required_error: 'Email is required' }),
+  password: z.string({ required_error: 'Password is required' }),
+});
+
+export type InvoiceItemType = {
+  qty: number,
+  price: number,
+  product_id: number,
+  sku: string,
+  name: string,
+  category_name: string
+}
+
+export type InvoiceType = {
+  invoice_code: string,
+  invoice_amount: number,
+  invoice_items: InvoiceItemType[],
+  claimed_time: string,
+  claimed_date: string
+}
+
+export type ClaimInvoicePayload = {
+  invoice_code: string
+}

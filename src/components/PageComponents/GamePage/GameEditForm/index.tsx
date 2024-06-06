@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/Buttons';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
 import MultiUpload from '@/components/ui/Input/MultiUpload';
 import InputNumber from '@/components/ui/Input/Number';
+import SliderRange from "@/components/ui/Input/Slider";
 import Text from '@/components/ui/Input/Text';
 import Textarea from '@/components/ui/Input/TextArea';
 import Upload from '@/components/ui/Input/Upload';
@@ -48,7 +49,8 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
       game_type: defaultValue.game_type || '',
       image_url_collection: defaultValue.collection_url || [],
       players: String(defaultValue.maximum_participant || ''),
-      level: String(defaultValue.difficulty || '')
+      difficulty: defaultValue.difficulty || '',
+      level: defaultValue.level || 0
     },
     resolver: zodResolver(AddGameSchema),
 
@@ -72,15 +74,17 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
       game_categories: data.game_categories.map((category) => ({ category_name: category })),
       game_type: data.game_type,
       collection_url: data.image_url_collection,
-      admin_code: data.level,
-      difficulty: data.level,
+      admin_code: data.admin_code,
+      difficulty: data.difficulty,
+      level: data.level,
       duration: Number(data.duration)
     };
 
     try {
       const res = await editGame({ param: defaultValue.game_code, body: payload })
+      console.log(res)
       toast({
-        title: 'Game successfully added!',
+        title: 'Game successfully updated!',
         variant: 'default',
       });
 
@@ -88,7 +92,7 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
     } catch (error) {
       toast({
         title: 'Something went wrong',
-        description: 'failed to add the game',
+        description: 'failed to update the game',
         variant: 'destructive',
       });
     }
@@ -188,12 +192,12 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
                 />
                 <FormField
                   control={form.control}
-                  name="level"
+                  name="difficulty"
                   render={({ field }) => (
                     <FormItem className="space-y-3">
                       <FormLabel>
                         <Typography variant='paragraph-l-medium'>
-                          Level
+                          Difficulty
                         </Typography>
                       </FormLabel>
                       <FormControl>
@@ -210,6 +214,23 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
                             <SelectItem value="beginner">Beginner</SelectItem>
                           </SelectContent>
                         </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="level"
+                  render={({ field }) => (
+                    <FormItem className="space-y-3">
+                      <FormLabel>
+                        <Typography variant='paragraph-l-medium'>
+                          Level
+                        </Typography>
+                      </FormLabel>
+                      <FormControl>
+                        <SliderRange min={0} max={5} step={0.5} value={[field.value]} prefix="Level" onValueChange={(value) => field.onChange(value[0])} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -315,7 +336,6 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
                     </FormItem>
                   )}
                 />
-                <div></div>
                 <FormField
                   control={form.control}
                   name="description"
@@ -390,7 +410,7 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
                     Cancel
                   </Button>
                   <Button variant='default' size="xl" type="submit" loading={isSubmitting} disabled={isSubmitting}>
-                    Add
+                    Update
                   </Button>
                 </section>
               </section>

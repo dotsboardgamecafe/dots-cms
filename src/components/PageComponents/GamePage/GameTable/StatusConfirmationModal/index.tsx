@@ -33,13 +33,14 @@ const StatusConfirmationModal = ({ open, onOpenChange, gameData }: Props) => {
       maximum_participant: gameData.maximum_participant,
       name: gameData.name,
       admin_code: gameData.game_masters?.admin_code || '',
-      difficulty: String(gameData.difficulty),
+      difficulty: gameData.difficulty,
       duration: gameData.duration,
+      level: gameData.level,
       status: isActive ? 'inactive' : 'active'
     }
 
     const res = await editGame({ param: gameData.game_code, body: payload });
-    console.log(res)
+
     onOpenChange(false);
     setIsSubmitting(false)
   };

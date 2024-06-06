@@ -1,7 +1,8 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import { Eye, Setting4 } from 'iconsax-react';
+import { Eye, ReceiptItem, Setting4 } from 'iconsax-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { PropsWithRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -28,26 +29,26 @@ type Props = PropsWithRef<{
 
 
 
-const MemberTable = ( { data, pagination }: Props ) => {
-  const [ filterModalOpen, setFilterModalOpen ] = useState<boolean>( false );
-  const [ detailModalOpen, setDetailModalOpen ] = useState<boolean>( false );
-  const [ confirmationModalOpen, setConfirmationModalOpen ] = useState<boolean>( false );
-  const [ selectedRow, setSelectedRow ] = useState<MemberType>();
+const MemberTable = ({ data, pagination }: Props) => {
+  const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
+  const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState<boolean>(false);
+  const [selectedRow, setSelectedRow] = useState<MemberType>();
   const columns: ColumnDef<MemberType>[] = [
     {
       accessorKey: 'username',
       header: 'User Name',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
           <section className='flex flex-row items-center gap-[10px]'>
             <Image
-              src={ row.original.image_url || '/images/avatar-not-found.png' }
-              alt={ row.original.username + '-img-pic' }
-              width={ 32 }
-              height={ 32 }
+              src={row.original.image_url || '/images/avatar-not-found.png'}
+              alt={row.original.username + '-img-pic'}
+              width={32}
+              height={32}
             />
             <Typography variant='paragraph-l-regular'>
-              { row.original.username || '-' }
+              {row.original.username || '-'}
             </Typography>
           </section>
         );
@@ -56,10 +57,10 @@ const MemberTable = ( { data, pagination }: Props ) => {
     {
       accessorKey: 'email',
       header: 'Email',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
           <Typography variant='paragraph-l-regular'>
-            { row.original.email || '-' }
+            {row.original.email || '-'}
           </Typography>
         );
       }
@@ -67,10 +68,10 @@ const MemberTable = ( { data, pagination }: Props ) => {
     {
       accessorKey: 'phone_number',
       header: 'Phone Number',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
           <Typography variant='paragraph-l-regular'>
-            { row.original.phone_number || '-' }
+            {row.original.phone_number || '-'}
           </Typography>
         );
       }
@@ -78,10 +79,10 @@ const MemberTable = ( { data, pagination }: Props ) => {
     {
       accessorKey: 'latest_tier',
       header: 'Tier Level',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
           <Typography variant='paragraph-l-regular'>
-            { row.original.latest_tier || '-' }
+            {row.original.latest_tier || '-'}
           </Typography>
         );
       }
@@ -89,29 +90,29 @@ const MemberTable = ( { data, pagination }: Props ) => {
     {
       accessorKey: 'status',
       header: 'Status',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
-          <Select value={ row.original.status } onValueChange={ ( value ) => {
-            if ( value === 'inactive' ) {
-              setConfirmationModalOpen( true );
-              setSelectedRow( row.original );
+          <Select value={row.original.status} onValueChange={(value) => {
+            if (value === 'inactive') {
+              setConfirmationModalOpen(true);
+              setSelectedRow(row.original);
             }
-          } }>
-            <SelectTrigger variant='badge' className={ cn(
+          }}>
+            <SelectTrigger variant='badge' className={cn(
               {
                 'bg-error-50': row.original.status === 'inactive',
                 'bg-blue-50': row.original.status === 'active'
               }
-            ) }>
-              <SelectValue aria-label={ row.original.status } >
-                <Typography variant='text-body-l-medium' className={ cn(
+            )}>
+              <SelectValue aria-label={row.original.status} >
+                <Typography variant='text-body-l-medium' className={cn(
                   'capitalize',
                   {
                     'text-error-700': row.original.status === 'inactive',
                     'text-blue-700': row.original.status === 'active'
                   }
-                ) }>
-                  { row.original.status }
+                )}>
+                  {row.original.status}
                 </Typography>
               </SelectValue>
             </SelectTrigger>
@@ -127,28 +128,33 @@ const MemberTable = ( { data, pagination }: Props ) => {
     {
       id: 'action',
       header: 'Action',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
-          <div className='flex flex-row items-center gap-4 cursor-pointer' onClick={ () => {
-            onClickDetail( row.original );
-          } }>
-            <Eye />
+          <div className='flex flex-row items-center gap-1' >
+            <Link href={`/member/invoices/${row.original.user_code}`}>
+              <ReceiptItem />
+            </Link>
+            <Button variant='link' onClick={() => {
+              onClickDetail(row.original);
+            }}>
+              <Eye />
+            </Button>
           </div>
         );
       }
     }
   ];
 
-  const table = useReactTable( {
+  const table = useReactTable({
     data: data,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     columns,
-  } );
+  });
 
-  const onClickDetail = ( row: MemberType ) => {
-    setDetailModalOpen( true );
-    setSelectedRow( row );
+  const onClickDetail = (row: MemberType) => {
+    setDetailModalOpen(true);
+    setSelectedRow(row);
   };
 
 
@@ -156,8 +162,8 @@ const MemberTable = ( { data, pagination }: Props ) => {
     <div className='flex flex-col gap-6'>
       <section className='table-action'>
         <Search />
-        <Button variant="secondary" size="md" onClick={ () => setFilterModalOpen( true ) }>
-          <Setting4 size={ 20 } />
+        <Button variant="secondary" size="md" onClick={() => setFilterModalOpen(true)}>
+          <Setting4 size={20} />
           <Typography variant='paragraph-l-bold'>
             Filter
           </Typography>
@@ -166,55 +172,55 @@ const MemberTable = ( { data, pagination }: Props ) => {
       <Table>
         <TableHeader>
           {
-            table.getHeaderGroups().map( ( headerGroup ) => (
-              <TableRow key={ headerGroup.id }>
-                { headerGroup.headers.map( ( header ) => {
+            table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={ header.id }>
-                      { header.isPlaceholder
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
                         ? null
                         : flexRender(
                           header.column.columnDef.header,
                           header.getContext()
-                        ) }
+                        )}
                     </TableHead>
                   );
-                } ) }
+                })}
               </TableRow>
-            ) )
+            ))
           }
         </TableHeader>
         <TableBody>
-          { table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map( ( row ) => (
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
               <TableRow
-                key={ row.id }
-                data-state={ row.getIsSelected() && "selected" }
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
               >
-                { row.getVisibleCells().map( ( cell ) => (
-                  <TableCell key={ cell.id }>
-                    { flexRender( cell.column.columnDef.cell, cell.getContext() ) }
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
-                ) ) }
+                ))}
               </TableRow>
-            ) )
+            ))
           ) : (
             <TableRow>
-              <TableCell colSpan={ columns.length } className="h-24 text-center">
+              <TableCell colSpan={columns.length} className="h-24 text-center">
                 No results.
               </TableCell>
             </TableRow>
-          ) }
+          )}
         </TableBody>
       </Table>
-      <Pagination pagination={ pagination }
+      <Pagination pagination={pagination}
       />
-      <MemberFilterModal open={ filterModalOpen } onOpenChange={ ( value ) => setFilterModalOpen( value ) } />
-      <MemberDetailModal open={ detailModalOpen } onOpenChange={ ( value ) => setDetailModalOpen( value ) } memberData={ selectedRow } />
+      <MemberFilterModal open={filterModalOpen} onOpenChange={(value) => setFilterModalOpen(value)} />
+      <MemberDetailModal open={detailModalOpen} onOpenChange={(value) => setDetailModalOpen(value)} memberData={selectedRow} />
       <StatusConfirmationModal
-        open={ confirmationModalOpen }
-        onOpenChange={ ( value ) => setConfirmationModalOpen( value ) }
-        memberData={ selectedRow }
+        open={confirmationModalOpen}
+        onOpenChange={(value) => setConfirmationModalOpen(value)}
+        memberData={selectedRow}
       />
     </div>
   );

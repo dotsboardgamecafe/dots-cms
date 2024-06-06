@@ -19,9 +19,12 @@ const ClaimHistoryPage = async ({ params, ...searchParams }: Props) => {
 
   return (
     <div>
-      <Header title='Member Control' subtitle={[{
+      <Header title='Invoice Claim' subtitle={[{
         label: 'All Member Information',
         link: '/member'
+      }, {
+        label: 'Manual Claim Invoice',
+        link: '#'
       }]} />
       <PageContainer>
         <Suspense>

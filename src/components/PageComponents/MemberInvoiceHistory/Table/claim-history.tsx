@@ -5,6 +5,7 @@ import dayjsFormats from 'dayjs/plugin/advancedFormat';
 
 import Pagination from '@/components/ui/Pagination/pagination';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
+import Typography from '@/components/ui/Typography';
 
 import { InvoiceType } from '@/types/member';
 import { Pagination as PaginationType } from '@/types/network';
@@ -28,6 +29,14 @@ const ClaimHistoryTable = ({ data, pagination, columnConfig }: Props) => {
 
   return (
     <div className='flex flex-col gap-6'>
+      <section className='flex flex-col pt-4 border-t-2'>
+        <Typography variant='heading-h4' color='neutral-ink'>
+          Claim History
+        </Typography>
+        <Typography variant='paragraph-l-regular' color='neutral-ink'>
+          User Claim Invoice History
+        </Typography>
+      </section>
       <Table>
         <TableHeader>
           {

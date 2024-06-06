@@ -39,6 +39,7 @@ const endpointData = {
 	editTournamentBadge: { path: '/tournament-badges', method: 'PUT', prefix: '' },
 	editTournaments: { path: '/tournaments', method: 'PUT', prefix: '' },
 	setTournamentWinner: { path: '/tournaments', method: 'PUT', prefix: 'close' },
+	editGame: { path: '/games', method: 'PUT', prefix: '' },
 } as const;
 
 // Typing schema, do not modify if not necessary

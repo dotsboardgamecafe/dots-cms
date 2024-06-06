@@ -31,6 +31,12 @@ export const getUserData = (): Promise<UserData> => {
 
   return userData && JSON.parse( userData );
 };
+export const getUserPermission = () => {
+  const permissions = cookies().get( 'permissions' )?.value;
+
+  return ( permissions && permissions.split( ',' ) ) || [];
+};
+
 
 export const clearStorage = () => {
   clearToken();

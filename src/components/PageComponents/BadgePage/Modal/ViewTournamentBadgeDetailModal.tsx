@@ -19,7 +19,8 @@ type Props = PropsWithRef<{
 }>;
 
 const ViewTournamentBadgeDetailModal = ({ open, onOpenChange, badgeCode = '', onEdit }: Props) => {
-  const { data: badgeDataList } = useTournamentBadgeDetail(badgeCode)
+  const { data: badgeDataList } = useTournamentBadgeDetail(open ? badgeCode : '')
+
   const badgeDataFirst = badgeDataList?.find((badge) => badge.badge_rules[0].value.position === 1)
   const badgeDataSecond = badgeDataList?.find((badge) => badge.badge_rules[0].value.position === 2)
   const badgeDataThird = badgeDataList?.find((badge) => badge.badge_rules[0].value.position === 3)

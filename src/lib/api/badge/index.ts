@@ -25,6 +25,7 @@ export const addBadges = async (options?: ApiOptions<BadgePostPayloadType>) => {
 export const editBadges = async (options?: ApiOptions<BadgePostPayloadType>) => {
   const res = await fetcher('editBadges', options);
   revalidateTag('getBadges');
+  revalidateTag(`get-badge-${options?.param}`)
   return res
 }
 
@@ -37,13 +38,14 @@ export const addTournamentBadge = async (options?: ApiOptions<TournamentBadgePay
 export const editTournamentBadge = async (options?: ApiOptions<TournamentBadgePayloadType>) => {
   const res = await fetcher('editTournamentBadge', options);
   revalidateTag('getBadges');
+  revalidateTag(`get-tournament-badge-${options?.param}`)
   return res
 }
 
 export const getBadgeDetail = (badgeCode: string, options?: ApiOptions) => {
-  return fetcher<BadgeType>('getBadges', { ...options, param: badgeCode })
+  return fetcher<BadgeType>('getBadges', { ...options, param: badgeCode, requestOpt: { next: { tags: [`get-badge-${badgeCode}`] } } })
 }
 
 export const getTournamentBadgeDetail = (badgeCode: string, options?: ApiOptions) => {
-  return fetcher<TournamentBadgeType[]>('getTournamentBadgeDetails', { ...options, param: badgeCode })
+  return fetcher<TournamentBadgeType[]>('getTournamentBadgeDetails', { ...options, param: badgeCode, requestOpt: { next: { tags: [`get-tournament-badge-${badgeCode}`] } } })
 }

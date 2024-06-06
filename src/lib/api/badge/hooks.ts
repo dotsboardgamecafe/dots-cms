@@ -12,7 +12,7 @@ import { BadgeType, TournamentBadgeType } from "@/types/badge"
 import { ResponseType } from "@/types/network"
 
 export const useBadgeDetail = (badgeCode: string, options?: ApiOptions): UseAsyncLoaderReturnType<BadgeType> => {
-  const fetchReturn = useAsyncLoader<ResponseType<BadgeType>>(() => fetcher<BadgeType>('getBadges', { param: badgeCode, ...options }))
+  const fetchReturn = useAsyncLoader<ResponseType<BadgeType>>(() => fetcher<BadgeType>('getBadges', { param: badgeCode, ...options, requestOpt: { next: { tags: [`get-badge-${badgeCode}`] } } }))
 
   useEffect(() => {
     if (!badgeCode) return
@@ -25,7 +25,7 @@ export const useBadgeDetail = (badgeCode: string, options?: ApiOptions): UseAsyn
 }
 
 export const useTournamentBadgeDetail = (badgeCode: string, options?: ApiOptions): UseAsyncLoaderReturnType<TournamentBadgeType[]> => {
-  const fetchReturn = useAsyncLoader<ResponseType<TournamentBadgeType[]>>(() => fetcher<TournamentBadgeType[]>('getTournamentBadgeDetails', { param: badgeCode, ...options }))
+  const fetchReturn = useAsyncLoader<ResponseType<TournamentBadgeType[]>>(() => fetcher<TournamentBadgeType[]>('getTournamentBadgeDetails', { param: badgeCode, ...options, requestOpt: { next: { tags: [`get-tournament-badge-${badgeCode}`] } } }))
 
   useEffect(() => {
     if (!badgeCode) return

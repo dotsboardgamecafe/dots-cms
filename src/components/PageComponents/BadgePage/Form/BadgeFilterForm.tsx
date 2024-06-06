@@ -19,8 +19,9 @@ type Props = {
   control?: MutableRefObject<null | BadgeFilterControlType>
 };
 
-export type BadgeFilterType = Pagination & {
+export type BadgeFilterType = Omit<Pagination, 'sort'> & {
   badge_category?: string
+  sort: Pagination['sort'] | null
 }
 
 export const BadgeFilterForm = ({ onClose, control }: Props) => {
@@ -32,8 +33,8 @@ export const BadgeFilterForm = ({ onClose, control }: Props) => {
     defaultValues: {
       status: searchParams.get('status') || '',
       badge_category: searchParams.get('badge_category') || '',
-      sort: searchParams.get('sort') as Pagination['sort'] || 'DESC',
-      order: searchParams.get('order') || 'created_date'
+      sort: searchParams.get('sort') as Pagination['sort'] || null,
+      order: searchParams.get('order') || ''
     },
   }));
 
@@ -58,7 +59,7 @@ export const BadgeFilterForm = ({ onClose, control }: Props) => {
   const resetFilter = useCallback(() => {
     form.setValue('status', '')
     form.setValue('badge_category', '')
-    form.setValue('sort', 'DESC')
+    form.setValue('sort', null)
   }, [form])
 
   useEffect(() => {
@@ -196,7 +197,7 @@ export const BadgeFilterForm = ({ onClose, control }: Props) => {
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ''}
                   className="flex flex-row "
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">

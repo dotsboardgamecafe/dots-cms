@@ -1,29 +1,31 @@
+
 import { getAdmins } from '@/lib/api/admin';
 import { getCafes } from '@/lib/api/cafes';
+import { getGameDetail } from '@/lib/api/games';
 
 import Header from '@/components/LayoutComponents/Header';
 import PageContainer from '@/components/LayoutComponents/PageContainer';
-import AddGameForm from '@/components/PageComponents/GamePage/GameAddForm';
+import EditGameForm from '@/components/PageComponents/GamePage/GameEditForm';
 
-const AddGamePage = async () => {
+const ViewRoomPage = async ({ params: { game_code } }: { params: { game_code: string; }; }) => {
+  const gameDetail = await getGameDetail(game_code);
   const admins = await getAdmins({ limit: 999999 });
   const cafes = await getCafes({ limit: 999999 });
 
   return (
-    <div>
+    <>
       <Header
         title='Game Catalog'
         subtitle={[
           { label: 'All Game Information', link: '/game' },
-          { label: 'Add New Game', link: '#' },
+          { label: `Edit game ${gameDetail.data.name}`, link: '#' },
         ]}
       />
       <PageContainer>
-        <AddGameForm admins={admins.data} cafes={cafes.data} />
+        <EditGameForm admins={admins.data} defaultValue={gameDetail.data} cafes={cafes.data} />
       </PageContainer>
-    </div>
+    </>
   );
-
 };
 
-export default AddGamePage;
+export default ViewRoomPage;

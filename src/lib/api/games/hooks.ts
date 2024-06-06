@@ -13,7 +13,7 @@ import { ResponseType } from '@/types/network';
 export const useMultiGameDetail = (gameCodes: GameType['game_code'][], options?: ApiOptions): UseAsyncLoaderReturnType<GameType[]> => {
   const fetchReturn = useAsyncLoader<ResponseType<GameType>[]>(() => {
     return Promise.all([
-      ...gameCodes.map((gameCode) => fetcher<GameType>('getGames', { param: gameCode, ...options }))
+      ...gameCodes.map((gameCode) => fetcher<GameType>('getGames', { param: gameCode, ...options, requestOpt: { next: { tags: [`get-game-detail-${gameCode}`] } } }))
     ])
   })
 

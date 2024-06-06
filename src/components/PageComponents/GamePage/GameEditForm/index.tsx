@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { addGame } from "@/lib/api/games";
+import { editGame } from "@/lib/api/games";
 
 import SelectGameCategory from "@/components/PageComponents/GamePage/GameAddForm/select-game-categories";
 import SelectGameMechanics from "@/components/PageComponents/GamePage/GameAddForm/select-game-mechanics";
@@ -24,30 +24,31 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { useToast } from "@/components/ui/Toast/use-toast";
 import Typography from '@/components/ui/Typography';
 
-import { AdminType } from '@/types/admin';
+import { AdminType } from "@/types/admin";
 import { CafeType } from '@/types/cafes';
-import { AddGamePayload, AddGameSchema } from '@/types/game';
+import { AddGamePayload, AddGameSchema, GameType } from '@/types/game';
 
 type Props = {
   cafes: CafeType[];
   admins: AdminType[];
+  defaultValue: GameType;
 };
 
-const AddGameForm = ({ cafes, admins }: Props) => {
-
+const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
   const form = useForm<z.infer<typeof AddGameSchema>>({
     defaultValues: {
-      admin_code: '',
-      cafe_code: '',
-      name: '',
-      image_url: '',
-      duration: '',
-      description: '',
-      status: 'active',
-      game_categories: [],
-      game_type: '',
-      image_url_collection: [],
-      players: ''
+      admin_code: defaultValue.game_masters?.admin_code || '',
+      cafe_code: defaultValue.cafe_code || '',
+      name: defaultValue.name || '',
+      image_url: defaultValue.image_url || '',
+      duration: String(defaultValue.duration || ''),
+      description: defaultValue.description || '',
+      status: defaultValue.status || 'active',
+      game_categories: defaultValue.game_categories?.map((category) => category.category_name) || [],
+      game_type: defaultValue.game_type || '',
+      image_url_collection: defaultValue.collection_url || [],
+      players: String(defaultValue.maximum_participant || ''),
+      level: String(defaultValue.difficulty || '')
     },
     resolver: zodResolver(AddGameSchema),
 
@@ -71,13 +72,13 @@ const AddGameForm = ({ cafes, admins }: Props) => {
       game_categories: data.game_categories.map((category) => ({ category_name: category })),
       game_type: data.game_type,
       collection_url: data.image_url_collection,
-      admin_code: data.admin_code,
+      admin_code: data.level,
       difficulty: data.level,
       duration: Number(data.duration)
     };
 
     try {
-      await addGame({ body: payload })
+      const res = await editGame({ param: defaultValue.game_code, body: payload })
       toast({
         title: 'Game successfully added!',
         variant: 'default',
@@ -157,7 +158,6 @@ const AddGameForm = ({ cafes, admins }: Props) => {
                       </FormLabel>
                       <FormControl>
                         <SelectGameCategory
-                          id='game_type'
                           onChange={field.onChange}
                           defaultValue={field.value ? { value: field.value, label: field.value } : undefined}
                         />
@@ -178,7 +178,6 @@ const AddGameForm = ({ cafes, admins }: Props) => {
                       </FormLabel>
                       <FormControl>
                         <SelectGameMechanics
-                          id="game_categories"
                           defaultValue={field.value ? field.value.map((gameMechanic) => ({ value: gameMechanic, label: gameMechanic })) : undefined}
                           onChange={(categoriesOption) => field.onChange(categoriesOption?.map((category) => category.value))}
                         />
@@ -404,4 +403,4 @@ const AddGameForm = ({ cafes, admins }: Props) => {
   );
 };
 
-export default AddGameForm;
+export default EditGameForm;

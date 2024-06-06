@@ -4,8 +4,11 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
+import ImageViewer from '@/components/ui/ImageViewer';
+
 
 type NextImageProps = {
+  enableViewer?: boolean;
   useSkeleton?: boolean;
   classNames?: {
     image?: string;
@@ -23,7 +26,7 @@ type NextImageProps = {
  * @description Must set width using `w-` className
  * @param useSkeleton add background with pulse animation, don't use it if image is transparent
  */
-export default function NextImage ( {
+export default function NextImage({
   useSkeleton = false,
   src,
   width,
@@ -31,30 +34,37 @@ export default function NextImage ( {
   alt,
   className,
   classNames,
+  enableViewer,
   ...rest
-}: NextImageProps ) {
-  const [ status, setStatus ] = React.useState(
+}: NextImageProps) {
+  const [isOpenViewer, setIsOpenViewer] = React.useState<boolean>(false)
+  const [status, setStatus] = React.useState(
     useSkeleton ? 'loading' : 'complete'
   );
-  const widthIsSet = className?.includes( 'w-' ) ?? false;
+  const widthIsSet = className?.includes('w-') ?? false;
 
   return (
-    <figure
-      style={ !widthIsSet ? { width: `${width}px` } : undefined }
-      className={ className }
-    >
-      <Image
-        className={ cn(
-          classNames?.image,
-          status === 'loading' && cn( 'animate-pulse', classNames?.blur )
-        ) }
-        src={ src }
-        width={ width }
-        height={ height }
-        alt={ alt }
-        onLoadingComplete={ () => setStatus( 'complete' ) }
-        { ...rest }
-      />
-    </figure>
+    <>
+      <figure
+        style={!widthIsSet ? { width: `${width}px` } : undefined}
+        className={className}
+        onClick={() => enableViewer && setIsOpenViewer(true)}
+      >
+        <Image
+          className={cn(
+            classNames?.image,
+            status === 'loading' && cn('animate-pulse', classNames?.blur),
+            enableViewer && 'cursor-pointer'
+          )}
+          src={src}
+          width={width}
+          height={height}
+          alt={alt}
+          onLoadingComplete={() => setStatus('complete')}
+          {...rest}
+        />
+      </figure>
+      {enableViewer && <ImageViewer src={src} visible={isOpenViewer} onClose={() => setIsOpenViewer(false)} />}
+    </>
   );
 }

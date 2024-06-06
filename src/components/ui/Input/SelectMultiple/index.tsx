@@ -16,81 +16,88 @@ const SelectMultiple = React.forwardRef<
   React.ElementRef<typeof Select<SelectOptionType, true>>,
   React.ComponentPropsWithoutRef<typeof Select<SelectOptionType, true>>
 >
-  (({ components, ...props }, ref) => (
-    <InputWrapper >
-      <Select<SelectOptionType, true> {...props}
-        ref={ref}
-        isMulti
-        menuPlacement='auto'
-        menuPortalTarget={document.body}
-        menuPosition='fixed'
-        components={{
-          IndicatorSeparator: () => null,
-          ...components
-        }}
-        styles={{
-          container: (base) => ({
-            ...base,
-            width: '100%',
-            minHeight: '0px',
-            padding: '0px'
-          }),
-          indicatorSeparator: (base) => ({
-            ...base,
-            marginTop: '0px',
-            marginBottom: '0px'
-          }),
-          indicatorsContainer: (base) => ({
-            ...base,
-            padding: '0px',
-          }),
-          clearIndicator: (base) => ({
-            ...base,
-            padding: '0px',
-          }),
-          control: (base) => ({
-            ...base,
-            borderRadius: '3px',
-            border: 'none',
-            minHeight: '0px',
-            borderColor: 'transparent',
-            boxShadow: 'none'
-          }),
-          valueContainer: (base) => ({
-            ...base,
-            padding: '0px'
-          }),
-          input: (base) => ({
-            ...base,
-            padding: '0px',
-            margin: '0px'
-          }),
-          dropdownIndicator: (base) => ({
-            ...base,
-            padding: '0px',
-          }),
-          menu: (base) => ({
-            ...base,
-            borderRadius: '8px',
-            marginTop: '18px',
-            zIndex: '999',
-            pointerEvents: 'auto'
-          }),
-          option: (base, { isSelected, isFocused, isDisabled }) => {
-            const backgroundColor = (isSelected && isFocused) ? 'hsl(var(--accent))' : undefined
-            const opacity = isDisabled ? '0.5' : '1'
+  (({ components, ...props }, ref) => {
+    const [isClient, setIsClient] = React.useState<boolean>(false)
 
-            return ({
+    React.useEffect(() => {
+      setIsClient(true)
+    }, [])
+    return (
+      <InputWrapper >
+        <Select<SelectOptionType, true> {...props}
+          ref={ref}
+          isMulti
+          menuPlacement='auto'
+          menuPortalTarget={isClient ? document.body : undefined}
+          menuPosition='fixed'
+          components={{
+            IndicatorSeparator: () => null,
+            ...components
+          }}
+          styles={{
+            container: (base) => ({
               ...base,
-              ...({ backgroundColor, opacity }),
-              color: 'black',
-            })
-          },
-          menuPortal: (base) => ({ ...base, zIndex: 999, height: 'fit-content', pointerEvents: 'auto' })
-        }}
-      />
-    </InputWrapper>
-  ));
+              width: '100%',
+              minHeight: '0px',
+              padding: '0px'
+            }),
+            indicatorSeparator: (base) => ({
+              ...base,
+              marginTop: '0px',
+              marginBottom: '0px'
+            }),
+            indicatorsContainer: (base) => ({
+              ...base,
+              padding: '0px',
+            }),
+            clearIndicator: (base) => ({
+              ...base,
+              padding: '0px',
+            }),
+            control: (base) => ({
+              ...base,
+              borderRadius: '3px',
+              border: 'none',
+              minHeight: '0px',
+              borderColor: 'transparent',
+              boxShadow: 'none'
+            }),
+            valueContainer: (base) => ({
+              ...base,
+              padding: '0px'
+            }),
+            input: (base) => ({
+              ...base,
+              padding: '0px',
+              margin: '0px'
+            }),
+            dropdownIndicator: (base) => ({
+              ...base,
+              padding: '0px',
+            }),
+            menu: (base) => ({
+              ...base,
+              borderRadius: '8px',
+              marginTop: '18px',
+              zIndex: '999',
+              pointerEvents: 'auto'
+            }),
+            option: (base, { isSelected, isFocused, isDisabled }) => {
+              const backgroundColor = (isSelected && isFocused) ? 'hsl(var(--accent))' : undefined
+              const opacity = isDisabled ? '0.5' : '1'
+
+              return ({
+                ...base,
+                ...({ backgroundColor, opacity }),
+                color: 'black',
+              })
+            },
+            menuPortal: (base) => ({ ...base, zIndex: 999, height: 'fit-content', pointerEvents: 'auto' })
+          }}
+        />
+      </InputWrapper>
+    )
+  });
 
 export function SelectOptionCheckBox<OptionType = SelectOptionType, isMulti extends boolean = true>
   ({ className, ...props }: OptionProps<OptionType, isMulti>) {

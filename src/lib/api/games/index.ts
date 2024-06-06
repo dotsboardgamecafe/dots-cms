@@ -18,7 +18,7 @@ export const addGame = async (options: ApiOptions) => {
 };
 
 export const editGame = async (options: ApiOptions) => {
-  const res = await fetcher<AddGamePayload>('addGame', options);
+  const res = await fetcher<AddGamePayload>('editGame', options);
   revalidateTag('getGames')
   revalidateTag(`get-game-detail-${options.param}`)
   return res

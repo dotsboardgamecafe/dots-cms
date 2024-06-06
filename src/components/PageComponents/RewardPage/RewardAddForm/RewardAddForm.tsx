@@ -1,8 +1,10 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+
+import { addRewards } from '@/lib/api/reward';
 
 import { Button } from '@/components/ui/Buttons';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
@@ -10,6 +12,7 @@ import DatePicker from '@/components/ui/Input/DatePicker';
 import Text from '@/components/ui/Input/Text';
 import Upload from '@/components/ui/Input/Upload';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
+import { useToast } from '@/components/ui/Toast/use-toast';
 import Typography from '@/components/ui/Typography';
 
 import { RewardAddSchema } from '@/types/rewards';
@@ -22,26 +25,41 @@ type Props = {
 };
 
 export const RewardAddForm = ( { onClose, tiers }: Props ) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const { toast } = useToast();
+
+  const [ loading, setLoading ] = useState( false );
   const form = useForm<z.infer<typeof RewardAddSchema>>( ( {
     defaultValues: {
       category_type: '',
       expired_date: '',
       image_url: '',
       name: '',
-      status: '',
+      status: 'active',
       tier_code: ''
     },
     resolver: zodResolver( RewardAddSchema )
   } ) );
 
-
-
-  const onSubmit = ( data: z.infer<typeof RewardAddSchema> ) => {
-
-    console.log( data );
-    onClose();
+  const onSubmit = async ( data: z.infer<typeof RewardAddSchema> ) => {
+    try {
+      setLoading( true );
+      const res = await addRewards( { body: data } );
+      toast( {
+        title: `Reward voucher successfully added!`,
+        variant: 'default',
+      } );
+      onClose();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch ( error: any ) {
+      toast( {
+        title: `Something went wrong!'`,
+        description: error.message,
+        variant: 'destructive',
+      } );
+      setLoading( false );
+    } finally {
+      setLoading( false );
+    }
   };
 
   return (
@@ -159,7 +177,7 @@ export const RewardAddForm = ( { onClose, tiers }: Props ) => {
         />
         <section className='flex gap-6'>
           <Button variant="secondary" size='lg' className='flex-1' onClick={ ( evt ) => { evt.preventDefault(); onClose(); } }>Cancel</Button>
-          <Button variant="default" size='lg' type='submit' className='flex-1'>Apply</Button>
+          <Button variant="default" size='lg' type='submit' className='flex-1' loading={ loading }>Save</Button>
         </section>
       </form>
     </Form >

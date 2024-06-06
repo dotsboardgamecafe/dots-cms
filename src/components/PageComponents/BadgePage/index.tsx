@@ -1,9 +1,8 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { AddCircle, Edit, Eye, SearchNormal1, Setting4 } from 'iconsax-react';
+import { AddCircle, Edit, Eye, Setting4 } from 'iconsax-react';
 import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { ChangeEvent, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -18,7 +17,7 @@ import ViewTournamentBadgeDetailModal from '@/components/PageComponents/BadgePag
 import BadgeListTable from '@/components/PageComponents/BadgePage/Table/BadgeListTable';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/ButtonDropdown';
 import { Button } from '@/components/ui/Buttons';
-import Text from '@/components/ui/Input/Text';
+import Search from '@/components/ui/Input/Search';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import Typography from '@/components/ui/Typography';
 
@@ -32,31 +31,25 @@ type Props = {
   pagination: PaginationType;
 };
 
-const BadgePageContent = ({ data, pagination }: Props) => {
-  const [statusConfirmationModalOpen, setStatusConfirmationModalOpen] = useState<boolean>(false);
-  const [selectedRow, setSelectedRow] = useState<BadgeType>();
-  const [keyword, setKeyword] = useState<string>('');
-
-  const [addModalOpen, setAddModalOpen] = useState<boolean>(false);
-  const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
-  const [viewDetailOpen, setViewDetailOpen] = useState<boolean>(false);
-  const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false);
-  const [isAddTournamentBadge, setIsAddTournamentBadge] = useState<boolean>(false)
-  const [isEditTournamentBadge, setIsEditTournamentBadge] = useState<boolean>(false)
-  const [isViewDetailsTournamentBadge, setIsViewDetailsTournamentBadge] = useState<boolean>(false)
-
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const columns: ColumnDef<BadgeType>[] = useMemo(() => [
+const BadgePageContent = ( { data, pagination }: Props ) => {
+  const [ statusConfirmationModalOpen, setStatusConfirmationModalOpen ] = useState<boolean>( false );
+  const [ selectedRow, setSelectedRow ] = useState<BadgeType>();
+  const [ addModalOpen, setAddModalOpen ] = useState<boolean>( false );
+  const [ editModalOpen, setEditModalOpen ] = useState<boolean>( false );
+  const [ viewDetailOpen, setViewDetailOpen ] = useState<boolean>( false );
+  const [ isOpenFilter, setIsOpenFilter ] = useState<boolean>( false );
+  const [ isAddTournamentBadge, setIsAddTournamentBadge ] = useState<boolean>( false );
+  const [ isEditTournamentBadge, setIsEditTournamentBadge ] = useState<boolean>( false );
+  const [ isViewDetailsTournamentBadge, setIsViewDetailsTournamentBadge ] = useState<boolean>( false );
+  const columns: ColumnDef<BadgeType>[] = useMemo( () => [
     {
       header: 'Badge',
-      cell: ({ row }) => {
+      cell: ( { row } ) => {
         return (
           <div className='flex flex-row items-center gap-4'>
-            <Image src={row.original.image_url || '/images/broken-image.png'} width={36} height={36} alt="banner-image" className='rounded-md object-cover object-center h-9 w-9' />
+            <Image src={ row.original.image_url || '/images/broken-image.png' } width={ 36 } height={ 36 } alt="banner-image" className='rounded-md object-cover object-center h-9 w-9' />
             <Typography variant='paragraph-l-regular' className='capitalize'>
-              {row.original.name}
+              { row.original.name }
             </Typography>
           </div>
 
@@ -65,27 +58,27 @@ const BadgePageContent = ({ data, pagination }: Props) => {
     },
     {
       header: 'Category',
-      cell: ({ row }) => {
+      cell: ( { row } ) => {
         return (
           <Typography variant='paragraph-l-regular' className='capitalize'>
-            {row.original.badge_category}
+            { row.original.badge_category }
           </Typography>
         );
       }
     },
     {
       header: 'Required Criteria',
-      cell: ({ row }) => {
+      cell: ( { row } ) => {
         return (
           <Typography variant='paragraph-l-regular'>
-            {row.original.badge_category === 'tournament' ? 'Tournament Winner' : getCriteriaDisplay(row.original.badge_rules)}
+            { row.original.badge_category === 'tournament' ? 'Tournament Winner' : getCriteriaDisplay( row.original.badge_rules ) }
           </Typography>
         );
       }
     },
     {
       header: 'Quantity',
-      cell: ({ row }) => {
+      cell: () => {
         return (
           <Typography variant='paragraph-l-regular' className='capitalize'>
             -
@@ -95,41 +88,41 @@ const BadgePageContent = ({ data, pagination }: Props) => {
     },
     {
       header: 'VP Amount',
-      cell: ({ row }) => {
+      cell: ( { row } ) => {
         return (
           <Typography variant='paragraph-l-regular' className='capitalize'>
-            {row.original.vp_point}
+            { row.original.vp_point }
           </Typography>
         );
       }
     },
     {
       accessorKey: 'status',
-      accessorFn: (row) => row.status,
+      accessorFn: ( row ) => row.status,
       header: 'Status',
-      cell: ({ row }) => {
+      cell: ( { row } ) => {
         return (
-          <Select value={row.original.status}
-            onValueChange={(value) => {
-              setStatusConfirmationModalOpen(true);
-              setSelectedRow(row.original);
-            }}
+          <Select value={ row.original.status }
+            onValueChange={ () => {
+              setStatusConfirmationModalOpen( true );
+              setSelectedRow( row.original );
+            } }
           >
-            <SelectTrigger variant='badge' className={cn(
+            <SelectTrigger variant='badge' className={ cn(
               {
                 'bg-error-50': row.original.status === 'inactive',
                 'bg-blue-50': row.original.status === 'active'
               }
-            )}>
-              <SelectValue aria-label={row.original.status}>
-                <Typography variant='text-body-l-medium' className={cn(
+            ) }>
+              <SelectValue aria-label={ row.original.status }>
+                <Typography variant='text-body-l-medium' className={ cn(
                   'capitalize',
                   {
                     'text-error-700': row.original.status === 'inactive',
                     'text-blue-700': row.original.status === 'active'
                   }
-                )}>
-                  {row.original.status}
+                ) }>
+                  { row.original.status }
                 </Typography>
               </SelectValue>
             </SelectTrigger>
@@ -144,21 +137,21 @@ const BadgePageContent = ({ data, pagination }: Props) => {
     {
       id: 'action',
       header: 'Action',
-      cell: ({ row }) => {
+      cell: ( { row } ) => {
         return (
           <div className='flex flex-row items-center gap-4'>
-            <Button variant='link' onClick={() => {
-              setSelectedRow(row.original)
-              if (row.original.badge_category === 'tournament') return setIsViewDetailsTournamentBadge(true)
-              setViewDetailOpen(true)
-            }}>
+            <Button variant='link' onClick={ () => {
+              setSelectedRow( row.original );
+              if ( row.original.badge_category === 'tournament' ) return setIsViewDetailsTournamentBadge( true );
+              setViewDetailOpen( true );
+            } }>
               <Eye className='cursor-pointer' />
             </Button>
-            <Button variant='link' onClick={() => {
-              setSelectedRow(row.original)
-              if (row.original.badge_category === 'tournament') return setIsEditTournamentBadge(true)
-              setEditModalOpen(true)
-            }}>
+            <Button variant='link' onClick={ () => {
+              setSelectedRow( row.original );
+              if ( row.original.badge_category === 'tournament' ) return setIsEditTournamentBadge( true );
+              setEditModalOpen( true );
+            } }>
               <Edit className='cursor-pointer' />
             </Button>
           </div>
@@ -166,29 +159,21 @@ const BadgePageContent = ({ data, pagination }: Props) => {
       }
     }
   ]
-    , []);
+    , [] );
 
-  const onChangeKeyword = (evt: ChangeEvent<HTMLInputElement>) => {
-    const { value } = evt.target;
-    setKeyword(value);
-    const params = new URLSearchParams(searchParams);
-    params.set('keyword', value);
-    router.push('/badges?' + params.toString());
-  };
+  function getCriteriaDisplay ( listCriteria?: BadgeRuleType[] ): string {
+    const criteria: string = snakeCaseToString( listCriteria?.[ 0 ].name );
+    const numberOfCriteria = listCriteria?.length || 0;
 
-  function getCriteriaDisplay(listCriteria?: BadgeRuleType[]): string {
-    const criteria: string = snakeCaseToString(listCriteria?.[0].name)
-    const numberOfCriteria = listCriteria?.length || 0
+    if ( numberOfCriteria <= 1 ) return criteria || '-';
 
-    if (numberOfCriteria <= 1) return criteria || '-'
-
-    return `${criteria}, +${numberOfCriteria - 1}`
+    return `${criteria}, +${numberOfCriteria - 1}`;
   }
 
   return (
     <div className='flex flex-col gap-6'>
       <section className='table-action'>
-        <Text className='max-w-[300px]' value={keyword} onChange={onChangeKeyword} prefixIcon={<SearchNormal1 size={20} className='text-gray-500 ' />} placeholder='Search...' />
+        <Search />
         <div className='flex flex-row flex-nowrap gap-4'>
           <DropdownMenu>
             <DropdownMenuTrigger variant='default' size='lg' className='gap-4'>
@@ -198,11 +183,11 @@ const BadgePageContent = ({ data, pagination }: Props) => {
               </Typography>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <Button variant='ghost' size='md' onClick={() => setAddModalOpen(true)}>Normal Badge</Button>
-              <Button variant='ghost' size='md' onClick={() => setIsAddTournamentBadge(true)}>Tournament Badge</Button>
+              <Button variant='ghost' size='md' onClick={ () => setAddModalOpen( true ) }>Normal Badge</Button>
+              <Button variant='ghost' size='md' onClick={ () => setIsAddTournamentBadge( true ) }>Tournament Badge</Button>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant='outline' size='lg' className='gap-4' onClick={() => setIsOpenFilter(true)}>
+          <Button variant='outline' size='lg' className='gap-4' onClick={ () => setIsOpenFilter( true ) }>
             <Setting4 />
             <Typography variant='paragraph-l-bold'>
               Filter
@@ -210,53 +195,53 @@ const BadgePageContent = ({ data, pagination }: Props) => {
           </Button>
         </div>
       </section>
-      <BadgeListTable data={data} pagination={pagination} columnConfig={columns} />
+      <BadgeListTable data={ data } pagination={ pagination } columnConfig={ columns } />
       <ViewBadgeDetail
-        badgeCode={selectedRow?.badge_code}
-        open={viewDetailOpen}
-        onOpenChange={(isOpenViewDetail: boolean) => setViewDetailOpen(isOpenViewDetail)}
-        onEdit={() => {
-          setViewDetailOpen(false)
-          setEditModalOpen(true)
-        }}
+        badgeCode={ selectedRow?.badge_code }
+        open={ viewDetailOpen }
+        onOpenChange={ ( isOpenViewDetail: boolean ) => setViewDetailOpen( isOpenViewDetail ) }
+        onEdit={ () => {
+          setViewDetailOpen( false );
+          setEditModalOpen( true );
+        } }
       />
       <AddBadgeModal
-        onOpenChange={(isopenAddModal: boolean) => setAddModalOpen(isopenAddModal)}
-        open={addModalOpen}
+        onOpenChange={ ( isopenAddModal: boolean ) => setAddModalOpen( isopenAddModal ) }
+        open={ addModalOpen }
       />
       <EditBadgeModal
-        onOpenChange={(isopenEditModal: boolean) => setEditModalOpen(isopenEditModal)}
-        open={editModalOpen}
-        badgeCode={selectedRow?.badge_code}
+        onOpenChange={ ( isopenEditModal: boolean ) => setEditModalOpen( isopenEditModal ) }
+        open={ editModalOpen }
+        badgeCode={ selectedRow?.badge_code }
       />
       <AddTournamentBadgeModal
-        onOpenChange={(isOpenAddTournamentBadge) => setIsAddTournamentBadge(isOpenAddTournamentBadge)}
-        open={isAddTournamentBadge}
+        onOpenChange={ ( isOpenAddTournamentBadge ) => setIsAddTournamentBadge( isOpenAddTournamentBadge ) }
+        open={ isAddTournamentBadge }
       />
       <ViewTournamentBadgeDetailModal
-        onEdit={() => {
-          setIsViewDetailsTournamentBadge(false)
-          setIsEditTournamentBadge(true)
-        }}
-        onOpenChange={(isOpenTournamentBadgeDetail) => setIsViewDetailsTournamentBadge(isOpenTournamentBadgeDetail)}
-        open={isViewDetailsTournamentBadge}
-        badgeCode={selectedRow?.parent_code}
+        onEdit={ () => {
+          setIsViewDetailsTournamentBadge( false );
+          setIsEditTournamentBadge( true );
+        } }
+        onOpenChange={ ( isOpenTournamentBadgeDetail ) => setIsViewDetailsTournamentBadge( isOpenTournamentBadgeDetail ) }
+        open={ isViewDetailsTournamentBadge }
+        badgeCode={ selectedRow?.parent_code }
       />
       <EditTournamentBadgeModal
-        open={isEditTournamentBadge}
-        onOpenChange={(isopen) => setIsEditTournamentBadge(isopen)}
-        badgeCode={selectedRow?.parent_code}
+        open={ isEditTournamentBadge }
+        onOpenChange={ ( isopen ) => setIsEditTournamentBadge( isopen ) }
+        badgeCode={ selectedRow?.parent_code }
       />
       <BadgeFilterModal
-        open={isOpenFilter}
-        onOpenChange={(isOpen) => setIsOpenFilter(isOpen)}
+        open={ isOpenFilter }
+        onOpenChange={ ( isOpen ) => setIsOpenFilter( isOpen ) }
       />
       <UpdateBadgeStatusConfirmation
-        open={statusConfirmationModalOpen}
-        onOpenChange={(isOpen) => setStatusConfirmationModalOpen(isOpen)}
-        prevStatus={selectedRow?.status as 'active' | 'inactive'}
-        id={selectedRow?.badge_category === 'tournament' ? selectedRow.parent_code : selectedRow?.badge_code}
-        type={selectedRow?.badge_category === 'tournament' ? 'tournament' : 'normal'}
+        open={ statusConfirmationModalOpen }
+        onOpenChange={ ( isOpen ) => setStatusConfirmationModalOpen( isOpen ) }
+        prevStatus={ selectedRow?.status as 'active' | 'inactive' }
+        id={ selectedRow?.badge_category === 'tournament' ? selectedRow.parent_code : selectedRow?.badge_code }
+        type={ selectedRow?.badge_category === 'tournament' ? 'tournament' : 'normal' }
       />
     </div>
   );

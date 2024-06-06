@@ -130,6 +130,7 @@ textarea:focus{
 }
 
 .image-viewer{
+  z-index: 1000;
   @apply fixed top-0 right-0  w-screen h-screen  items-center justify-center
 }
 

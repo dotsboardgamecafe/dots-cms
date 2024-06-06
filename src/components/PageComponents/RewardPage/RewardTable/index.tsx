@@ -1,6 +1,6 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import { AddCircle, Edit, Eye, SearchNormal1, Setting4 } from 'iconsax-react';
+import { AddCircle, Edit, Eye, Setting4 } from 'iconsax-react';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 
@@ -10,8 +10,8 @@ import { RewardAddForm } from '@/components/PageComponents/RewardPage/RewardAddF
 import { RewardEditForm } from '@/components/PageComponents/RewardPage/RewardEditForm/RewardEditForm';
 import RewardView from '@/components/PageComponents/RewardPage/RewardView';
 import { Button } from '@/components/ui/Buttons';
-import Text from '@/components/ui/Input/Text';
-import { Modal, ModalContent, ModalHeader, ModalTitle } from '@/components/ui/Modal';
+import Search from '@/components/ui/Input/Search';
+import { Modal, ModalContent, ModalHeader } from '@/components/ui/Modal';
 import Pagination from '@/components/ui/Pagination/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import { Separator } from '@/components/ui/Separator';
@@ -34,7 +34,9 @@ type Props = {
 const RewardTable = ( { data, pagination, tiers }: Props ) => {
   const [ addModalOpen, setAddModalOpen ] = useState( false );
   const [ editModalOpen, setEditModalOpen ] = useState( false );
+  const [ detailModalOpen, setDetailModalOpen ] = useState( false );
 
+  const [ selectedRow, setSelectedRow ] = useState<RewardType | null>( null );
 
   const columns: ColumnDef<RewardType>[] = useMemo( () => [
     {
@@ -138,13 +140,23 @@ const RewardTable = ( { data, pagination, tiers }: Props ) => {
       cell: ( { row } ) => {
         return (
           <div className='flex flex-row items-center gap-4'>
-            <Eye className='cursor-pointer' />
-            <Edit className='cursor-pointer' />
+            <Eye className='cursor-pointer' onClick={ () => onViewDetail( row.original ) } />
+            <Edit className='cursor-pointer' onClick={ () => onEdit( row.original ) } />
           </div>
         );
       }
     }
   ], [] );
+
+  const onViewDetail = ( data: RewardType ) => {
+    setSelectedRow( data );
+    setDetailModalOpen( true );
+  };
+
+  const onEdit = ( data: RewardType ) => {
+    setSelectedRow( data );
+    setEditModalOpen( true );
+  };
 
   const table = useReactTable( {
     data,
@@ -152,15 +164,12 @@ const RewardTable = ( { data, pagination, tiers }: Props ) => {
     getPaginationRowModel: getPaginationRowModel(),
     columns,
   } );
+
   return (
     <div className='flex flex-col gap-6'>
       <section className='table-action'>
-        <Text className='max-w-[300px]' prefixIcon={ <SearchNormal1 size={ 20 } className='text-gray-500 ' /> } placeholder='Search...' />
-        <Button variant="default" size="lg" className='gap-2'>
-          <Typography variant='paragraph-l-bold' className='text-white'>
-            Redeem Voucher
-          </Typography>
-        </Button>
+        <Search />
+
         <Button variant="default" size="lg" className='gap-2' onClick={ () => setAddModalOpen( true ) }>
           <AddCircle className='text-white' />
           <Typography variant='paragraph-l-bold' className='text-white'>
@@ -219,15 +228,12 @@ const RewardTable = ( { data, pagination, tiers }: Props ) => {
         </TableBody>
       </Table>
       <Pagination pagination={ pagination } />
-
       <Modal open={ addModalOpen } onOpenChange={ setAddModalOpen } >
         <ModalContent hideCloseIcon>
           <ModalHeader>
-            <ModalTitle>
-              <Typography variant='heading-h4'>
-                Add New Voucher
-              </Typography>
-            </ModalTitle>
+            <Typography variant='heading-h4'>
+              Add New Voucher
+            </Typography>
           </ModalHeader>
           <Separator />
           <RewardAddForm tiers={ tiers } onClose={ () => setAddModalOpen( false ) } />
@@ -236,27 +242,25 @@ const RewardTable = ( { data, pagination, tiers }: Props ) => {
       <Modal open={ editModalOpen } onOpenChange={ setEditModalOpen } >
         <ModalContent hideCloseIcon>
           <ModalHeader>
-            <ModalTitle>
-              <Typography variant='heading-h4'>
-                Edit Voucher
-              </Typography>
-            </ModalTitle>
+            <Typography variant='heading-h4'>
+              Edit Voucher
+            </Typography>
           </ModalHeader>
           <Separator />
-          <RewardEditForm tiers={ tiers } onClose={ () => setEditModalOpen( false ) } />
+          <RewardEditForm tiers={ tiers } onClose={ () => setEditModalOpen( false ) } reward={ selectedRow } />
         </ModalContent>
       </Modal>
-      <Modal open={ editModalOpen } onOpenChange={ setEditModalOpen } >
+      <Modal open={ detailModalOpen } onOpenChange={ setDetailModalOpen } >
         <ModalContent hideCloseIcon>
           <ModalHeader>
-            <ModalTitle>
-              <Typography variant='heading-h4'>
-                Edit Voucher
-              </Typography>
-            </ModalTitle>
+            <Typography variant='text-body-xl-heavy'>
+              { selectedRow?.name }
+            </Typography>
           </ModalHeader>
           <Separator />
-          <RewardView />
+          <RewardView data={ selectedRow } onEdit={ () => {
+            setEditModalOpen( true );
+          } } />
         </ModalContent>
       </Modal>
     </div>

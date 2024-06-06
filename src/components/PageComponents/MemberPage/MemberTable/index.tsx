@@ -1,10 +1,8 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import { Eye, SearchNormal1, Setting4 } from 'iconsax-react';
-import { debounce } from 'lodash';
+import { Eye, Setting4 } from 'iconsax-react';
 import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { ChangeEvent, PropsWithRef, useState } from 'react';
+import { PropsWithRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -12,8 +10,8 @@ import MemberDetailModal from '@/components/PageComponents/MemberPage/DetailModa
 import MemberFilterModal from '@/components/PageComponents/MemberPage/FilterModal';
 import StatusConfirmationModal from '@/components/PageComponents/MemberPage/StatusConfirmationModal';
 import { Button } from '@/components/ui/Buttons';
-import Text from '@/components/ui/Input/Text';
-import PaginationDeprecated from '@/components/ui/Pagination';
+import Search from '@/components/ui/Input/Search';
+import Pagination from '@/components/ui/Pagination/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
@@ -35,8 +33,6 @@ const MemberTable = ( { data, pagination }: Props ) => {
   const [ detailModalOpen, setDetailModalOpen ] = useState<boolean>( false );
   const [ confirmationModalOpen, setConfirmationModalOpen ] = useState<boolean>( false );
   const [ selectedRow, setSelectedRow ] = useState<MemberType>();
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const columns: ColumnDef<MemberType>[] = [
     {
       accessorKey: 'username',
@@ -155,21 +151,11 @@ const MemberTable = ( { data, pagination }: Props ) => {
     setSelectedRow( row );
   };
 
-  const onSearchKeyword = ( evt: ChangeEvent<HTMLInputElement> ) => {
-    const { value } = evt.target;
-    debounced( value );
-  };
-  const onDebounced = ( value: string ) => {
-    const params = new URLSearchParams( searchParams );
-    params.set( 'keyword', value );
-    router.push( '/member?' + params.toString() );
-  };
 
-  const debounced = debounce( onDebounced, 500 );
   return (
     <div className='flex flex-col gap-6'>
       <section className='table-action'>
-        <Text className='max-w-[300px]' prefixIcon={ <SearchNormal1 size={ 20 } className='text-gray-500 ' /> } placeholder='Search...' onChange={ onSearchKeyword } />
+        <Search />
         <Button variant="secondary" size="md" onClick={ () => setFilterModalOpen( true ) }>
           <Setting4 size={ 20 } />
           <Typography variant='paragraph-l-bold'>
@@ -221,19 +207,7 @@ const MemberTable = ( { data, pagination }: Props ) => {
           ) }
         </TableBody>
       </Table>
-      <PaginationDeprecated
-        totalPages={ table.getPageCount() }
-        currentPage={ table.getState().pagination.pageIndex + 1 }
-        itemsPerPage={ table.getState().pagination.pageSize }
-        totalItems={ table.getFilteredRowModel().rows.length }
-        onChangeItemsPerPage={ ( items ) => table.setPageSize( items ) }
-        onNext={ () => table.nextPage() }
-        onPrevious={ () => table.previousPage() }
-        prevDisabled={ !table.getCanPreviousPage() }
-        nextDisabled={ !table.getCanNextPage() }
-        onChangePage={ ( page ) => table.setPageIndex( page ) }
-        from={ table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1 }
-        to={ table.getState().pagination.pageIndex * table.getState().pagination.pageSize + table.getState().pagination.pageSize }
+      <Pagination pagination={ pagination }
       />
       <MemberFilterModal open={ filterModalOpen } onOpenChange={ ( value ) => setFilterModalOpen( value ) } />
       <MemberDetailModal open={ detailModalOpen } onOpenChange={ ( value ) => setDetailModalOpen( value ) } memberData={ selectedRow } />

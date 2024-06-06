@@ -10,6 +10,7 @@ import { PageProps } from '@/types/common';
 
 const TierPage = async ( { searchParams }: PageProps ) => {
   const tiers = await getTiers( { pagination: searchParams.pagination } );
+  console.log( tiers );
   return (
     <>
       <Header title='Tier' subtitle={ [ {

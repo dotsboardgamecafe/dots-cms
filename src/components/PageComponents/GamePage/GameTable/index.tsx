@@ -1,16 +1,15 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import { AddCircle, Edit, Eye, SearchNormal1, Setting4 } from 'iconsax-react';
+import { AddCircle, Edit, Eye, Setting4 } from 'iconsax-react';
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
 import GameFilterModal from '@/components/PageComponents/GamePage/GameTable/GameFilterModal';
 import StatusConfirmationModal from '@/components/PageComponents/GamePage/GameTable/StatusConfirmationModal';
 import { Button } from '@/components/ui/Buttons';
-import Text from '@/components/ui/Input/Text';
+import Search from '@/components/ui/Input/Search';
 import Pagination from '@/components/ui/Pagination/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
@@ -23,27 +22,23 @@ import { GameCategoryType } from '@/types/settings';
 type Props = {
   data: GameType[];
   pagination: PaginationType;
-  gameTypes: GameCategoryType[]
+  gameTypes: GameCategoryType[];
 };
 
 
-const GameTable = ({ data, pagination, gameTypes }: Props) => {
-  const router = useRouter()
-  const pathName = usePathname()
-  const searchParams = useSearchParams()
-  const [searchKeyword, setSearchKeyword] = useState<string>(searchParams.get('keyword') || '')
-  const [isOpenChangeStatus, setIsOpenChangeStatus] = useState<boolean>(false)
-  const [selectedGame, setSelectedGame] = useState<GameType | undefined>()
-  const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false)
+const GameTable = ( { data, pagination, gameTypes }: Props ) => {
+  const [ isOpenChangeStatus, setIsOpenChangeStatus ] = useState<boolean>( false );
+  const [ selectedGame, setSelectedGame ] = useState<GameType | undefined>();
+  const [ isOpenFilter, setIsOpenFilter ] = useState<boolean>( false );
 
   const columns: ColumnDef<GameType>[] = [
     {
       accessorKey: 'name',
       header: 'Game Name',
-      cell: ({ row }) => {
+      cell: ( { row } ) => {
         return (
           <Typography variant='paragraph-l-regular'>
-            {row.original.name}
+            { row.original.name }
           </Typography>
         );
       }
@@ -51,10 +46,10 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
     {
       accessorKey: 'game_type',
       header: 'Type',
-      cell: ({ row }) => {
+      cell: ( { row } ) => {
         return (
           <Typography variant='paragraph-l-regular' className='capitalize'>
-            {row.original.game_type}
+            { row.original.game_type }
           </Typography>
         );
       }
@@ -62,18 +57,18 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
     {
       accessorKey: 'game_categories',
       header: 'Mechanics',
-      cell: ({ row }) => {
+      cell: ( { row } ) => {
         return (
           <>
             <div className='flex flex-row gap-2 flex-wrap'>
-              {row.original.game_categories?.map((category, index) => (
-                <div className='bg-gray-100 rounded-xl px-4' key={`game-mechanics-${index}`}>
+              { row.original.game_categories?.map( ( category, index ) => (
+                <div className='bg-gray-100 rounded-xl px-4' key={ `game-mechanics-${index}` }>
                   <Typography variant='paragraph-l-regular' >
-                    {category.category_name}
+                    { category.category_name }
                   </Typography>
                 </div>
 
-              ))}
+              ) ) }
             </div>
           </>
         );
@@ -82,10 +77,10 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
     {
       accessorKey: 'duration',
       header: 'Duration',
-      cell: ({ row }) => {
+      cell: ( { row } ) => {
         return (
           <Typography variant='paragraph-l-regular'>
-            {row.original.duration} Min
+            { row.original.duration } Min
           </Typography>
         );
       }
@@ -93,10 +88,10 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
     {
       accessorKey: 'cafe_name',
       header: 'Location',
-      cell: ({ row }) => {
+      cell: ( { row } ) => {
         return (
           <Typography variant='paragraph-l-regular'>
-            {row.original.cafe_name}
+            { row.original.cafe_name }
           </Typography>
         );
       }
@@ -104,29 +99,29 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
     {
       accessorKey: 'status',
       header: 'Status',
-      cell: ({ row }) => {
+      cell: ( { row } ) => {
         return (
-          <Select value={row.original.status}
-            onValueChange={() => {
-              setIsOpenChangeStatus(true);
-              setSelectedGame(row.original);
-            }}
+          <Select value={ row.original.status }
+            onValueChange={ () => {
+              setIsOpenChangeStatus( true );
+              setSelectedGame( row.original );
+            } }
           >
-            <SelectTrigger variant='badge' className={cn(
+            <SelectTrigger variant='badge' className={ cn(
               {
                 'bg-error-50': row.original.status === 'inactive',
                 'bg-blue-50': row.original.status === 'active'
               }
-            )}>
-              <SelectValue aria-label={row.original.status}>
-                <Typography variant='text-body-l-medium' className={cn(
+            ) }>
+              <SelectValue aria-label={ row.original.status }>
+                <Typography variant='text-body-l-medium' className={ cn(
                   'capitalize',
                   {
                     'text-error-700': row.original.status === 'inactive',
                     'text-blue-700': row.original.status === 'active'
                   }
-                )}>
-                  {row.original.status}
+                ) }>
+                  { row.original.status }
                 </Typography>
               </SelectValue>
             </SelectTrigger>
@@ -141,13 +136,13 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
     {
       id: 'action',
       header: 'Action',
-      cell: ({ row }) => {
+      cell: ( { row } ) => {
         return (
           <div className='flex flex-row items-center gap-4'>
-            <Link href={`/game/view/${row.original.game_code}`} >
+            <Link href={ `/game/view/${row.original.game_code}` } >
               <Eye className='cursor-pointer' />
             </Link>
-            <Link href={`/game/edit/${row.original.game_code}`} >
+            <Link href={ `/game/edit/${row.original.game_code}` } >
               <Edit className='cursor-pointer' />
             </Link>
           </div>
@@ -156,23 +151,18 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
     }
   ];
 
-  const table = useReactTable({
+  const table = useReactTable( {
     data,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     columns,
-  });
+  } );
 
-  const onChangeKeyword = (evt: ChangeEvent<HTMLInputElement>) => {
-    const { value } = evt.target;
-    setSearchKeyword(value);
-    router.push(pathName + '?' + new URLSearchParams({ keyword: value }).toString());
-  };
 
   return (
     <div className='flex flex-col gap-6'>
       <section className='table-action'>
-        <Text className='max-w-[300px]' value={searchKeyword} onChange={onChangeKeyword} prefixIcon={<SearchNormal1 size={20} className='text-gray-500 ' />} placeholder='Search...' />
+        <Search />
         <div className='flex flex-row flex-nowrap gap-4'>
           <Link href='/game/add'>
             <button className="rounded-[8px] gap-[8px] px-5 py-3 bg-button-midnight-black flex flex-row items-center text-nowrap">
@@ -182,7 +172,7 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
               </Typography>
             </button>
           </Link>
-          <Button variant='outline' size='lg' className='gap-4' onClick={() => setIsOpenFilter(true)}>
+          <Button variant='outline' size='lg' className='gap-4' onClick={ () => setIsOpenFilter( true ) }>
             <Setting4 />
             <Typography variant='paragraph-l-bold'>
               Filter
@@ -193,57 +183,57 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
       <Table>
         <TableHeader>
           {
-            table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+            table.getHeaderGroups().map( ( headerGroup ) => (
+              <TableRow key={ headerGroup.id }>
+                { headerGroup.headers.map( ( header ) => {
                   return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
+                    <TableHead key={ header.id }>
+                      { header.isPlaceholder
                         ? null
                         : flexRender(
                           header.column.columnDef.header,
                           header.getContext()
-                        )}
+                        ) }
                     </TableHead>
                   );
-                })}
+                } ) }
               </TableRow>
-            ))
+            ) )
           }
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
+          { table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map( ( row ) => (
               <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
+                key={ row.id }
+                data-state={ row.getIsSelected() && "selected" }
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                { row.getVisibleCells().map( ( cell ) => (
+                  <TableCell key={ cell.id }>
+                    { flexRender( cell.column.columnDef.cell, cell.getContext() ) }
                   </TableCell>
-                ))}
+                ) ) }
               </TableRow>
-            ))
+            ) )
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell colSpan={ columns.length } className="h-24 text-center">
                 No results.
               </TableCell>
             </TableRow>
-          )}
+          ) }
         </TableBody>
       </Table>
-      <Pagination pagination={pagination} />
+      <Pagination pagination={ pagination } />
       <StatusConfirmationModal
-        open={isOpenChangeStatus}
-        onOpenChange={(isOpen) => setIsOpenChangeStatus(isOpen)}
-        gameData={selectedGame}
+        open={ isOpenChangeStatus }
+        onOpenChange={ ( isOpen ) => setIsOpenChangeStatus( isOpen ) }
+        gameData={ selectedGame }
       />
       <GameFilterModal
-        open={isOpenFilter}
-        onOpenChange={(isOpen) => setIsOpenFilter(isOpen)}
-        gameTypes={gameTypes}
+        open={ isOpenFilter }
+        onOpenChange={ ( isOpen ) => setIsOpenFilter( isOpen ) }
+        gameTypes={ gameTypes }
       />
     </div>
   );

@@ -29,7 +29,9 @@ export default async function LoginPage ( { searchParams }: { searchParams: { er
       {/* Form Section */ }
       <div className='w-[465px] flex-col gap-10 flex '>
         <Image src="/images/logo.png" alt='logo image' width={ 140 } height={ 64 } style={ { width: '140px', height: '64px' } } />
-        <LoginForm />
+        <React.Suspense>
+          <LoginForm />
+        </React.Suspense>
       </div>
     </section>
   );

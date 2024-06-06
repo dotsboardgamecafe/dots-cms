@@ -13,66 +13,66 @@ type Props = {
   onClose: () => void;
 };
 
-const ImageViewer = ({ visible = false, src, onClose }: Props) => {
+const ImageViewer = ( { visible = false, src, onClose }: Props ) => {
 
-  const [isClient, setIsClient] = useState(false);
-  const [zoom, setZoom] = useState(1);
+  const [ isClient, setIsClient ] = useState( false );
+  const [ zoom, setZoom ] = useState( 1 );
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  useEffect( () => {
+    setIsClient( true );
+  }, [] );
 
-  const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max);
+  const clamp = ( num: number, min: number, max: number ) => Math.min( Math.max( num, min ), max );
 
-  const onImageScroll = (evt: React.WheelEvent<HTMLElement>) => {
-    setZoom(clamp(zoom - (evt.deltaY * 0.005), 0.2, 2));
+  const onImageScroll = ( evt: React.WheelEvent<HTMLElement> ) => {
+    setZoom( clamp( zoom - ( evt.deltaY * 0.005 ), 0.2, 2 ) );
   };
 
   const Component = (
     <section className={
-      cn([
+      cn( [
         {
           'hidden': !visible,
           'flex': visible
         },
         'image-viewer',
-      ])
+      ] )
     }>
       <div
-        className={cn(
+        className={ cn(
           'fixed top-0 left-0 z-30 w-full h-full bg-black bg-opacity-50',
           {
             'hidden': !visible,
             'block': visible,
           }
-        )}
-        onClick={onClose}
+        ) }
+        onClick={ onClose }
       />
       <div className='image-viewer-close'>
-        <CloseCircle size={32} onClick={onClose} />
+        <CloseCircle size={ 32 } onClick={ onClose } />
       </div>
 
-      <section className='image-viewport' onWheelCapture={onImageScroll}>
+      <section className='image-viewport' onWheelCapture={ onImageScroll }>
         <Image
-          src={src || '/images/broken-image.png'}
+          src={ src || '/images/broken-image.png' }
           alt='og'
-          width={0}
-          height={0}
+          width={ 0 }
+          height={ 0 }
           sizes='100vw'
           className={
-            cn([
+            cn( [
               'w-full h-full object-cover transition duration-300 ease-in-out',
-            ])
+            ] )
           }
-          style={{
+          style={ {
             transform: `scale(${zoom})`,
-          }}
+          } }
         />
       </section>
     </section>
   );
 
-  return isClient ? createPortal(Component, document.getElementById('portal') || document.body) : null;
+  return isClient ? createPortal( Component, document.getElementById( 'portal' ) || document.body ) : null;
 };
 
 export default ImageViewer;

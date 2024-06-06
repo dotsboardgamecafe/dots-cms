@@ -92,7 +92,7 @@ const MemberTable = ({ data, pagination }: Props) => {
       header: 'Status',
       cell: ({ row }) => {
         return (
-          <Select value={row.original.status} onValueChange={(value) => {
+          <Select value={row.original.status} disabled={row.original.status === 'inactive'} onValueChange={(value) => {
             if (value === 'inactive') {
               setConfirmationModalOpen(true);
               setSelectedRow(row.original);

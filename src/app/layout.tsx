@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import NextTopLoader from 'nextjs-toploader';
 import * as React from 'react';
 
 import '@/styles/globals.css';
@@ -16,7 +17,7 @@ import { siteConfig } from '@/constant/config';
 // !STARTERCONF Change these default meta
 // !STARTERCONF Look at @/constant/config to change them
 export const metadata: Metadata = {
-  metadataBase: new URL( siteConfig.url ),
+  metadataBase: new URL(siteConfig.url),
   title: {
     default: siteConfig.title,
     template: `%s | ${siteConfig.title}`,
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
     title: siteConfig.title,
     description: siteConfig.description,
     siteName: siteConfig.title,
-    images: [ `${siteConfig.url}/images/og.jpg` ],
+    images: [`${siteConfig.url}/images/og.jpg`],
     type: 'website',
     locale: 'en_US',
   },
@@ -44,21 +45,32 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: siteConfig.title,
     description: siteConfig.description,
-    images: [ `${siteConfig.url}/images/og.jpg` ],
+    images: [`${siteConfig.url}/images/og.jpg`],
     creator: 'https://vereintech.com',
   }
 };
 
-export default function RootLayout ( {
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-} ) {
+}) {
   return (
-    <html className={ `${OpenSans.variable} ${Lexend.variable}` }>
+    <html className={`${OpenSans.variable} ${Lexend.variable}`}>
       <body>
+        <NextTopLoader
+          color="#2299DD"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={4}
+          crawl={true}
+          showSpinner={true}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #2299DD,0 0 5px #2299DD"
+        />
         <main>
-          { children }
+          {children}
         </main>
         <section id="portal"></section>
         <Toaster />

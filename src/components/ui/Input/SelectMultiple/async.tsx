@@ -7,8 +7,14 @@ import { SelectOptionType } from '@/components/ui/Input/SelectMultiple'
 import { Pagination } from '@/types/network'
 
 function SelectAsync<isMulti extends boolean, OptionType = SelectOptionType, Additional = Pagination>({ components, ...props }: AsyncPaginateProps<OptionType, GroupBase<OptionType>, Additional, isMulti>) {
+  const [isClient, setIsClient] = React.useState<boolean>(false)
+
+  React.useEffect(() => {
+    setIsClient(true)
+  }, [])
+
   return (
-    <AsyncPaginate
+    <AsyncPaginate<OptionType, GroupBase<OptionType>, Additional, isMulti>
       {...props}
       components={{
         IndicatorSeparator: () => null,
@@ -76,7 +82,7 @@ function SelectAsync<isMulti extends boolean, OptionType = SelectOptionType, Add
         menuPortal: (base) => ({ ...base, zIndex: 999, height: 'fit-content', pointerEvents: 'auto' })
       }}
       menuPlacement='auto'
-      menuPortalTarget={document.body}
+      menuPortalTarget={isClient ? document.body : undefined}
       menuPosition='fixed'
     />
   )

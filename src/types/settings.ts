@@ -11,3 +11,5 @@ type SettingType = {
 
 export type ProvinceType = SettingType
 export type CityType = SettingType
+export type GameCategoryType = SettingType
+export type GameMechanicType = SettingType

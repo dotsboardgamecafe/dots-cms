@@ -8,13 +8,13 @@ import Typography from '@/components/ui/Typography';
 
 type Props = PropsWithRef<{
   open: boolean;
-  onOpenChange: ( open: boolean ) => void;
+  onOpenChange: (open: boolean) => void;
 }>;
 
-const MemberFilterModal = ( { open, onOpenChange }: Props ) => {
+const MemberFilterModal = ({ open, onOpenChange }: Props) => {
 
   return (
-    <Modal open={ open } onOpenChange={ onOpenChange } >
+    <Modal open={open} onOpenChange={onOpenChange} >
       <ModalContent hideCloseIcon>
         <ModalHeader>
           <ModalTitle>
@@ -22,7 +22,7 @@ const MemberFilterModal = ( { open, onOpenChange }: Props ) => {
               <Typography variant='heading-h4'>
                 Filter
               </Typography>
-              <Link href="/member">
+              <Link href="/member" onClick={() => onOpenChange(false)}>
                 <Typography variant='text-body-xl-heavy' className='text-brand-red'>
                   Reset
                 </Typography>
@@ -31,7 +31,7 @@ const MemberFilterModal = ( { open, onOpenChange }: Props ) => {
           </ModalTitle>
         </ModalHeader>
         <Separator />
-        <MemberFilterForm onClose={ () => onOpenChange( false ) } />
+        <MemberFilterForm onClose={() => onOpenChange(false)} />
       </ModalContent>
     </Modal>
   );

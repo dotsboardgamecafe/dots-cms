@@ -4,15 +4,15 @@ import { cookiesHelper } from '@/helper';
 
 
 const usePermissions = () => {
-  const [ permissions, setPermissions ] = useState<string[]>();
+  const [permissions, setPermissions] = useState<string[]>([]);
 
-  useEffect( () => {
+  useEffect(() => {
     getUserData();
-  }, [] );
+  }, []);
 
   const getUserData = async () => {
     const data = await cookiesHelper.getUserPermission();
-    setPermissions( data );
+    setPermissions(data);
   };
 
 

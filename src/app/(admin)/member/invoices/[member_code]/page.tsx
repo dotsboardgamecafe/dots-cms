@@ -9,8 +9,9 @@ import MemberInvoicePage from '@/components/PageComponents/MemberInvoiceHistory'
 
 import { Pagination } from '@/types/network';
 
-type Props = Omit<Pagination, 'keyword'> & {
+type Props = {
   params: { member_code: string }
+  searchParams: Omit<Pagination, 'keyword'>
 };
 
 const ClaimHistoryPage = async ({ params, ...searchParams }: Props) => {

@@ -303,7 +303,7 @@ const EditRoomForm = ({ admins, roomDetail }: Props) => {
                       start_date={field.value?.start_date}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage message={dayjs(field.value.start_date).isBefore(new Date) ? "You can't select the past time" : 'You need to select the schedule'} />
                 </FormItem>
               )}
             />
@@ -450,7 +450,7 @@ const EditRoomForm = ({ admins, roomDetail }: Props) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Textarea note='Max 100 characters' placeholder='Game Description...' className='min-h-[225px]' {...field} />
+                    <Textarea note='Max 100 characters' maxLength={100} placeholder='Game Description...' className='min-h-[225px]' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -458,7 +458,7 @@ const EditRoomForm = ({ admins, roomDetail }: Props) => {
             />
           </section>
           <section className='w-full flex justify-end gap-[16px]'>
-            <Button variant='secondary' size="xl" onClick={(evt) => { router.back(); }}>
+            <Button variant='secondary' size="xl" onClick={(evt) => { evt.preventDefault(); router.replace('/room'); }}>
               Cancel
             </Button>
             <Button variant='default' size="xl" type='submit' loading={isSubmitting} disabled={isSubmitting}>

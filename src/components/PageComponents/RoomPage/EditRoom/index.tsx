@@ -458,7 +458,7 @@ const EditRoomForm = ({ admins, roomDetail }: Props) => {
             />
           </section>
           <section className='w-full flex justify-end gap-[16px]'>
-            <Button variant='secondary' size="xl" onClick={(evt) => { router.back(); }}>
+            <Button variant='secondary' size="xl" onClick={(evt) => { evt.preventDefault(); router.replace('/room'); }}>
               Cancel
             </Button>
             <Button variant='default' size="xl" type='submit' loading={isSubmitting} disabled={isSubmitting}>

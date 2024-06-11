@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { z } from 'zod';
 
 export type RoomType = {
@@ -60,7 +61,7 @@ export type RoomParticipant = {
   reward_point: number;
 };
 
-export const RoomParticipantSchema = z.array( z.object( {
+export const RoomParticipantSchema = z.array(z.object({
   user_code: z.string(),
   user_name: z.string(),
   user_image_url: z.string(),
@@ -69,27 +70,36 @@ export const RoomParticipantSchema = z.array( z.object( {
   additional_info: z.string(),
   position: z.number(),
   reward_point: z.number(),
-} ) );
+}));
 
-export const AddRoomSchema = z.object( {
-  room_type: z.enum( [ "normal", "special_event" ], {
+export const AddRoomSchema = z.object({
+  room_type: z.enum(["normal", "special_event"], {
     required_error: "You need to select a room type.",
-  } ),
-  room_name: z.string( { required_error: "You need to enter a room name.", } ),
-  game_code: z.string( { required_error: "You need to select a game.", } ),
-  game_master: z.string( { required_error: "You need to select a game master.", } ),
-  schedule: z.object( {
+  }),
+  room_name: z.string({ required_error: "You need to enter a room name.", }),
+  game_code: z.string({ required_error: "You need to select a game.", }),
+  game_master: z.string({ required_error: "You need to select a game master.", }),
+  schedule: z.object({
     start_date: z.date(),
     end_date: z.date(),
-  } ),
-  location: z.string( { required_error: "You need to select a location.", } ),
-  level: z.string( { required_error: "You need to select a level.", } ),
-  player_slot: z.string( { required_error: "You need to set a player slot availability.", } ),
-  price: z.number( { required_error: "You need enter a price for the game room.", } ).min( 15000, "Min Price Rp. 15000" ),
-  points: z.string( { required_error: "You need select a points for the game room.", } ),
-  description: z.string( { required_error: "You need to enter a description for the game room.", } ),
-  banner: z.string( { required_error: "You need to upload banner for the game room.", } ),
-} );
+  }).superRefine(({ start_date }, ctx) => {
+    if (dayjs(start_date).isBefore(new Date())) ctx.addIssue({
+      type: 'date',
+      code: z.ZodIssueCode.too_small,
+      inclusive: true,
+      minimum: 1,
+      message: "You can't select the past time",
+      path: ['schedule']
+    })
+  }),
+  location: z.string({ required_error: "You need to select a location.", }),
+  level: z.string({ required_error: "You need to select a level.", }),
+  player_slot: z.string({ required_error: "You need to set a player slot availability.", }),
+  price: z.number({ required_error: "You need enter a price for the game room.", }).min(15000, "Min Price Rp. 15000"),
+  points: z.string({ required_error: "You need select a points for the game room.", }),
+  description: z.string({ required_error: "You need to enter a description for the game room.", }),
+  banner: z.string({ required_error: "You need to upload banner for the game room.", }),
+});
 
 export type AddRoomPayload = {
   game_master_code?: string,

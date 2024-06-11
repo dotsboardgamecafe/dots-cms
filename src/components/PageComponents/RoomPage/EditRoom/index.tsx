@@ -303,7 +303,7 @@ const EditRoomForm = ({ admins, roomDetail }: Props) => {
                       start_date={field.value?.start_date}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage message={dayjs(field.value.start_date).isBefore(new Date) ? "You can't select the past time" : 'You need to select the schedule'} />
                 </FormItem>
               )}
             />

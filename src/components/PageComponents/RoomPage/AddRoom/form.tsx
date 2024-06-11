@@ -411,7 +411,7 @@ const AddRoomForm = ({ admins }: Props) => {
             />
           </section>
           <section className='w-full flex justify-end gap-[16px]'>
-            <Button variant='secondary' size="xl" onClick={(evt) => { evt.preventDefault(); form.reset(); }}>
+            <Button variant='secondary' size="xl" onClick={(evt) => { evt.preventDefault(); router.replace('/room'); }}>
               Cancel
             </Button>
             <Button variant='default' size="xl" type='submit'>

@@ -35,6 +35,14 @@ const RoomTable = ({ data, pagination }: Props) => {
   const [selectedRow, setSelectedRow] = useState<RoomType>();
   const router = useRouter();
 
+  const getRoomStatus = (roomData: RoomType): string => {
+    if (roomData.status !== 'active') return roomData.status
+    const isAlreadyPast = dayjs(roomData.end_date).isBefore(dayjs())
+
+    if (isAlreadyPast) return 'inactive'
+    return roomData.status
+  }
+
   const columns: ColumnDef<RoomType>[] = useMemo(() => [
     {
       accessorKey: 'type',
@@ -122,8 +130,8 @@ const RoomTable = ({ data, pagination }: Props) => {
       header: 'Status',
       cell: ({ row }) => {
         return (
-          <Select value={row.original.status}
-            disabled={row.original.status === 'inactive' || row.original.current_used_slot > 0}
+          <Select value={getRoomStatus(row.original)}
+            disabled={getRoomStatus(row.original) === 'inactive' || row.original.current_used_slot > 0}
             onValueChange={(value) => {
               if (value === 'inactive') {
                 setStatusConfirmationModalOpen(true);
@@ -133,19 +141,19 @@ const RoomTable = ({ data, pagination }: Props) => {
           >
             <SelectTrigger variant='badge' className={cn(
               {
-                'bg-error-50': row.original.status === 'inactive',
-                'bg-blue-50': row.original.status === 'active'
+                'bg-error-50': getRoomStatus(row.original) === 'inactive',
+                'bg-blue-50': getRoomStatus(row.original) === 'active'
               }
             )}>
-              <SelectValue aria-label={row.original.status}>
+              <SelectValue aria-label={getRoomStatus(row.original)}>
                 <Typography variant='text-body-l-medium' className={cn(
                   'capitalize',
                   {
-                    'text-error-700': row.original.status === 'inactive',
-                    'text-blue-700': row.original.status === 'active'
+                    'text-error-700': getRoomStatus(row.original) === 'inactive',
+                    'text-blue-700': getRoomStatus(row.original) === 'active'
                   }
                 )}>
-                  {row.original.status}
+                  {getRoomStatus(row.original)}
                 </Typography>
               </SelectValue>
             </SelectTrigger>

@@ -251,7 +251,7 @@ const TournamentInfoForm: React.FC<{ tournamentDetail?: TournamentDetailType }> 
               </Typography>
             </FormLabel>
             <FormControl>
-              <Textarea note='Max 100 characters' placeholder='Game Description...' className='min-h-[225px]' {...field} />
+              <Textarea note='Max 100 characters' maxLength={100} placeholder='Game Description...' className='min-h-[225px]' {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

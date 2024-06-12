@@ -6,8 +6,8 @@ import PageContainer from '@/components/LayoutComponents/PageContainer';
 import AddGameForm from '@/components/PageComponents/GamePage/GameAddForm';
 
 const AddGamePage = async () => {
-  const admins = await getAdmins({ limit: 999999 });
-  const cafes = await getCafes({ limit: 999999 });
+  const admins = await getAdmins({ pagination: { limit: 9999999, status: 'active' } });
+  const cafes = await getCafes({ pagination: { limit: 9999999, status: 'active' } });
 
   return (
     <div>

@@ -71,7 +71,7 @@ export const AddBannerForm = ({ onClose, defaultData, onSubmit }: Props) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Text placeholder='Enter Banner Title' value={field.value} onChange={field.onChange} />
+                <Text placeholder='Enter Banner Title' value={field.value} onChange={field.onChange} maxLength={100} />
               </FormControl>
               <FormMessage />
             </FormItem>

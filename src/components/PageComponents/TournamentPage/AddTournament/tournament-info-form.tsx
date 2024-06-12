@@ -76,7 +76,7 @@ const TournamentInfoForm: React.FC<{ tournamentDetail?: TournamentDetailType }> 
               </Typography>
             </FormLabel>
             <FormControl>
-              <Text placeholder='Enter Tournament Name' {...field} />
+              <Text placeholder='Enter Tournament Name' {...field} maxLength={100} />
             </FormControl>
             <FormMessage />
           </FormItem>

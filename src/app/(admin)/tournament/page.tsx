@@ -9,18 +9,17 @@ import PageContainer from '@/components/LayoutComponents/PageContainer';
 import TournamentTable from '@/components/PageComponents/TournamentPage/DataTable';
 
 import { PageProps } from '@/types/common';
-import { Pagination } from '@/types/network';
 
-const RoomPage = async ( { searchParams }: PageProps ) => {
-  const tournaments = await getTournaments( { pagination: searchParams as Pagination } );
+const RoomPage = async ({ searchParams }: PageProps) => {
+  const tournaments = await getTournaments({ pagination: searchParams });
   return (
     <>
-      <Header title='Tournament' subtitle={ [ {
+      <Header title='Tournament' subtitle={[{
         label: 'All Tournament Information',
         link: '/tournament'
-      } ] } />
+      }]} />
       <PageContainer>
-        <TournamentTable data={ tournaments.data } pagination={ tournaments.pagination } />
+        <TournamentTable data={tournaments.data} pagination={tournaments.pagination} />
       </PageContainer>
     </>
 

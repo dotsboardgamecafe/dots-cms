@@ -144,7 +144,7 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
                         </Typography>
                       </FormLabel>
                       <FormControl>
-                        <Text placeholder='Game Name' value={field.value} onChange={field.onChange} />
+                        <Text placeholder='Game Name' value={field.value} onChange={field.onChange} maxLength={100} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

@@ -17,15 +17,15 @@ import { ResponseType } from '@/types/network';
 
 type Props = {
   onClose: () => void;
-  onSubmit: ( data: TPostBannerPayload ) => Promise<ResponseType<any>>;
+  onSubmit: (data: TPostBannerPayload) => Promise<ResponseType<any>>;
   defaultData?: TBannerData;
 };
 
-export const AddBannerForm = ( { onClose, defaultData, onSubmit }: Props ) => {
-  const [ isSubmitting, setIsSubmitting ] = useState<boolean>( false );
+export const AddBannerForm = ({ onClose, defaultData, onSubmit }: Props) => {
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { toast } = useToast();
 
-  const form = useForm<TPostBannerPayload>( ( {
+  const form = useForm<TPostBannerPayload>(({
     defaultValues: {
       banner_type: '',
       description: '',
@@ -34,36 +34,36 @@ export const AddBannerForm = ( { onClose, defaultData, onSubmit }: Props ) => {
       status: 'unpublish',
       ...defaultData
     },
-    resolver: zodResolver( AddBannerSchema )
-  } ) );
+    resolver: zodResolver(AddBannerSchema)
+  }));
 
-  const handleFormSubmit = ( data: TPostBannerPayload ) => {
-    setIsSubmitting( true );
-    onSubmit( data )
-      .then( () => {
+  const handleFormSubmit = (data: TPostBannerPayload) => {
+    setIsSubmitting(true);
+    onSubmit(data)
+      .then(() => {
         onClose();
-        toast( {
+        toast({
           title: `Banner successfully ${defaultData ? 'updated!' : 'added!'}`,
           variant: 'default',
-        } );
-      } )
-      .catch( () => {
-        toast( {
+        });
+      })
+      .catch(() => {
+        toast({
           title: 'Something went wrong',
           description: `failed to ${defaultData ? 'update' : 'add'} the banned`,
           variant: 'destructive',
-        } );
-      } )
-      .finally( () => setIsSubmitting( false ) );
+        });
+      })
+      .finally(() => setIsSubmitting(false));
   };
 
   return (
-    <Form { ...form }>
-      <form onSubmit={ form.handleSubmit( handleFormSubmit ) } className='flex flex-col gap-6'>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleFormSubmit)} className='flex flex-col gap-6'>
         <FormField
-          control={ form.control }
+          control={form.control}
           name="title"
-          render={ ( { field } ) => (
+          render={({ field }) => (
             <FormItem >
               <FormLabel className='mb-2 block'>
                 <Typography variant='paragraph-l-medium'>
@@ -71,16 +71,16 @@ export const AddBannerForm = ( { onClose, defaultData, onSubmit }: Props ) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Text placeholder='Enter Banner Title' value={ field.value } onChange={ field.onChange } />
+                <Text placeholder='Enter Banner Title' value={field.value} onChange={field.onChange} />
               </FormControl>
               <FormMessage />
             </FormItem>
-          ) }
+          )}
         />
         <FormField
-          control={ form.control }
+          control={form.control}
           name="banner_type"
-          render={ ( { field } ) => (
+          render={({ field }) => (
             <FormItem className="space-y-3">
               <FormLabel>
                 <Typography variant='paragraph-l-medium'>
@@ -88,11 +88,11 @@ export const AddBannerForm = ( { onClose, defaultData, onSubmit }: Props ) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Select value={ field.value } onValueChange={ field.onChange }>
+                <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger>
-                    <SelectValue aria-label={ field.value } placeholder='Select Banner Category'>
+                    <SelectValue aria-label={field.value} placeholder='Select Banner Category'>
                       <Typography variant='text-body-l-medium' className="capitalize" >
-                        { field.value }
+                        {field.value}
                       </Typography>
                     </SelectValue>
                   </SelectTrigger>
@@ -104,12 +104,12 @@ export const AddBannerForm = ( { onClose, defaultData, onSubmit }: Props ) => {
               </FormControl>
               <FormMessage />
             </FormItem>
-          ) }
+          )}
         />
         <FormField
-          control={ form.control }
+          control={form.control}
           name="description"
-          render={ ( { field } ) => (
+          render={({ field }) => (
             <FormItem >
               <FormLabel className='mb-2 block'>
                 <Typography variant='paragraph-l-medium'>
@@ -117,16 +117,16 @@ export const AddBannerForm = ( { onClose, defaultData, onSubmit }: Props ) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Textarea note='Max 100 characters' maxLength={ 100 } placeholder='Enter Banner Description' value={ field.value } onChange={ field.onChange } className='resize-none' />
+                <Textarea note='Max 100 characters' maxLength={100} placeholder='Enter Banner Description' value={field.value} onChange={field.onChange} className='resize-none' />
               </FormControl>
               <FormMessage />
             </FormItem>
-          ) }
+          )}
         />
         <FormField
           name='image_url'
-          control={ form.control }
-          render={ ( { field } ) => (
+          control={form.control}
+          render={({ field }) => (
             <FormItem>
               <FormLabel className='mb-2 block' htmlFor='status'>
                 <Typography variant='paragraph-l-medium'>
@@ -134,15 +134,15 @@ export const AddBannerForm = ( { onClose, defaultData, onSubmit }: Props ) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Upload onChange={ field.onChange } variant='default' />
+                <Upload value={field.value} onChange={field.onChange} variant='default' />
               </FormControl>
               <FormMessage />
             </FormItem>
-          ) }
+          )}
         />
         <section className='flex gap-6'>
-          <Button variant="secondary" size='lg' className='flex-1' onClick={ ( evt ) => { evt.preventDefault(); onClose(); } } disabled={ isSubmitting }>Cancel</Button>
-          <Button variant="default" size='lg' type='submit' className='flex-1' disabled={ isSubmitting }>{ defaultData ? 'Save Changes' : 'Add' }</Button>
+          <Button variant="secondary" size='lg' className='flex-1' onClick={(evt) => { evt.preventDefault(); onClose(); }} disabled={isSubmitting}>Cancel</Button>
+          <Button variant="default" size='lg' type='submit' className='flex-1' disabled={isSubmitting}>{defaultData ? 'Save Changes' : 'Add'}</Button>
         </section>
       </form>
     </Form >

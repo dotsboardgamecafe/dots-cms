@@ -3,7 +3,7 @@ import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReact
 import { Eye, ReceiptItem, Setting4 } from 'iconsax-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { PropsWithRef, useState } from 'react';
+import { PropsWithRef, useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -157,6 +157,12 @@ const MemberTable = ({ data, pagination }: Props) => {
     setSelectedRow(row);
   };
 
+  useEffect(() => {
+    if (!pagination.limit) return
+    table.setPageSize(pagination.limit)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagination.limit])
 
   return (
     <div className='flex flex-col gap-6'>

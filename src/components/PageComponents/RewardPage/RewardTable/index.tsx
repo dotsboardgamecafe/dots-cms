@@ -2,7 +2,7 @@
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { AddCircle, Edit, Eye, Setting4 } from 'iconsax-react';
 import Image from 'next/image';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -31,23 +31,23 @@ type Props = {
 };
 
 
-const RewardTable = ( { data, pagination, tiers }: Props ) => {
-  const [ addModalOpen, setAddModalOpen ] = useState( false );
-  const [ editModalOpen, setEditModalOpen ] = useState( false );
-  const [ detailModalOpen, setDetailModalOpen ] = useState( false );
+const RewardTable = ({ data, pagination, tiers }: Props) => {
+  const [addModalOpen, setAddModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
 
-  const [ selectedRow, setSelectedRow ] = useState<RewardType | null>( null );
+  const [selectedRow, setSelectedRow] = useState<RewardType | null>(null);
 
-  const columns: ColumnDef<RewardType>[] = useMemo( () => [
+  const columns: ColumnDef<RewardType>[] = useMemo(() => [
     {
       accessorKey: 'name',
       header: 'Voucher Reward',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
           <div className='flex flex-row gap-2'>
-            { row.original.image_url && <Image src={ row.original.image_url } width={ 73 } height={ 36 } alt='Voucher Image' /> }
+            {row.original.image_url && <Image src={row.original.image_url} width={73} height={36} alt='Voucher Image' />}
             <Typography variant='paragraph-l-regular'>
-              { row.original.name }
+              {row.original.name}
             </Typography>
           </div>
         );
@@ -56,23 +56,23 @@ const RewardTable = ( { data, pagination, tiers }: Props ) => {
     {
       accessorKey: 'category_type',
       header: 'Category Voucher',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
           <Typography variant='paragraph-l-regular' className='capitalize'>
-            { row.original.category_type }
+            {row.original.category_type}
           </Typography>
         );
       }
     },
     {
       header: 'Tier',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
           <>
             <div className='flex flex-row gap-2 flex-wrap'>
               <div className='bg-gray-100 rounded-xl px-4'>
                 <Typography variant='paragraph-l-regular' >
-                  { row.original.Tier.name }
+                  {row.original.Tier.name}
                 </Typography>
               </div>
             </div>
@@ -83,10 +83,10 @@ const RewardTable = ( { data, pagination, tiers }: Props ) => {
     {
       accessorKey: 'voucher_code',
       header: 'Manual Code',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
           <Typography variant='paragraph-l-regular'>
-            { row.original.voucher_code || '-' }
+            {row.original.voucher_code || '-'}
           </Typography>
         );
       }
@@ -94,10 +94,10 @@ const RewardTable = ( { data, pagination, tiers }: Props ) => {
     {
       accessorKey: 'expired_date',
       header: 'Expire Date',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
           <Typography variant='paragraph-l-regular'>
-            { formatDate( row.original.expired_date ) }
+            {formatDate(row.original.expired_date)}
           </Typography>
         );
       }
@@ -105,23 +105,23 @@ const RewardTable = ( { data, pagination, tiers }: Props ) => {
     {
       accessorKey: 'status',
       header: 'Status',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
-          <Select value={ row.original.status }>
-            <SelectTrigger variant='badge' className={ cn(
+          <Select value={row.original.status}>
+            <SelectTrigger variant='badge' className={cn(
               {
                 'bg-error-50': row.original.status === 'Closed',
                 'bg-blue-50': row.original.status === 'Active'
               }
-            ) }>
-              <SelectValue aria-label={ row.original.status }>
-                <Typography variant='text-body-l-medium' className={ cn(
+            )}>
+              <SelectValue aria-label={row.original.status}>
+                <Typography variant='text-body-l-medium' className={cn(
                   {
                     'text-error-700': row.original.status === 'Closed',
                     'text-blue-700': row.original.status === 'Active'
                   }, 'capitalize'
-                ) }>
-                  { row.original.status }
+                )}>
+                  {row.original.status}
                 </Typography>
               </SelectValue>
             </SelectTrigger>
@@ -137,40 +137,47 @@ const RewardTable = ( { data, pagination, tiers }: Props ) => {
     {
       id: 'action',
       header: 'Action',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
           <div className='flex flex-row items-center gap-4'>
-            <Eye className='cursor-pointer' onClick={ () => onViewDetail( row.original ) } />
-            <Edit className='cursor-pointer' onClick={ () => onEdit( row.original ) } />
+            <Eye className='cursor-pointer' onClick={() => onViewDetail(row.original)} />
+            <Edit className='cursor-pointer' onClick={() => onEdit(row.original)} />
           </div>
         );
       }
     }
-  ], [] );
+  ], []);
 
-  const onViewDetail = ( data: RewardType ) => {
-    setSelectedRow( data );
-    setDetailModalOpen( true );
+  const onViewDetail = (data: RewardType) => {
+    setSelectedRow(data);
+    setDetailModalOpen(true);
   };
 
-  const onEdit = ( data: RewardType ) => {
-    setSelectedRow( data );
-    setEditModalOpen( true );
+  const onEdit = (data: RewardType) => {
+    setSelectedRow(data);
+    setEditModalOpen(true);
   };
 
-  const table = useReactTable( {
+  const table = useReactTable({
     data,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     columns,
-  } );
+  });
+
+  useEffect(() => {
+    if (!pagination.limit) return
+    table.setPageSize(pagination.limit)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagination.limit])
 
   return (
     <div className='flex flex-col gap-6'>
       <section className='table-action'>
         <Search />
 
-        <Button variant="default" size="lg" className='gap-2' onClick={ () => setAddModalOpen( true ) }>
+        <Button variant="default" size="lg" className='gap-2' onClick={() => setAddModalOpen(true)}>
           <AddCircle className='text-white' />
           <Typography variant='paragraph-l-bold' className='text-white'>
             Add New Voucher
@@ -186,49 +193,49 @@ const RewardTable = ( { data, pagination, tiers }: Props ) => {
       <Table>
         <TableHeader>
           {
-            table.getHeaderGroups().map( ( headerGroup ) => (
-              <TableRow key={ headerGroup.id }>
-                { headerGroup.headers.map( ( header ) => {
+            table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={ header.id }>
-                      { header.isPlaceholder
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
                         ? null
                         : flexRender(
                           header.column.columnDef.header,
                           header.getContext()
-                        ) }
+                        )}
                     </TableHead>
                   );
-                } ) }
+                })}
               </TableRow>
-            ) )
+            ))
           }
         </TableHeader>
         <TableBody>
-          { table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map( ( row ) => (
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
               <TableRow
-                key={ row.id }
-                data-state={ row.getIsSelected() && "selected" }
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
               >
-                { row.getVisibleCells().map( ( cell ) => (
-                  <TableCell key={ cell.id }>
-                    { flexRender( cell.column.columnDef.cell, cell.getContext() ) }
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
-                ) ) }
+                ))}
               </TableRow>
-            ) )
+            ))
           ) : (
             <TableRow>
-              <TableCell colSpan={ columns.length } className="h-24 text-center">
+              <TableCell colSpan={columns.length} className="h-24 text-center">
                 No results.
               </TableCell>
             </TableRow>
-          ) }
+          )}
         </TableBody>
       </Table>
-      <Pagination pagination={ pagination } />
-      <Modal open={ addModalOpen } onOpenChange={ setAddModalOpen } >
+      <Pagination pagination={pagination} />
+      <Modal open={addModalOpen} onOpenChange={setAddModalOpen} >
         <ModalContent hideCloseIcon>
           <ModalHeader>
             <Typography variant='heading-h4'>
@@ -236,10 +243,10 @@ const RewardTable = ( { data, pagination, tiers }: Props ) => {
             </Typography>
           </ModalHeader>
           <Separator />
-          <RewardAddForm tiers={ tiers } onClose={ () => setAddModalOpen( false ) } />
+          <RewardAddForm tiers={tiers} onClose={() => setAddModalOpen(false)} />
         </ModalContent>
       </Modal>
-      <Modal open={ editModalOpen } onOpenChange={ setEditModalOpen } >
+      <Modal open={editModalOpen} onOpenChange={setEditModalOpen} >
         <ModalContent hideCloseIcon>
           <ModalHeader>
             <Typography variant='heading-h4'>
@@ -247,20 +254,20 @@ const RewardTable = ( { data, pagination, tiers }: Props ) => {
             </Typography>
           </ModalHeader>
           <Separator />
-          <RewardEditForm tiers={ tiers } onClose={ () => setEditModalOpen( false ) } reward={ selectedRow } />
+          <RewardEditForm tiers={tiers} onClose={() => setEditModalOpen(false)} reward={selectedRow} />
         </ModalContent>
       </Modal>
-      <Modal open={ detailModalOpen } onOpenChange={ setDetailModalOpen } >
+      <Modal open={detailModalOpen} onOpenChange={setDetailModalOpen} >
         <ModalContent hideCloseIcon>
           <ModalHeader>
             <Typography variant='text-body-xl-heavy'>
-              { selectedRow?.name }
+              {selectedRow?.name}
             </Typography>
           </ModalHeader>
           <Separator />
-          <RewardView data={ selectedRow } onEdit={ () => {
-            setEditModalOpen( true );
-          } } />
+          <RewardView data={selectedRow} onEdit={() => {
+            setEditModalOpen(true);
+          }} />
         </ModalContent>
       </Modal>
     </div>

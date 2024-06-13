@@ -1,5 +1,6 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
+import { useEffect } from 'react';
 
 import Pagination from '@/components/ui/Pagination/pagination';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
@@ -22,6 +23,13 @@ const CafeTable = ({ data, pagination, columnConfig }: Props) => {
     manualPagination: true,
     columns: columnConfig,
   });
+
+  useEffect(() => {
+    if (!pagination.limit) return
+    table.setPageSize(pagination.limit)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagination.limit])
 
   return (
     <div className='flex flex-col gap-6'>

@@ -2,7 +2,7 @@
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { AddCircle, Edit, Eye, Setting4 } from 'iconsax-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -168,6 +168,12 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
     columns,
   });
 
+  useEffect(() => {
+    if (!pagination.limit) return
+    table.setPageSize(pagination.limit)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagination.limit])
 
   return (
     <div className='flex flex-col gap-6'>

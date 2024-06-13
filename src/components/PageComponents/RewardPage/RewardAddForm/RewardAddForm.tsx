@@ -24,11 +24,11 @@ type Props = {
   onClose: () => void;
 };
 
-export const RewardAddForm = ( { onClose, tiers }: Props ) => {
+export const RewardAddForm = ({ onClose, tiers }: Props) => {
   const { toast } = useToast();
 
-  const [ loading, setLoading ] = useState( false );
-  const form = useForm<z.infer<typeof RewardAddSchema>>( ( {
+  const [loading, setLoading] = useState(false);
+  const form = useForm<z.infer<typeof RewardAddSchema>>(({
     defaultValues: {
       category_type: '',
       expired_date: '',
@@ -37,38 +37,38 @@ export const RewardAddForm = ( { onClose, tiers }: Props ) => {
       status: 'active',
       tier_code: ''
     },
-    resolver: zodResolver( RewardAddSchema )
-  } ) );
+    resolver: zodResolver(RewardAddSchema)
+  }));
 
-  const onSubmit = async ( data: z.infer<typeof RewardAddSchema> ) => {
+  const onSubmit = async (data: z.infer<typeof RewardAddSchema>) => {
     try {
-      setLoading( true );
-      const res = await addRewards( { body: data } );
-      toast( {
+      setLoading(true);
+      const res = await addRewards({ body: data });
+      toast({
         title: `Reward voucher successfully added!`,
         variant: 'default',
-      } );
+      });
       onClose();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch ( error: any ) {
-      toast( {
+    } catch (error: any) {
+      toast({
         title: `Something went wrong!'`,
         description: error.message,
         variant: 'destructive',
-      } );
-      setLoading( false );
+      });
+      setLoading(false);
     } finally {
-      setLoading( false );
+      setLoading(false);
     }
   };
 
   return (
-    <Form { ...form }>
-      <form onSubmit={ form.handleSubmit( onSubmit ) } className='flex flex-col gap-6'>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-6'>
         <FormField
           name='name'
-          control={ form.control }
-          render={ ( { field } ) => (
+          control={form.control}
+          render={({ field }) => (
             <FormItem>
               <FormLabel className='mb-2 block' htmlFor='status'>
                 <Typography variant='paragraph-l-medium'>
@@ -76,16 +76,16 @@ export const RewardAddForm = ( { onClose, tiers }: Props ) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Text placeholder='Enter Voucher Title' value={ field.value } onChange={ field.onChange } />
+                <Text placeholder='Enter Voucher Title' value={field.value} onChange={field.onChange} maxLength={100} />
               </FormControl>
               <FormMessage />
             </FormItem>
-          ) }
+          )}
         />
         <FormField
-          control={ form.control }
+          control={form.control}
           name="category_type"
-          render={ ( { field } ) => (
+          render={({ field }) => (
             <FormItem >
               <FormLabel className='mb-2 block'>
                 <Typography variant='paragraph-l-medium'>
@@ -93,11 +93,11 @@ export const RewardAddForm = ( { onClose, tiers }: Props ) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Select value={ field.value } onValueChange={ ( value ) => field.onChange( value ) }>
+                <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
                   <SelectTrigger>
-                    <SelectValue aria-label={ field.value } placeholder='Category'>
+                    <SelectValue aria-label={field.value} placeholder='Category'>
                       <Typography variant='text-body-l-medium' className="capitalize" >
-                        { field.value }
+                        {field.value}
                       </Typography>
                     </SelectValue>
                   </SelectTrigger>
@@ -109,12 +109,12 @@ export const RewardAddForm = ( { onClose, tiers }: Props ) => {
               </FormControl>
               <FormMessage />
             </FormItem>
-          ) }
+          )}
         />
         <FormField
-          control={ form.control }
+          control={form.control}
           name="tier_code"
-          render={ ( { field } ) => (
+          render={({ field }) => (
             <FormItem >
               <FormLabel className='mb-2 block'>
                 <Typography variant='paragraph-l-medium'>
@@ -122,29 +122,29 @@ export const RewardAddForm = ( { onClose, tiers }: Props ) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Select value={ field.value } onValueChange={ ( value ) => field.onChange( value ) }>
+                <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
                   <SelectTrigger>
-                    <SelectValue aria-label={ field.value } placeholder='Select tier'>
+                    <SelectValue aria-label={field.value} placeholder='Select tier'>
                       <Typography variant='text-body-l-medium' className="capitalize" >
-                        { tiers.find( ( tier ) => tier.tier_code === field.value )?.name || '-' }
+                        {tiers.find((tier) => tier.tier_code === field.value)?.name || '-'}
                       </Typography>
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    { tiers.map( ( tier ) => (
-                      <SelectItem key={ tier.tier_code } value={ tier.tier_code }>{ tier.name }</SelectItem>
-                    ) ) }
+                    {tiers.map((tier) => (
+                      <SelectItem key={tier.tier_code} value={tier.tier_code}>{tier.name}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </FormControl>
               <FormMessage />
             </FormItem>
-          ) }
+          )}
         />
         <FormField
-          control={ form.control }
+          control={form.control}
           name="expired_date"
-          render={ ( { field } ) => (
+          render={({ field }) => (
             <FormItem >
               <FormLabel className='mb-2 block'>
                 <Typography variant='paragraph-l-medium'>
@@ -152,16 +152,16 @@ export const RewardAddForm = ( { onClose, tiers }: Props ) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <DatePicker onChange={ field.onChange } value={ field.value } />
+                <DatePicker disablePastDate onChange={field.onChange} value={field.value} />
               </FormControl>
               <FormMessage />
             </FormItem>
-          ) }
+          )}
         />
         <FormField
-          control={ form.control }
+          control={form.control}
           name="image_url"
-          render={ ( { field } ) => (
+          render={({ field }) => (
             <FormItem >
               <FormLabel className='mb-2 block'>
                 <Typography variant='paragraph-l-medium'>
@@ -169,15 +169,15 @@ export const RewardAddForm = ( { onClose, tiers }: Props ) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Upload onChange={ field.onChange } value={ field.value } />
+                <Upload onChange={field.onChange} value={field.value} />
               </FormControl>
               <FormMessage />
             </FormItem>
-          ) }
+          )}
         />
         <section className='flex gap-6'>
-          <Button variant="secondary" size='lg' className='flex-1' onClick={ ( evt ) => { evt.preventDefault(); onClose(); } }>Cancel</Button>
-          <Button variant="default" size='lg' type='submit' className='flex-1' loading={ loading }>Save</Button>
+          <Button variant="secondary" size='lg' className='flex-1' onClick={(evt) => { evt.preventDefault(); onClose(); }}>Cancel</Button>
+          <Button variant="default" size='lg' type='submit' className='flex-1' loading={loading}>Save</Button>
         </section>
       </form>
     </Form >

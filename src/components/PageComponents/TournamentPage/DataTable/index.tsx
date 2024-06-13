@@ -34,7 +34,7 @@ const TournamentTable = ({ data, pagination }: Props) => {
 
   const getTournamentStatus = (tournamentData: TournamentType): string => {
     if (tournamentData.status !== 'active') return tournamentData.status
-    const isAlreadyPast = dayjs(tournamentData.end_date).isBefore(dayjs())
+    const isAlreadyPast = dayjs(`${tournamentData.end_date} ${tournamentData.end_time}`).isBefore(dayjs())
 
     if (isAlreadyPast) return 'inactive'
     return tournamentData.status

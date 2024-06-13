@@ -16,8 +16,9 @@ export function DatePicker({
   onChange,
   placeholder = 'Select date',
   value,
-  valueFormat
-}: { className?: string, placeholder?: string, value?: string, onChange: (date: string) => void, valueFormat?: string }) {
+  valueFormat,
+  disablePastDate
+}: { className?: string, placeholder?: string, value?: string, onChange: (date: string) => void, valueFormat?: string, disablePastDate?: boolean }) {
   const [date, setDate] = React.useState<Date | undefined>(value ? new Date(value) : undefined);
 
   function handleChange(date: Date) {
@@ -44,6 +45,7 @@ export function DatePicker({
             defaultMonth={new Date()}
             initialFocus
             selected={date}
+            disabled={disablePastDate && { before: new Date() }}
             onSelect={(_, selectedDay) => handleChange(selectedDay)}
           />
         </PopoverContent>

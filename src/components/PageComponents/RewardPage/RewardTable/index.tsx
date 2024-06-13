@@ -8,6 +8,8 @@ import { cn } from '@/lib/utils';
 
 import { RewardAddForm } from '@/components/PageComponents/RewardPage/RewardAddForm/RewardAddForm';
 import { RewardEditForm } from '@/components/PageComponents/RewardPage/RewardEditForm/RewardEditForm';
+import RewardsFilterModal from '@/components/PageComponents/RewardPage/RewardFilterModal';
+import RewardStatusConfirmationModal from '@/components/PageComponents/RewardPage/RewardStatusConfirmationModal';
 import RewardView from '@/components/PageComponents/RewardPage/RewardView';
 import { Button } from '@/components/ui/Buttons';
 import Search from '@/components/ui/Input/Search';
@@ -35,6 +37,8 @@ const RewardTable = ({ data, pagination, tiers }: Props) => {
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [detailModalOpen, setDetailModalOpen] = useState(false);
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
 
   const [selectedRow, setSelectedRow] = useState<RewardType | null>(null);
 
@@ -107,18 +111,23 @@ const RewardTable = ({ data, pagination, tiers }: Props) => {
       header: 'Status',
       cell: ({ row }) => {
         return (
-          <Select value={row.original.status}>
+          <Select value={row.original.status}
+            onValueChange={() => {
+              setSelectedRow(row.original)
+              setConfirmationModalOpen(true)
+            }}
+          >
             <SelectTrigger variant='badge' className={cn(
               {
-                'bg-error-50': row.original.status === 'Closed',
-                'bg-blue-50': row.original.status === 'Active'
+                'bg-error-50': row.original.status === 'inactive',
+                'bg-blue-50': row.original.status === 'active'
               }
             )}>
               <SelectValue aria-label={row.original.status}>
                 <Typography variant='text-body-l-medium' className={cn(
                   {
-                    'text-error-700': row.original.status === 'Closed',
-                    'text-blue-700': row.original.status === 'Active'
+                    'text-error-700': row.original.status === 'inactive',
+                    'text-blue-700': row.original.status === 'active'
                   }, 'capitalize'
                 )}>
                   {row.original.status}
@@ -127,7 +136,7 @@ const RewardTable = ({ data, pagination, tiers }: Props) => {
             </SelectTrigger>
             <SelectContent >
               <SelectItem value="Active">Active</SelectItem>
-              <SelectItem value="Closed">Closed</SelectItem>
+              <SelectItem value="Closed">In-active</SelectItem>
             </SelectContent>
           </Select>
 
@@ -183,7 +192,7 @@ const RewardTable = ({ data, pagination, tiers }: Props) => {
             Add New Voucher
           </Typography>
         </Button>
-        <Button variant="secondary" size="lg" className='w-[160px]'>
+        <Button variant="secondary" size="lg" className='w-[160px]' onClick={() => setFilterOpen(true)}>
           <Setting4 />
           <Typography variant='paragraph-l-bold'>
             Filter
@@ -270,6 +279,15 @@ const RewardTable = ({ data, pagination, tiers }: Props) => {
           }} />
         </ModalContent>
       </Modal>
+      <RewardStatusConfirmationModal
+        open={confirmationModalOpen}
+        onOpenChange={(isOpen) => setConfirmationModalOpen(isOpen)}
+        rewardData={selectedRow}
+      />
+      <RewardsFilterModal
+        open={filterOpen}
+        onOpenChange={(isOpen) => setFilterOpen(isOpen)}
+      />
     </div>
   );
 };

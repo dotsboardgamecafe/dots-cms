@@ -41,8 +41,8 @@ const BannerPageContent = ({ data, pagination }: Props) => {
       cell: ({ row }) => {
         return (
           <div className='flex flex-row items-center gap-4'>
-            <Image src={row.original.image_url || '/images/broken-image.png'} width={73} height={36} alt="banner-image" className='rounded-md object-cover object-center h-9 w-19' />
-            <Typography variant='paragraph-l-regular' className='capitalize'>
+            <Image src={row.original.image_url || '/images/broken-image.png'} width={73} height={36} alt="banner-image" className='rounded-md object-cover object-center h-9 w-19 flex-shrink-0' />
+            <Typography variant='paragraph-l-regular' className='capitalize text-ellipsis overflow-hidden'>
               {row.original.title}
             </Typography>
           </div>
@@ -65,7 +65,7 @@ const BannerPageContent = ({ data, pagination }: Props) => {
       header: 'Description',
       cell: ({ row }) => {
         return (
-          <Typography variant='paragraph-l-regular'>
+          <Typography variant='paragraph-l-regular' className='overflow-hidden text-ellipsis'>
             {row.original.description}
           </Typography>
         );

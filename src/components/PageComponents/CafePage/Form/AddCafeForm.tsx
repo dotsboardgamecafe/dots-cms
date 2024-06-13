@@ -76,7 +76,7 @@ export const AddCafeForm = ({ onClose, defaultData, onSubmit, settings }: Props)
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Text placeholder='Enter new cafe' value={field.value} onChange={field.onChange} />
+                <Text placeholder='Enter new cafe' value={field.value} onChange={field.onChange} maxLength={100} />
               </FormControl>
               <FormMessage />
             </FormItem>

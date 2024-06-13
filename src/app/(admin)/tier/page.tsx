@@ -8,17 +8,17 @@ import { PageProps } from '@/types/common';
 
 
 
-const TierPage = async ( { searchParams }: PageProps ) => {
-  const tiers = await getTiers( { pagination: searchParams.pagination } );
-  console.log( tiers );
+const TierPage = async ({ searchParams }: PageProps) => {
+  const tiers = await getTiers({ pagination: searchParams });
+
   return (
     <>
-      <Header title='Tier' subtitle={ [ {
+      <Header title='Tier' subtitle={[{
         label: 'All Tier Information',
         link: '/tier'
-      } ] } />
+      }]} />
       <PageContainer>
-        <TierTable data={ tiers.data } pagination={ tiers.pagination } />
+        <TierTable data={tiers.data} pagination={tiers.pagination} />
       </PageContainer>
     </>
   );

@@ -49,7 +49,6 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
       game_type: defaultValue.game_type || '',
       image_url_collection: defaultValue.collection_url || [],
       players: String(defaultValue.maximum_participant || ''),
-      difficulty: defaultValue.difficulty || '',
       level: defaultValue.level || 0
     },
     resolver: zodResolver(AddGameSchema),
@@ -75,14 +74,13 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
       game_type: data.game_type,
       collection_url: data.image_url_collection,
       admin_code: data.admin_code,
-      difficulty: data.difficulty,
       level: data.level,
       duration: Number(data.duration)
     };
 
     try {
-      const res = await editGame({ param: defaultValue.game_code, body: payload })
-      console.log(res)
+      await editGame({ param: defaultValue.game_code, body: payload })
+
       toast({
         title: 'Game successfully updated!',
         variant: 'default',
@@ -144,7 +142,7 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
                         </Typography>
                       </FormLabel>
                       <FormControl>
-                        <Text placeholder='Game Name' value={field.value} onChange={field.onChange} />
+                        <Text placeholder='Game Name' value={field.value} onChange={field.onChange} maxLength={100} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -192,35 +190,6 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
                 />
                 <FormField
                   control={form.control}
-                  name="difficulty"
-                  render={({ field }) => (
-                    <FormItem className="space-y-3">
-                      <FormLabel>
-                        <Typography variant='paragraph-l-medium'>
-                          Difficulty
-                        </Typography>
-                      </FormLabel>
-                      <FormControl>
-                        <Select value={field.value} onValueChange={field.onChange}>
-                          <SelectTrigger>
-                            <SelectValue aria-label={field.value} placeholder='Select Level'>
-                              <Typography variant='text-body-l-medium' className="capitalize" >
-                                {field.value}
-                              </Typography>
-                            </SelectValue>
-                          </SelectTrigger>
-                          <SelectContent >
-                            <SelectItem value="advanced">Advanced</SelectItem>
-                            <SelectItem value="beginner">Beginner</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
                   name="level"
                   render={({ field }) => (
                     <FormItem className="space-y-3">
@@ -230,7 +199,7 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
                         </Typography>
                       </FormLabel>
                       <FormControl>
-                        <SliderRange min={0} max={5} step={0.5} value={[field.value]} prefix="Level" onValueChange={(value) => field.onChange(value[0])} />
+                        <SliderRange min={0} max={5} step={0.1} value={[field.value]} prefix="Level" onValueChange={(value) => field.onChange(value[0])} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -336,6 +305,7 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
                     </FormItem>
                   )}
                 />
+                <div></div>
                 <FormField
                   control={form.control}
                   name="description"

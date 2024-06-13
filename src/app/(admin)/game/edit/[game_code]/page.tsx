@@ -9,8 +9,8 @@ import EditGameForm from '@/components/PageComponents/GamePage/GameEditForm';
 
 const ViewRoomPage = async ({ params: { game_code } }: { params: { game_code: string; }; }) => {
   const gameDetail = await getGameDetail(game_code);
-  const admins = await getAdmins({ limit: 999999 });
-  const cafes = await getCafes({ limit: 999999 });
+  const admins = await getAdmins({ pagination: { limit: 999999, status: 'active' } });
+  const cafes = await getCafes({ pagination: { limit: 999999, status: 'active' } });
 
   return (
     <>

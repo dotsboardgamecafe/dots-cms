@@ -8,7 +8,7 @@ import CafePageContent from '@/components/PageComponents/CafePage';
 import { PageProps } from '@/types/common';
 
 const CafePage = async ({ searchParams }: PageProps) => {
-  const cafes = await getCafes({ query: searchParams });
+  const cafes = await getCafes({ pagination: searchParams });
   const city = await getCity()
   const province = await getProvince()
 

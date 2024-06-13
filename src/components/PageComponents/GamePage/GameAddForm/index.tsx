@@ -49,7 +49,6 @@ const AddGameForm = ({ cafes, admins }: Props) => {
       game_categories: [],
       game_type: '',
       image_url_collection: [],
-      difficulty: '',
       players: ''
     },
     resolver: zodResolver(AddGameSchema),
@@ -75,7 +74,6 @@ const AddGameForm = ({ cafes, admins }: Props) => {
       game_type: data.game_type,
       collection_url: data.image_url_collection,
       admin_code: data.admin_code,
-      difficulty: data.difficulty,
       level: data.level,
       duration: Number(data.duration)
     };
@@ -143,7 +141,7 @@ const AddGameForm = ({ cafes, admins }: Props) => {
                         </Typography>
                       </FormLabel>
                       <FormControl>
-                        <Text placeholder='Game Name' value={field.value} onChange={field.onChange} />
+                        <Text placeholder='Game Name' value={field.value} onChange={field.onChange} maxLength={100} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -193,35 +191,6 @@ const AddGameForm = ({ cafes, admins }: Props) => {
                 />
                 <FormField
                   control={form.control}
-                  name="difficulty"
-                  render={({ field }) => (
-                    <FormItem className="space-y-3">
-                      <FormLabel>
-                        <Typography variant='paragraph-l-medium'>
-                          Difficulty
-                        </Typography>
-                      </FormLabel>
-                      <FormControl>
-                        <Select value={field.value} onValueChange={field.onChange}>
-                          <SelectTrigger>
-                            <SelectValue aria-label={field.value} placeholder='Select Level'>
-                              <Typography variant='text-body-l-medium' className="capitalize" >
-                                {field.value}
-                              </Typography>
-                            </SelectValue>
-                          </SelectTrigger>
-                          <SelectContent >
-                            <SelectItem value="advanced">Advanced</SelectItem>
-                            <SelectItem value="beginner">Beginner</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
                   name="level"
                   render={({ field }) => (
                     <FormItem className="space-y-3">
@@ -231,7 +200,7 @@ const AddGameForm = ({ cafes, admins }: Props) => {
                         </Typography>
                       </FormLabel>
                       <FormControl>
-                        <SliderRange min={0} max={5} step={0.5} value={[field.value]} prefix="Level" onValueChange={(value) => field.onChange(value[0])} />
+                        <SliderRange min={0} max={5} step={0.1} value={[field.value]} prefix="Level" onValueChange={(value) => field.onChange(value[0])} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -337,6 +306,7 @@ const AddGameForm = ({ cafes, admins }: Props) => {
                     </FormItem>
                   )}
                 />
+                <div></div>
                 <FormField
                   control={form.control}
                   name="description"

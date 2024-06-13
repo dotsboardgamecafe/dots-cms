@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 
 import { RewardAddForm } from '@/components/PageComponents/RewardPage/RewardAddForm/RewardAddForm';
 import { RewardEditForm } from '@/components/PageComponents/RewardPage/RewardEditForm/RewardEditForm';
+import RewardsFilterModal from '@/components/PageComponents/RewardPage/RewardFilterModal';
 import RewardStatusConfirmationModal from '@/components/PageComponents/RewardPage/RewardStatusConfirmationModal';
 import RewardView from '@/components/PageComponents/RewardPage/RewardView';
 import { Button } from '@/components/ui/Buttons';
@@ -37,6 +38,7 @@ const RewardTable = ({ data, pagination, tiers }: Props) => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [detailModalOpen, setDetailModalOpen] = useState(false);
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
 
   const [selectedRow, setSelectedRow] = useState<RewardType | null>(null);
 
@@ -190,7 +192,7 @@ const RewardTable = ({ data, pagination, tiers }: Props) => {
             Add New Voucher
           </Typography>
         </Button>
-        <Button variant="secondary" size="lg" className='w-[160px]'>
+        <Button variant="secondary" size="lg" className='w-[160px]' onClick={() => setFilterOpen(true)}>
           <Setting4 />
           <Typography variant='paragraph-l-bold'>
             Filter
@@ -281,6 +283,10 @@ const RewardTable = ({ data, pagination, tiers }: Props) => {
         open={confirmationModalOpen}
         onOpenChange={(isOpen) => setConfirmationModalOpen(isOpen)}
         rewardData={selectedRow}
+      />
+      <RewardsFilterModal
+        open={filterOpen}
+        onOpenChange={(isOpen) => setFilterOpen(isOpen)}
       />
     </div>
   );

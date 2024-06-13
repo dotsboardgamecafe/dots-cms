@@ -20,9 +20,9 @@ const ViewBannerDetailModal = ({ open, onOpenChange, bannerData, onEdit }: Props
   return (
     <Modal open={open} onOpenChange={onOpenChange} >
       <ModalContent hideCloseIcon>
-        <div className='gap-6 flex flex-col'>
+        <div className='gap-6 flex flex-col w-full overflow-hidden'>
           <section className='flex flex-col gap-2'>
-            <Typography variant='text-body-xl-heavy'>
+            <Typography variant='text-body-xl-heavy' className='break-all'>
               {bannerData?.title}
             </Typography>
             <Image src={bannerData?.image_url || '/images/broken-image.png'} width={440} height={170} alt="member-detail-avatar" className='rounded-md object-cover object-center max-h-44' />
@@ -40,7 +40,7 @@ const ViewBannerDetailModal = ({ open, onOpenChange, bannerData, onEdit }: Props
             <Typography variant='paragraph-l-regular'>
               Description
             </Typography>
-            <Typography variant='paragraph-xl-regular'>
+            <Typography variant='paragraph-xl-regular' className='break-all'>
               {bannerData?.description || '-'}
             </Typography>
             <Separator className='mt-1' />

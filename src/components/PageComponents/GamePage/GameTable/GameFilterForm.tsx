@@ -52,7 +52,7 @@ export const GameFilterForm = ({ onClose, control, gameTypes }: Props) => {
     if (data.game_type.length > 0) params.set('game_type', data.game_type.join(','))
     if (data.sort) {
       params.set('sort', data.sort)
-      params.set('order', 'name')
+      params.set('order', 'games.name')
     }
 
     router.replace(pathName + '?' + params.toString())

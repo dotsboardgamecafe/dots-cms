@@ -195,7 +195,11 @@ const TierTable = ({ data, pagination }: Props) => {
           )}
         </TableBody>
       </Table>
-      <Pagination pagination={pagination} />
+      {
+        (pagination.count || 0) > 10 && (
+          <Pagination pagination={pagination} />
+        )
+      }
       <ViewTierModal
         open={isOpenDetail}
         onOpenChange={(isOpen) => setIsOpenDetail(isOpen)}

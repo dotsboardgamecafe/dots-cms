@@ -52,7 +52,7 @@ export const MemberFilterForm = ({ onClose }: Props) => {
     if (data.status) {
       params.append('status', data.status);
     }
-    if (data.latest_tier) {
+    if (data.latest_tier.length > 0) {
       params.append('latest_tier', data.latest_tier.join(','));
     }
     if (data.sort) {

@@ -24,13 +24,13 @@ export type RewardType = {
   updated_date: string;
 };
 
-export const RewardAddSchema = z.object( {
-  tier_code: z.string( { required_error: 'Tier is required' } ),
-  name: z.string( { required_error: 'Name is required' } ),
-  image_url: z.string( { required_error: 'Image is required' } ).url(),
-  category_type: z.string( { required_error: 'Category is required' } ),
-  status: z.string( { required_error: 'Status is required' } ),
-  expired_date: z.string().refine( value => !isNaN( Date.parse( value ) ), {
+export const RewardAddSchema = z.object({
+  tier_code: z.string({ required_error: 'Tier is required' }).min(1, 'Tier is required'),
+  name: z.string({ required_error: 'Name is required' }).min(1, 'Name is required'),
+  image_url: z.string({ required_error: 'Image is required' }).url('Image is required'),
+  category_type: z.string({ required_error: 'Category is required' }).min(1, 'Category is required'),
+  status: z.string({ required_error: 'Status is required' }).min(1, 'Status is required'),
+  expired_date: z.string().refine(value => !isNaN(Date.parse(value)), {
     message: 'Invalid date format, expected yyyy-mm-dd',
-  } ),
-} );
+  }),
+});

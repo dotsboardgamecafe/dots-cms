@@ -11,12 +11,12 @@ export type CafeType = {
 };
 
 export const AddCafeSchema = z.object({
-  name: z.string({ required_error: "You need to input the cafe name.", }),
-  address: z.string({ required_error: "You need to input the cafe address.", }),
-  province: z.string({ required_error: "You need to input the cafe province.", }),
-  city: z.string({ required_error: "You need to input the cafe city.", }),
-  description: z.string({ required_error: "You need to input the cafe description.", }),
-  status: z.string({ required_error: "You need to select the cafe status.", }),
+  name: z.string({ required_error: "You need to input the cafe name.", }).min(1, "You need to input the cafe name."),
+  address: z.string({ required_error: "You need to input the cafe address.", }).min(1, "You need to input the cafe address."),
+  province: z.string({ required_error: "You need to input the cafe province.", }).min(1, "You need to input the cafe province."),
+  city: z.string({ required_error: "You need to input the cafe city.", }).min(1, "You need to input the cafe city."),
+  description: z.string({ required_error: "You need to input the cafe description.", }).min(1, "You need to input the cafe description."),
+  status: z.string({ required_error: "You need to select the cafe status.", }).min(1, "You need to select the cafe status."),
 });
 
 export type CafePayload = z.infer<typeof AddCafeSchema>;

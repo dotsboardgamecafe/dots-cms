@@ -1,5 +1,6 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
+import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -31,7 +32,7 @@ export const RewardEditForm = ({ onClose, tiers, reward }: Props) => {
   const form = useForm<z.infer<typeof RewardAddSchema>>(({
     defaultValues: {
       category_type: reward?.category_type || '',
-      expired_date: reward?.expired_date || '',
+      expired_date: reward?.expired_date ? dayjs(reward?.expired_date).format('YYYY-MM-DD') : '',
       image_url: reward?.image_url || '',
       name: reward?.name || '',
       status: reward?.status || '',
@@ -44,7 +45,8 @@ export const RewardEditForm = ({ onClose, tiers, reward }: Props) => {
   const onSubmit = async (data: z.infer<typeof RewardAddSchema>) => {
     try {
       setLoading(true);
-      const res = await updateReward({ body: data, param: reward?.reward_code });
+      await updateReward({ body: data, param: reward?.reward_code });
+
       toast({
         title: `Reward voucher successfully updated!`,
         variant: 'default',
@@ -93,7 +95,7 @@ export const RewardEditForm = ({ onClose, tiers, reward }: Props) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Select value={field.value} onValueChange={(value) => field.onChange(Boolean(value === 'true' ? true : false))}>
+                <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
                   <SelectTrigger>
                     <SelectValue aria-label={field.value} placeholder='Choose yes or no'>
                       <Typography variant='text-body-l-medium' className="capitalize" >
@@ -176,8 +178,8 @@ export const RewardEditForm = ({ onClose, tiers, reward }: Props) => {
           )}
         />
         <section className='flex gap-6'>
-          <Button variant="secondary" size='lg' className='flex-1' onClick={(evt) => { evt.preventDefault(); onClose(); }}>Cancel</Button>
-          <Button variant="default" size='lg' type='submit' className='flex-1' loading={loading}>Save Changes</Button>
+          <Button variant="secondary" size='lg' className='flex-1' onClick={(evt) => { evt.preventDefault(); onClose(); }} disabled={loading}>Cancel</Button>
+          <Button variant="default" size='lg' type='submit' className='flex-1' loading={loading} disabled={loading}>Save Changes</Button>
         </section>
       </form>
     </Form >

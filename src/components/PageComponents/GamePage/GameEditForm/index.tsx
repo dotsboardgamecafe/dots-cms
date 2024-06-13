@@ -99,7 +99,7 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
   };
 
   async function checkFieldGameInformationValidation() {
-    const result: boolean = await form.trigger(['name', 'game_type', 'game_categories', 'description', 'cafe_code', 'players', 'duration', 'level'])
+    const result: boolean = await form.trigger(['name', 'game_type', 'game_categories', 'description', 'cafe_code', 'players', 'duration', 'level', 'admin_code'])
     return result
   }
 

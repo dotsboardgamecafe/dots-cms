@@ -2,7 +2,7 @@
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { AddCircle, Edit, Eye, Setting4 } from 'iconsax-react';
 import Image from 'next/image';
-import { PropsWithRef, useState } from 'react';
+import { PropsWithRef, useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -28,28 +28,28 @@ type Props = PropsWithRef<{
 
 
 
-const AdminTable = ( { data, pagination }: Props ) => {
+const AdminTable = ({ data, pagination }: Props) => {
 
-  const [ filterModalOpen, setFilterModalOpen ] = useState<boolean>( false );
-  const [ detailModalOpen, setDetailModalOpen ] = useState<boolean>( false );
-  const [ confirmationModalOpen, setConfirmationModalOpen ] = useState<boolean>( false );
-  const [ addModalOpen, setAddModalOpen ] = useState<boolean>( false );
-  const [ selectedRow, setSelectedRow ] = useState<AdminType>();
+  const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
+  const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState<boolean>(false);
+  const [addModalOpen, setAddModalOpen] = useState<boolean>(false);
+  const [selectedRow, setSelectedRow] = useState<AdminType>();
   const columns: ColumnDef<AdminType>[] = [
     {
       accessorKey: 'name',
       header: 'Admin Name',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
           <section className='flex flex-row items-center gap-[10px]'>
             <Image
-              src={ row.original.img_url || '/images/avatar-not-found.png' }
-              alt={ row.original.name + '-img-pic' }
-              width={ 32 }
-              height={ 32 }
+              src={row.original.img_url || '/images/avatar-not-found.png'}
+              alt={row.original.name + '-img-pic'}
+              width={32}
+              height={32}
             />
             <Typography variant='paragraph-l-regular'>
-              { row.original.name || '-' }
+              {row.original.name || '-'}
             </Typography>
           </section>
         );
@@ -58,10 +58,10 @@ const AdminTable = ( { data, pagination }: Props ) => {
     {
       accessorKey: 'email',
       header: 'Email',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
           <Typography variant='paragraph-l-regular'>
-            { row.original.email || '-' }
+            {row.original.email || '-'}
           </Typography>
         );
       }
@@ -69,10 +69,10 @@ const AdminTable = ( { data, pagination }: Props ) => {
     {
       accessorKey: 'phone_number',
       header: 'Phone Number',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
           <Typography variant='paragraph-l-regular'>
-            { row.original?.phone_number || '-' }
+            {row.original?.phone_number || '-'}
           </Typography>
         );
       }
@@ -80,29 +80,29 @@ const AdminTable = ( { data, pagination }: Props ) => {
     {
       accessorKey: 'status',
       header: 'Status',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
-          <Select value={ row.original.status } onValueChange={ ( value ) => {
-            if ( value === 'inactive' ) {
-              setConfirmationModalOpen( true );
-              setSelectedRow( row.original );
+          <Select value={row.original.status} onValueChange={(value) => {
+            if (value === 'inactive') {
+              setConfirmationModalOpen(true);
+              setSelectedRow(row.original);
             }
-          } }>
-            <SelectTrigger variant='badge' className={ cn(
+          }}>
+            <SelectTrigger variant='badge' className={cn(
               {
                 'bg-error-50': row.original.status === 'inactive',
                 'bg-blue-50': row.original.status === 'active'
               }
-            ) }>
-              <SelectValue aria-label={ row.original.status } >
-                <Typography variant='text-body-l-medium' className={ cn(
+            )}>
+              <SelectValue aria-label={row.original.status} >
+                <Typography variant='text-body-l-medium' className={cn(
                   'capitalize',
                   {
                     'text-error-700': row.original.status === 'inactive',
                     'text-blue-700': row.original.status === 'active'
                   }
-                ) }>
-                  { row.original.status }
+                )}>
+                  {row.original.status}
                 </Typography>
               </SelectValue>
             </SelectTrigger>
@@ -118,12 +118,12 @@ const AdminTable = ( { data, pagination }: Props ) => {
     {
       id: 'action',
       header: 'Action',
-      cell: ( { row } ) => {
+      cell: ({ row }) => {
         return (
           <div className='flex flex-row items-center gap-4 cursor-pointer' >
-            <Eye onClick={ () => {
-              onClickDetail( row.original );
-            } } />
+            <Eye onClick={() => {
+              onClickDetail(row.original);
+            }} />
             <Edit />
           </div>
         );
@@ -131,32 +131,38 @@ const AdminTable = ( { data, pagination }: Props ) => {
     }
   ];
 
-  const table = useReactTable( {
+  const table = useReactTable({
     data: data,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     columns,
-  } );
+  });
 
-  const onClickDetail = ( row: AdminType ) => {
-    setDetailModalOpen( true );
-    setSelectedRow( row );
+  const onClickDetail = (row: AdminType) => {
+    setDetailModalOpen(true);
+    setSelectedRow(row);
   };
 
+  useEffect(() => {
+    if (!pagination.limit) return
+    table.setPageSize(pagination.limit)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagination.limit])
 
   return (
     <div className='flex flex-col gap-6'>
       <section className='table-action'>
         <Search />
         <div className='flex flex-row gap-6'>
-          <Button variant="default" size="lg" onClick={ () => setAddModalOpen( true ) } className="gap-2">
-            <AddCircle size={ 20 } />
+          <Button variant="default" size="lg" onClick={() => setAddModalOpen(true)} className="gap-2">
+            <AddCircle size={20} />
             <Typography variant='paragraph-l-bold'>
               Add New Admin
             </Typography>
           </Button>
-          <Button variant="secondary" size="md" onClick={ () => setFilterModalOpen( true ) }>
-            <Setting4 size={ 20 } />
+          <Button variant="secondary" size="md" onClick={() => setFilterModalOpen(true)}>
+            <Setting4 size={20} />
             <Typography variant='paragraph-l-bold'>
               Filter
             </Typography>
@@ -166,55 +172,55 @@ const AdminTable = ( { data, pagination }: Props ) => {
       <Table>
         <TableHeader>
           {
-            table.getHeaderGroups().map( ( headerGroup ) => (
-              <TableRow key={ headerGroup.id }>
-                { headerGroup.headers.map( ( header ) => {
+            table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={ header.id }>
-                      { header.isPlaceholder
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
                         ? null
                         : flexRender(
                           header.column.columnDef.header,
                           header.getContext()
-                        ) }
+                        )}
                     </TableHead>
                   );
-                } ) }
+                })}
               </TableRow>
-            ) )
+            ))
           }
         </TableHeader>
         <TableBody>
-          { table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map( ( row ) => (
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
               <TableRow
-                key={ row.id }
-                data-state={ row.getIsSelected() && "selected" }
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
               >
-                { row.getVisibleCells().map( ( cell ) => (
-                  <TableCell key={ cell.id }>
-                    { flexRender( cell.column.columnDef.cell, cell.getContext() ) }
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
-                ) ) }
+                ))}
               </TableRow>
-            ) )
+            ))
           ) : (
             <TableRow>
-              <TableCell colSpan={ columns.length } className="h-24 text-center">
+              <TableCell colSpan={columns.length} className="h-24 text-center">
                 No results.
               </TableCell>
             </TableRow>
-          ) }
+          )}
         </TableBody>
       </Table>
-      <Pagination pagination={ pagination } />
-      <AdminFilterModal open={ filterModalOpen } onOpenChange={ ( value ) => setFilterModalOpen( value ) } />
-      <AdminDetailModal open={ detailModalOpen } onOpenChange={ ( value ) => setDetailModalOpen( value ) } memberData={ selectedRow } />
-      <AddAdminModal open={ addModalOpen } onOpenChange={ ( value ) => setAddModalOpen( value ) } />
+      <Pagination pagination={pagination} />
+      <AdminFilterModal open={filterModalOpen} onOpenChange={(value) => setFilterModalOpen(value)} />
+      <AdminDetailModal open={detailModalOpen} onOpenChange={(value) => setDetailModalOpen(value)} memberData={selectedRow} />
+      <AddAdminModal open={addModalOpen} onOpenChange={(value) => setAddModalOpen(value)} />
       <StatusConfirmationModal
-        open={ confirmationModalOpen }
-        onOpenChange={ ( value ) => setConfirmationModalOpen( value ) }
-        memberData={ selectedRow }
+        open={confirmationModalOpen}
+        onOpenChange={(value) => setConfirmationModalOpen(value)}
+        memberData={selectedRow}
       />
     </div >
   );

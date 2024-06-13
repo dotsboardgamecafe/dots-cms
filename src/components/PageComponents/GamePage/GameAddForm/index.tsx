@@ -54,6 +54,7 @@ const AddGameForm = ({ cafes, admins }: Props) => {
     resolver: zodResolver(AddGameSchema),
 
   });
+
   const [activeTab, setActiveTab] = useState<string>('game-info');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const router = useRouter()
@@ -98,7 +99,7 @@ const AddGameForm = ({ cafes, admins }: Props) => {
   };
 
   async function checkFieldGameInformationValidation() {
-    const result: boolean = await form.trigger(['name', 'game_type', 'game_categories', 'description', 'cafe_code', 'players', 'duration', 'level'])
+    const result: boolean = await form.trigger(['name', 'game_type', 'game_categories', 'description', 'cafe_code', 'players', 'duration', 'level', 'admin_code'])
     return result
   }
 

@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import dayjsFormats from 'dayjs/plugin/advancedFormat';
 import { AddCircle, Edit, Eye } from 'iconsax-react';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -166,6 +166,13 @@ const TournamentTable = ({ data, pagination }: Props) => {
     manualPagination: true,
     columns,
   });
+
+  useEffect(() => {
+    if (!pagination.limit) return
+    table.setPageSize(pagination.limit)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagination.limit])
 
   return (
     <div className='flex flex-col gap-6'>

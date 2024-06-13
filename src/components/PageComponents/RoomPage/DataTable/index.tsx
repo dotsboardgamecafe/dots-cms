@@ -6,13 +6,13 @@ import { AddCircle, Edit, Eye } from 'iconsax-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
 import StatusConfirmationModal from '@/components/PageComponents/RoomPage/StatusConfirmationModal';
 import Search from '@/components/ui/Input/Search';
-import PaginationDeprecated from '@/components/ui/Pagination';
+import Pagination from '@/components/ui/Pagination/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
@@ -199,6 +199,13 @@ const RoomTable = ({ data, pagination }: Props) => {
     return 1;
   };
 
+  useEffect(() => {
+    if (!pagination.limit) return
+    table.setPageSize(pagination.limit)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagination.limit])
+
 
   return (
     <div className='flex flex-col gap-6'>
@@ -257,23 +264,7 @@ const RoomTable = ({ data, pagination }: Props) => {
           )}
         </TableBody>
       </Table>
-      <PaginationDeprecated
-        totalPages={getMaxPage()}
-        currentPage={pagination.page}
-        itemsPerPage={pagination.limit ?? 0}
-        totalItems={pagination.count ?? 0}
-        onChangeItemsPerPage={(items) => {
-          router.push(`/room?page=1&limit=${items}`);
-          table.setPageSize(items);
-        }}
-        onNext={() => router.push(`/room?page=${(pagination.page ?? 1) + 1}`)}
-        onPrevious={() => router.push(`/room?page=${(pagination.page ?? 1) - 1}`)}
-        prevDisabled={pagination.page === 1}
-        nextDisabled={pagination.page === getMaxPage()}
-        onChangePage={(page) => router.push(`/room?page=${page}`)}
-        from={table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}
-        to={table.getState().pagination.pageIndex * table.getState().pagination.pageSize + table.getState().pagination.pageSize}
-      />
+      <Pagination pagination={pagination} />
       <StatusConfirmationModal
         open={statusConfirmationModalOpen}
         onOpenChange={(value) => setStatusConfirmationModalOpen(value)}

@@ -76,7 +76,7 @@ export const RewardEditForm = ({ onClose, tiers, reward }: Props) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Text placeholder='Enter Voucher Title' value={field.value} onChange={field.onChange} />
+                <Text placeholder='Enter Voucher Title' value={field.value} onChange={field.onChange} maxLength={100} />
               </FormControl>
               <FormMessage />
             </FormItem>

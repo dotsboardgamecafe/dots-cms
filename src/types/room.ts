@@ -76,9 +76,9 @@ export const AddRoomSchema = z.object({
   room_type: z.enum(["normal", "special_event"], {
     required_error: "You need to select a room type.",
   }),
-  room_name: z.string({ required_error: "You need to enter a room name.", }),
-  game_code: z.string({ required_error: "You need to select a game.", }),
-  game_master: z.string({ required_error: "You need to select a game master.", }),
+  room_name: z.string({ required_error: "You need to enter a room name.", }).min(1, "You need to enter a room name."),
+  game_code: z.string({ required_error: "You need to select a game.", }).min(1, "You need to select a game."),
+  game_master: z.string({ required_error: "You need to select a game master.", }).min(1, "You need to select a game master."),
   schedule: z.object({
     start_date: z.date(),
     end_date: z.date(),
@@ -92,13 +92,13 @@ export const AddRoomSchema = z.object({
       path: ['schedule']
     })
   }),
-  location: z.string({ required_error: "You need to select a location.", }),
-  level: z.string({ required_error: "You need to select a level.", }),
-  player_slot: z.string({ required_error: "You need to set a player slot availability.", }),
+  location: z.string({ required_error: "You need to select a location.", }).min(1, "You need to select a location."),
+  level: z.string({ required_error: "You need to select a level.", }).min(1, "You need to select a level."),
+  player_slot: z.string({ required_error: "You need to set a player slot availability.", }).min(1, "You need to set a player slot availability."),
   price: z.number({ required_error: "You need enter a price for the game room.", }).min(15000, "Min Price Rp. 15000"),
-  points: z.string({ required_error: "You need select a points for the game room.", }),
-  description: z.string({ required_error: "You need to enter a description for the game room.", }),
-  banner: z.string({ required_error: "You need to upload banner for the game room.", }),
+  points: z.string({ required_error: "You need select a points for the game room.", }).min(1, "You need select a points for the game room."),
+  description: z.string({ required_error: "You need to enter a description for the game room.", }).min(1, "You need to enter a description for the game room."),
+  banner: z.string({ required_error: "You need to upload banner for the game room.", }).min(1, "You need to upload banner for the game room."),
 });
 
 export type AddRoomPayload = {

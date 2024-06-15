@@ -10,19 +10,19 @@ import { AdminType } from '@/types/admin';
 
 type Props = PropsWithRef<{
   open: boolean;
-  onOpenChange: ( open: boolean ) => void;
+  onOpenChange: (open: boolean) => void;
   memberData?: AdminType;
 }>;
 
-const AdminDetailModal = ( { open, onOpenChange, memberData }: Props ) => {
+const AdminDetailModal = ({ open, onOpenChange, memberData }: Props) => {
   return (
-    <Modal open={ open } onOpenChange={ onOpenChange } >
+    <Modal open={open} onOpenChange={onOpenChange} >
       <ModalContent hideCloseIcon>
         <div className='gap-6 flex flex-col'>
           <section className='flex flex-row items-center gap-3'>
-            <Image src={ memberData?.img_url || '/images/avatar-not-found.png' } alt="member-detail-avatar" width={ 52 } height={ 52 } className='rounded-full' />
+            <Image src={memberData?.image_url || '/images/avatar-not-found.png'} alt="member-detail-avatar" width={52} height={52} className='rounded-full w-[52px] h-[52px] object-cover object-center' />
             <Typography variant='heading-h4'>
-              { memberData?.name }
+              {memberData?.name}
             </Typography>
           </section>
           <section className='flex flex-col  gap-1'>
@@ -30,7 +30,7 @@ const AdminDetailModal = ( { open, onOpenChange, memberData }: Props ) => {
               Email Address
             </Typography>
             <Typography variant='paragraph-xl-regular'>
-              { memberData?.email || '-' }
+              {memberData?.email || '-'}
             </Typography>
             <Separator className='mt-1' />
           </section>
@@ -39,7 +39,7 @@ const AdminDetailModal = ( { open, onOpenChange, memberData }: Props ) => {
               Phone Number
             </Typography>
             <Typography variant='paragraph-xl-regular'>
-              { memberData?.phone_number || '-' }
+              {memberData?.phone_number || '-'}
             </Typography>
             <Separator className='mt-1' />
           </section>
@@ -48,7 +48,7 @@ const AdminDetailModal = ( { open, onOpenChange, memberData }: Props ) => {
               Status
             </Typography>
             <Typography variant='paragraph-xl-regular' className='capitalize'>
-              { memberData?.status }
+              {memberData?.status}
             </Typography>
             <Separator className='mt-1' />
           </section>

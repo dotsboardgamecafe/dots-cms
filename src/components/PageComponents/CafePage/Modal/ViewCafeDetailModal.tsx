@@ -20,7 +20,7 @@ const ViewCafeDetailModal = ({ open, onOpenChange, cafeData, onEdit }: Props) =>
     <Modal open={open} onOpenChange={onOpenChange} >
       <ModalContent hideCloseIcon>
         <ModalHeader>
-          <ModalTitle>
+          <ModalTitle className='break-all'>
             {cafeData?.name || '-'}
           </ModalTitle>
         </ModalHeader>
@@ -38,7 +38,7 @@ const ViewCafeDetailModal = ({ open, onOpenChange, cafeData, onEdit }: Props) =>
             <Typography variant='paragraph-l-regular'>
               Description
             </Typography>
-            <Typography variant='paragraph-xl-regular'>
+            <Typography variant='paragraph-xl-regular' className='break-all'>
               {cafeData?.description || '-'}
             </Typography>
             <Separator className='mt-1' />

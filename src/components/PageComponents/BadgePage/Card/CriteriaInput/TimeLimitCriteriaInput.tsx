@@ -71,7 +71,7 @@ const TimeLimitCriteriaInput: React.FC<{ parentPath: string, onRemove?: () => vo
                   </Typography>
                 </FormLabel>
                 <FormControl>
-                  <DatePicker value={field.value} onChange={(newDate: string) => { form.setValue(`${parentPath}.start_date`, newDate) }} />
+                  <DatePicker disablePastDate disabled={form.watch(`${parentPath}.end_date`) && { after: form.watch(`${parentPath}.end_date`) }} value={field.value} onChange={(newDate: string) => { form.setValue(`${parentPath}.start_date`, newDate) }} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -88,7 +88,7 @@ const TimeLimitCriteriaInput: React.FC<{ parentPath: string, onRemove?: () => vo
                   </Typography>
                 </FormLabel>
                 <FormControl>
-                  <DatePicker value={field.value} onChange={(newDate: string) => { form.setValue(`${parentPath}.end_date`, newDate) }} />
+                  <DatePicker disablePastDate disabled={form.watch(`${parentPath}.start_date`) && { before: form.watch(`${parentPath}.start_date`) }} value={field.value} onChange={(newDate: string) => { form.setValue(`${parentPath}.end_date`, newDate) }} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

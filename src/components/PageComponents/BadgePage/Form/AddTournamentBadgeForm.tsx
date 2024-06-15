@@ -28,7 +28,7 @@ export const AddTournamentBadgeForm = ({ onClose, defaultData, onSubmit }: Props
   const form = useForm<TournamentBadgeSchemaType>(({
     defaultValues: {
       badge_category: 'tournament',
-      status: 'active',
+      status: defaultData?.firstPlace.status || 'active',
       image_url1: defaultData?.firstPlace.image_url || '',
       image_url2: defaultData?.secondPlace.image_url || '',
       image_url3: defaultData?.thirdPlace.image_url || '',
@@ -183,7 +183,7 @@ export const AddTournamentBadgeForm = ({ onClose, defaultData, onSubmit }: Props
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Text placeholder='Enter badge name' value={field.value} onChange={field.onChange} />
+                    <Text placeholder='Enter badge name' value={field.value} onChange={field.onChange} maxLength={100} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

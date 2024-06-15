@@ -3,6 +3,7 @@
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from 'iconsax-react';
 import * as React from "react";
+import { Matcher } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
 
@@ -17,8 +18,9 @@ export function DatePicker({
   placeholder = 'Select date',
   value,
   valueFormat,
-  disablePastDate
-}: { className?: string, placeholder?: string, value?: string, onChange: (date: string) => void, valueFormat?: string, disablePastDate?: boolean }) {
+  disablePastDate,
+  disabled
+}: { className?: string, placeholder?: string, value?: string, disabled?: Matcher, onChange: (date: string) => void, valueFormat?: string, disablePastDate?: boolean }) {
   const [date, setDate] = React.useState<Date | undefined>(value ? new Date(value) : undefined);
 
   function handleChange(date: Date) {
@@ -45,7 +47,7 @@ export function DatePicker({
             defaultMonth={new Date()}
             initialFocus
             selected={date}
-            disabled={disablePastDate && { before: new Date() }}
+            disabled={[disablePastDate ? { before: new Date() } : false, disabled ?? false]}
             onSelect={(_, selectedDay) => handleChange(selectedDay)}
           />
         </PopoverContent>

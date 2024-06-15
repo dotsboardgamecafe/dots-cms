@@ -32,7 +32,7 @@ const Menus = () => {
         const isChildActive = hasChild && menu.child?.some((childMenu) => pathName.includes(childMenu.href))
         const isActive = hasChild ? activeMenuGroup === menu.title : pathName.includes(menu.href);
         return (
-          <li className={cn(['sidebar-menu-item', (isActive && !hasChild) && 'active'])} key={`sidebar-items-${index}`}>
+          <li className={cn(['sidebar-menu-item', (isActive && !hasChild) && 'active', (hasChild && (isActive || isChildActive)) && 'text-brand-blue-electric'])} key={`sidebar-items-${index}`}>
             <Link href={menu.href} onClick={(event) => {
               if (!hasChild) return
               event.preventDefault()

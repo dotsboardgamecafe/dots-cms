@@ -1,14 +1,18 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
+import { createAdmin } from '@/lib/api/admin';
+
 import { Button } from '@/components/ui/Buttons';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
+import Password from '@/components/ui/Input/Password';
 import PhoneNumber from '@/components/ui/Input/PhoneNumber';
 import Text from '@/components/ui/Input/Text';
 import Upload from '@/components/ui/Input/Upload';
+import { useToast } from '@/components/ui/Toast/use-toast';
 import Typography from '@/components/ui/Typography';
 
 import { AddAdminSchema } from '@/types/admin';
@@ -17,50 +21,53 @@ type Props = {
   onClose: () => void;
 };
 
-export const AddAdminForm = ( { onClose }: Props ) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const form = useForm<z.infer<typeof AddAdminSchema>>( ( {
+export const AddAdminForm = ({ onClose }: Props) => {
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const { toast } = useToast()
+  const form = useForm<z.infer<typeof AddAdminSchema>>(({
     defaultValues: {
-      image: '',
+      image_url: '',
       email: '',
       name: '',
-      phone: '',
+      phone_number: '',
+      password: '',
       status: 'active'
     },
-    resolver: zodResolver( AddAdminSchema )
-  } ) );
+    resolver: zodResolver(AddAdminSchema)
+  }));
 
-  // useEffect( () => {
-  //   form.setValue( 'tierLevel', searchParams.get( 'tierLevel' )?.split( ',' ) || [] );
-  //   form.setValue( 'viewBy', searchParams.get( 'viewBy' ) || '' );
-  //   form.setValue( 'status', searchParams.get( 'status' ) || '' );
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [ searchParams ] );
+  const onSubmit = async (data: z.infer<typeof AddAdminSchema>) => {
+    if (isSubmitting) return
 
-  const onSubmit = ( data: z.infer<typeof AddAdminSchema> ) => {
-    // const params = new URLSearchParams();
-    // if ( data.status ) {
-    //   params.append( 'status', data.status );
-    // }
-    // if ( data.tierLevel ) {
-    //   params.append( 'tierLevel', data.tierLevel.join( ',' ) );
-    // }
-    // if ( data.viewBy ) {
-    //   params.append( 'viewBy', data.viewBy );
-    // }
-    // router.push( `/member?${params.toString()}` );
-    console.log( data );
-    onClose();
+    setIsSubmitting(true)
+
+    try {
+      const res = await createAdmin(data)
+      if (res.stat_code?.includes('ERR')) throw new Error(res.stat_msg)
+
+      toast({
+        title: 'Admin successfully added!',
+        variant: 'default',
+      });
+      onClose();
+    } catch (error) {
+      toast({
+        title: 'Something went wrong',
+        description: 'failed to add an admin',
+        variant: 'destructive',
+      });
+    }
+
+    setIsSubmitting(false)
   };
 
   return (
-    <Form { ...form }>
-      <form onSubmit={ form.handleSubmit( onSubmit ) } className='flex flex-col gap-6'>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-6'>
         <FormField
-          name='image'
-          control={ form.control }
-          render={ ( { field } ) => (
+          name='image_url'
+          control={form.control}
+          render={({ field }) => (
             <FormItem>
               <FormLabel className='mb-2 block' htmlFor='status'>
                 <Typography variant='paragraph-l-medium'>
@@ -68,16 +75,16 @@ export const AddAdminForm = ( { onClose }: Props ) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Upload onChange={ field.onChange } variant='small' />
+                <Upload value={field.value} onChange={field.onChange} variant='small' />
               </FormControl>
               <FormMessage />
             </FormItem>
-          ) }
+          )}
         />
         <FormField
-          control={ form.control }
+          control={form.control}
           name="name"
-          render={ ( { field } ) => (
+          render={({ field }) => (
             <FormItem >
               <FormLabel className='mb-2 block'>
                 <Typography variant='paragraph-l-medium'>
@@ -85,16 +92,16 @@ export const AddAdminForm = ( { onClose }: Props ) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Text placeholder='Enter Admin Name' value={ field.value } onChange={ field.onChange } />
+                <Text placeholder='Enter Admin Name' value={field.value} onChange={field.onChange} />
               </FormControl>
               <FormMessage />
             </FormItem>
-          ) }
+          )}
         />
         <FormField
-          control={ form.control }
+          control={form.control}
           name="email"
-          render={ ( { field } ) => (
+          render={({ field }) => (
             <FormItem >
               <FormLabel className='mb-2 block'>
                 <Typography variant='paragraph-l-medium'>
@@ -102,16 +109,33 @@ export const AddAdminForm = ( { onClose }: Props ) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Text placeholder='Enter Email Address' value={ field.value } onChange={ field.onChange } />
+                <Text placeholder='Enter Email Address' value={field.value} onChange={field.onChange} />
               </FormControl>
               <FormMessage />
             </FormItem>
-          ) }
+          )}
         />
         <FormField
-          control={ form.control }
-          name="phone"
-          render={ ( { field } ) => (
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem >
+              <FormLabel className='mb-2 block'>
+                <Typography variant='paragraph-l-medium'>
+                  Password
+                </Typography>
+              </FormLabel>
+              <FormControl>
+                <Password placeholder='Enter password' toggler value={field.value} onChange={field.onChange} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="phone_number"
+          render={({ field }) => (
             <FormItem >
               <FormLabel className='mb-2 block'>
                 <Typography variant='paragraph-l-medium'>
@@ -119,15 +143,15 @@ export const AddAdminForm = ( { onClose }: Props ) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <PhoneNumber />
+                <PhoneNumber value={field.value} onChange={({ value, phoneCode }) => field.onChange(`${phoneCode} ${value}`)} />
               </FormControl>
               <FormMessage />
             </FormItem>
-          ) }
+          )}
         />
         <section className='flex gap-6'>
-          <Button variant="secondary" size='lg' className='flex-1' onClick={ ( evt ) => { evt.preventDefault(); onClose(); } }>Cancel</Button>
-          <Button variant="default" size='lg' type='submit' className='flex-1'>Apply</Button>
+          <Button variant="secondary" size='lg' className='flex-1' disabled={isSubmitting} onClick={(evt) => { evt.preventDefault(); onClose(); }}>Cancel</Button>
+          <Button variant="default" size='lg' type='submit' disabled={isSubmitting} loading={isSubmitting} className='flex-1'>Add</Button>
         </section>
       </form>
     </Form >

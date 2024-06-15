@@ -20,8 +20,8 @@ const GameFilterModal = ({ open, onOpenChange, gameTypes }: Props) => {
   const filterControl = useRef<null | BadgeFilterControlType>(null)
 
   return (
-    <Modal open={open} onOpenChange={onOpenChange} >
-      <ModalContent hideCloseIcon>
+    <Modal open={open} onOpenChange={onOpenChange}>
+      <ModalContent hideCloseIcon className='max-w-2xl'>
         <ModalHeader className='flex-row align-top justify-between'>
           <ModalTitle>
             Filter

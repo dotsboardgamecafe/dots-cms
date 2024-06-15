@@ -1,4 +1,5 @@
 .sidebar-menu-container {
+  color: hsl(var(--foreground));
   @apply flex flex-col gap-3 min-w-[232px]
 }
 

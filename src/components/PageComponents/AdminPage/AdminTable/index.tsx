@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 
 import AddAdminModal from '@/components/PageComponents/AdminPage/AddAdminModal';
 import AdminDetailModal from '@/components/PageComponents/AdminPage/DetailModal';
+import EditAdminModal from '@/components/PageComponents/AdminPage/EditAdminModal';
 import AdminFilterModal from '@/components/PageComponents/AdminPage/FilterModal';
 import StatusConfirmationModal from '@/components/PageComponents/AdminPage/StatusConfirmationModal';
 import { Button } from '@/components/ui/Buttons';
@@ -34,6 +35,7 @@ const AdminTable = ({ data, pagination }: Props) => {
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
   const [confirmationModalOpen, setConfirmationModalOpen] = useState<boolean>(false);
   const [addModalOpen, setAddModalOpen] = useState<boolean>(false);
+  const [editModalOpen, setEditModalOpen] = useState<boolean>(false)
   const [selectedRow, setSelectedRow] = useState<AdminType>();
   const columns: ColumnDef<AdminType>[] = [
     {
@@ -43,10 +45,11 @@ const AdminTable = ({ data, pagination }: Props) => {
         return (
           <section className='flex flex-row items-center gap-[10px]'>
             <Image
-              src={row.original.img_url || '/images/avatar-not-found.png'}
+              src={row.original.image_url || '/images/avatar-not-found.png'}
               alt={row.original.name + '-img-pic'}
               width={32}
               height={32}
+              className='rounded-full object-cover object-center h-8 w-8'
             />
             <Typography variant='paragraph-l-regular'>
               {row.original.name || '-'}
@@ -124,7 +127,10 @@ const AdminTable = ({ data, pagination }: Props) => {
             <Eye onClick={() => {
               onClickDetail(row.original);
             }} />
-            <Edit />
+            <Edit onClick={() => {
+              setSelectedRow(row.original)
+              setEditModalOpen(true)
+            }} />
           </div>
         );
       }
@@ -221,6 +227,11 @@ const AdminTable = ({ data, pagination }: Props) => {
         open={confirmationModalOpen}
         onOpenChange={(value) => setConfirmationModalOpen(value)}
         memberData={selectedRow}
+      />
+      <EditAdminModal
+        open={editModalOpen}
+        onOpenChange={(isOpen) => setEditModalOpen(isOpen)}
+        adminData={selectedRow}
       />
     </div >
   );

@@ -23,7 +23,7 @@ export type AdminType = {
   email: string;
   name: string;
   status: string;
-  img_url?: string;
+  image_url?: string;
   phone_number?: string;
   password?: string;
 };

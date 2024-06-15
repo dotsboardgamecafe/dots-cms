@@ -41,7 +41,7 @@ export const RewardsFilterForm = ({ onClose, control }: Props) => {
     if (data.status) params.set('status', data.status)
     if (data.sort) {
       params.set('sort', data.sort)
-      params.set('order', 'name')
+      params.set('order', 'reward_name')
     }
 
     router.replace(pathName + '?' + params.toString())

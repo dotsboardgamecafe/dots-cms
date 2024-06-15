@@ -16,7 +16,7 @@ type Props = PropsWithRef<{
 }>;
 
 const EditBadgeModal = ({ open, onOpenChange, badgeCode = '' }: Props) => {
-  const { data: badgeData } = useBadgeDetail(badgeCode)
+  const { data: badgeData } = useBadgeDetail(open ? badgeCode : '')
 
   if (!badgeData) return null
 

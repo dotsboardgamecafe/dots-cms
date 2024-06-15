@@ -15,7 +15,7 @@ export const useBadgeDetail = (badgeCode: string, options?: ApiOptions): UseAsyn
   const fetchReturn = useAsyncLoader<ResponseType<BadgeType>>(() => fetcher<BadgeType>('getBadges', { param: badgeCode, ...options, requestOpt: { next: { tags: [`get-badge-${badgeCode}`] } } }))
 
   useEffect(() => {
-    if (!badgeCode) return
+    if (!badgeCode) return fetchReturn.resetData()
     fetchReturn.run()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -28,7 +28,7 @@ export const useTournamentBadgeDetail = (badgeCode: string, options?: ApiOptions
   const fetchReturn = useAsyncLoader<ResponseType<TournamentBadgeType[]>>(() => fetcher<TournamentBadgeType[]>('getTournamentBadgeDetails', { param: badgeCode, ...options, requestOpt: { next: { tags: [`get-tournament-badge-${badgeCode}`] } } }))
 
   useEffect(() => {
-    if (!badgeCode) return
+    if (!badgeCode) return fetchReturn.resetData()
     fetchReturn.run()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

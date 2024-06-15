@@ -246,12 +246,12 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
               name="badge_rule"
               render={({ field }) => (
                 <FormItem >
-                  <FormLabel htmlFor={field.name} className='mb-2 block'>
+                  <FormLabel disableChildErrorWarning htmlFor={field.name} className='mb-2 block'>
                     <Typography variant='paragraph-l-medium'>
                       Required Criteria
                     </Typography>
                   </FormLabel>
-                  <FormControl>
+                  <FormControl disableChildErrorWarning>
                     <SelectMultiple
                       id={field.name}
                       closeMenuOnSelect={false}
@@ -265,7 +265,7 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
                       onChange={handleCriteriaChanges}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage disableChildErrorWarning />
                 </FormItem>
               )}
             />

@@ -8,6 +8,7 @@ export type UseAsyncLoaderReturnType<T> = {
   isError: boolean,
   data?: null | T
   run: () => void
+  resetData: () => void
 }
 
 export function useAsyncLoader<Response>(asyncFunction: () => Promise<Response>): UseAsyncLoaderReturnType<Response> {
@@ -29,5 +30,5 @@ export function useAsyncLoader<Response>(asyncFunction: () => Promise<Response>)
 
   }
 
-  return { isLoading, isError, data, run: runAsync }
+  return { isLoading, isError, data, run: runAsync, resetData: () => setData(null) }
 }

@@ -93,14 +93,14 @@ FormItem.displayName = "FormItem";
 
 const FormLabel = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
->(({ className, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> & { disableChildErrorWarning?: boolean }
+>(({ className, disableChildErrorWarning, ...props }, ref) => {
   const { error, formItemId } = useFormField();
 
   return (
     <Label
       ref={ref}
-      className={cn(error && "text-destructive", className)}
+      className={cn((disableChildErrorWarning ? error?.message : error) && "text-destructive", className)}
       htmlFor={formItemId}
       {...props}
     />
@@ -110,8 +110,8 @@ FormLabel.displayName = "FormLabel";
 
 const FormControl = React.forwardRef<
   React.ElementRef<typeof Slot>,
-  React.ComponentPropsWithoutRef<typeof Slot>
->(({ ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof Slot> & { disableChildErrorWarning?: boolean }
+>(({ disableChildErrorWarning, ...props }, ref) => {
   const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
 
   return (
@@ -119,11 +119,11 @@ const FormControl = React.forwardRef<
       ref={ref}
       id={formItemId}
       aria-describedby={
-        !error
+        (disableChildErrorWarning ? !error?.message : !error)
           ? `${formDescriptionId}`
           : `${formDescriptionId} ${formMessageId}`
       }
-      aria-invalid={!!error}
+      aria-invalid={disableChildErrorWarning ? !!error?.message : !!error}
       {...props}
     />
   );
@@ -149,10 +149,10 @@ FormDescription.displayName = "FormDescription";
 
 const FormMessage = React.forwardRef<
   HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement> & { message?: string }
->(({ className, children, message, ...props }, ref) => {
+  React.HTMLAttributes<HTMLParagraphElement> & { message?: string, disableChildErrorWarning?: boolean }
+>(({ className, children, message, disableChildErrorWarning, ...props }, ref) => {
   const { error, formMessageId } = useFormField();
-  const body = error ? String(error?.message) : children;
+  const body = (disableChildErrorWarning ? error?.message : error) ? String(error?.message) : children;
 
   if (!body) {
     return null;

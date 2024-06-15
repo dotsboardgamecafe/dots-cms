@@ -41,7 +41,7 @@ export const RewardsFilterForm = ({ onClose, control }: Props) => {
     if (data.status) params.set('status', data.status)
     if (data.sort) {
       params.set('sort', data.sort)
-      params.set('order', 'name')
+      params.set('order', 'reward_name')
     }
 
     router.replace(pathName + '?' + params.toString())
@@ -49,10 +49,9 @@ export const RewardsFilterForm = ({ onClose, control }: Props) => {
   };
 
   const resetFilter = useCallback(() => {
-    form.setValue('status', '')
-    form.setValue('sort', undefined)
-    form.setValue('order', '')
-  }, [form])
+    router.replace(pathName)
+    onClose?.()
+  }, [pathName, router, onClose])
 
   useEffect(() => {
     if (!control?.current && control?.current !== null) return

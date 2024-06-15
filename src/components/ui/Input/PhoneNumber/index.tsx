@@ -3,69 +3,82 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 import InputWrapper from '@/components/ui/Input/InputWrapper';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
+import Typography from '@/components/ui/Typography';
+
+import { countryPhoneCodes, defaultCountryPhoneCodes, PhoneCodeType } from '@/constant/phone_code';
 
 import { InputProps } from '@/types/Inputs';
 
-type Props = React.InputHTMLAttributes<HTMLInputElement> & InputProps;
+type Props = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & InputProps & {
+  value?: string
+  onChange?: (phoneNumber: { value: string, phoneCode: string }) => void
+}
 
-const PhoneAreaDropdown = () => {
-  const areas = [ '+84', '+856', '+81', '+82' ]; // example list
-  const [ selected, setSelected ] = React.useState( areas[ 0 ] );
-  const [ opened, setOpened ] = React.useState( false );
+const PhoneNumber = React.forwardRef<HTMLInputElement, Props>(({ prefixIcon, suffixIcon, className, value = '', onChange, ...props }, ref) => {
+  const splitDefaultValue: string[] = value?.split(' ')
+  const phoneArea: string = splitDefaultValue[0].includes('+') ? splitDefaultValue[0] : ''
+  const phoneNumber: string = phoneArea ? splitDefaultValue[1] : splitDefaultValue[0]
 
-  return (
-    <div className='relative'>
-      <button
-        type='button'
-        className='w-full bg-white rounded-xl border-[1px] border-gray-300 px-[12px] py-[8px] text-sm font-normal text-gray-900 shadow-sm text-left focus:outline-none'
-        onClick={ () => setOpened( !opened ) }
-      >
-        { selected }
-      </button>
-      <ul id='area-dropdown' className={ cn(
-        [
-          'absolute right-0 w-full mt-1 bg-white rounded-xl shadow-lg top-full hidden max-h-[100px] overflow-y-auto',
-          { 'hidden': !opened }
-        ]
-      ) }>
-        {
-          areas.map( area => (
-            <li key={ area } className='px-[12px] py-[4px] cursor-pointer'
-              onClick={ () => {
-                setSelected( area );
-                document.getElementById( 'area-dropdown' )?.classList.add( 'hidden' );
-              } }
-            >
-              { area }
-            </li>
-          ) )
-        }
-      </ul>
-    </div>
-  );
-};
+  const [firstDigit, ...restDigit] = phoneNumber
+  const isStartWithZero: boolean = firstDigit === '0'
+  const correctPhoneNumberValue = isStartWithZero ? restDigit.join('') : phoneNumber
 
+  const [selected, setSelected] = React.useState<PhoneCodeType>(countryPhoneCodes.find((countryCode) => countryCode.code === phoneArea?.replace('+', '')) || defaultCountryPhoneCodes);
 
-const PhoneNumber = React.forwardRef<HTMLInputElement, Props>( ( { prefixIcon, suffixIcon, className, ...props }, ref ) => {
+  const handleCountryCodeChange = (newCountryCode: PhoneCodeType) => {
+    setSelected(newCountryCode)
+
+    onChange?.({
+      value: (correctPhoneNumberValue) as string,
+      phoneCode: `+${newCountryCode.code}`
+    })
+  }
+
+  const handleChangePhoneNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const regexNumber = new RegExp(/^[0-9]*$/)
+
+    if (event.target.value && !regexNumber.test(event.target.value)) return event.preventDefault()
+
+    const [firstValue, ...phoneNumber] = event.target.value
+    const correctPhoneNumber: string = firstValue === '0' ? phoneNumber.join('') : event.target.value
+
+    onChange?.({
+      value: correctPhoneNumber,
+      phoneCode: `+${selected.code}`
+    })
+  }
 
   return (
     <div className='w-full flex flex-col gap-2'>
-      <InputWrapper className={ className } >
-        <PhoneAreaDropdown />
-        { prefixIcon }
+      <InputWrapper className={className} >
+        <Select value={selected.iso}>
+          <SelectTrigger className='w-fit'>
+            <SelectValue aria-label={selected.iso} placeholder='Choose yes or no'>
+              <Typography variant='text-body-l-medium' className="capitalize" >
+                {selected.iso}
+              </Typography>
+            </SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {countryPhoneCodes.map((countryCode) => <SelectItem key={countryCode.iso} value={countryCode.iso} onClick={() => handleCountryCodeChange(countryCode)}>{countryCode.country}</SelectItem>)}
+          </SelectContent>
+        </Select>
+        {prefixIcon}
         <input
-          { ...props }
+          {...props}
           type='tel'
-          className={ cn( [ 'w-full' ] ) }
-          onChange={ props.onChange }
-          value={ props.value }
-          ref={ ref }
-          pattern='[0-9]'
+          className={cn(['w-full'])}
+          onChange={(event) => handleChangePhoneNumber(event)}
+          value={correctPhoneNumberValue}
+          ref={ref}
+          minLength={6}
+          maxLength={15}
         />
-        { suffixIcon }
+        {suffixIcon}
       </InputWrapper>
     </div>
   );
-} );
+});
 
 export default PhoneNumber;

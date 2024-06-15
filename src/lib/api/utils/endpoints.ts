@@ -31,6 +31,7 @@ const endpointData = {
 	addTournaments: { path: '/tournaments', method: 'POST', prefix: '' },
 	addReward: { path: '/rewards', method: 'POST', prefix: '' },
 	claimInvoice: { path: '/invoices', method: 'POST', prefix: 'claim' },
+	createAdmin: { path: '/admins', method: 'POST', prefix: '' },
 
 	// PUT
 	changeStatusMember: { path: '/users', method: 'PUT', prefix: 'status' },
@@ -45,6 +46,8 @@ const endpointData = {
 	setTournamentWinner: { path: '/tournaments', method: 'PUT', prefix: 'close' },
 	editGame: { path: '/games', method: 'PUT', prefix: '' },
 	updateReward: { path: '/rewards', method: 'PUT', prefix: '' },
+	updateAdmin: { path: '/admins', method: 'PUT', prefix: '' },
+
 } as const;
 
 // Typing schema, do not modify if not necessary

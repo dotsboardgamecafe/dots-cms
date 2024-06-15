@@ -183,7 +183,7 @@ export const AddTournamentBadgeForm = ({ onClose, defaultData, onSubmit }: Props
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Text placeholder='Enter badge name' value={field.value} onChange={field.onChange} />
+                    <Text placeholder='Enter badge name' value={field.value} onChange={field.onChange} maxLength={100} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

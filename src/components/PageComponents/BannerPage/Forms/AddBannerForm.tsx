@@ -12,6 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/components/ui/Toast/use-toast';
 import Typography from '@/components/ui/Typography';
 
+import { snakeCaseToString } from '@/helper/string';
+
 import { AddBannerSchema, TBannerData, TPostBannerPayload } from '@/types/banner';
 import { ResponseType } from '@/types/network';
 
@@ -92,7 +94,7 @@ export const AddBannerForm = ({ onClose, defaultData, onSubmit }: Props) => {
                   <SelectTrigger>
                     <SelectValue aria-label={field.value} placeholder='Select Banner Category'>
                       <Typography variant='text-body-l-medium' className="capitalize" >
-                        {field.value}
+                        {snakeCaseToString(field.value)}
                       </Typography>
                     </SelectValue>
                   </SelectTrigger>

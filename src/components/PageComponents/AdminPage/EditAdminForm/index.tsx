@@ -36,7 +36,8 @@ export const EditAdminForm = ({ onClose, adminData }: Props) => {
       email: adminData.email,
       name: adminData.name,
       phone_number: adminData.phone_number || '',
-      status: adminData.status as z.infer<typeof EditAdminSchema>['status']
+      status: adminData.status as z.infer<typeof EditAdminSchema>['status'],
+      username: adminData.user_name || ''
     },
     resolver: zodResolver(EditAdminSchema)
   }));
@@ -111,6 +112,23 @@ export const EditAdminForm = ({ onClose, adminData }: Props) => {
         />
         <FormField
           control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem >
+              <FormLabel className='mb-2 block'>
+                <Typography variant='paragraph-l-medium'>
+                  Username
+                </Typography>
+              </FormLabel>
+              <FormControl>
+                <Text placeholder='Enter username for the admin' value={field.value} onChange={field.onChange} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem >
@@ -137,7 +155,7 @@ export const EditAdminForm = ({ onClose, adminData }: Props) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <PhoneNumber value={field.value} onChange={({ value, phoneCode }) => field.onChange(`${phoneCode} ${value}`)} />
+                <PhoneNumber value={field.value} onChange={({ value, phoneCode }) => field.onChange(`${phoneCode ? `${phoneCode} ` : ''}${value}`)} />
               </FormControl>
               <FormMessage />
             </FormItem>

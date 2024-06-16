@@ -221,7 +221,15 @@ const AdminTable = ({ data, pagination }: Props) => {
       </Table>
       <Pagination pagination={pagination} />
       <AdminFilterModal open={filterModalOpen} onOpenChange={(value) => setFilterModalOpen(value)} />
-      <AdminDetailModal open={detailModalOpen} onOpenChange={(value) => setDetailModalOpen(value)} memberData={selectedRow} />
+      <AdminDetailModal
+        open={detailModalOpen}
+        onOpenChange={(value) => setDetailModalOpen(value)}
+        adminData={selectedRow}
+        onEdit={() => {
+          setDetailModalOpen(false)
+          setEditModalOpen(true)
+        }}
+      />
       <AddAdminModal open={addModalOpen} onOpenChange={(value) => setAddModalOpen(value)} />
       <StatusConfirmationModal
         open={confirmationModalOpen}

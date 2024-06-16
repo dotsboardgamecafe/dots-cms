@@ -38,8 +38,8 @@ const ClaimInvoiceConfirmationModal = ({ open, onOpenChange, memberData, invoice
 
     } catch (error) {
       toast({
-        title: 'Something went wrong',
-        description: `failed to claim invoice ${invoiceId} for user ${memberData.fullname}`,
+        title: `Failed to claim invoice ${invoiceId}`,
+        description: `make sure you type the correct invoice number`,
         variant: 'destructive',
       });
 

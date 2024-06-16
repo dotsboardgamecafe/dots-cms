@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { cookiesHelper } from '@/helper';
 
+export type EnhancedPermissionType = { [key: string]: boolean | undefined }
 
 const usePermissions = () => {
   const [permissions, setPermissions] = useState<string[]>([]);
@@ -14,8 +15,6 @@ const usePermissions = () => {
     const data = await cookiesHelper.getUserPermission();
     setPermissions(data);
   };
-
-
 
   return permissions;
 };

@@ -31,7 +31,8 @@ export const AddAdminForm = ({ onClose }: Props) => {
       name: '',
       phone_number: '',
       password: '',
-      status: 'active'
+      status: 'active',
+      username: '',
     },
     resolver: zodResolver(AddAdminSchema)
   }));
@@ -44,7 +45,6 @@ export const AddAdminForm = ({ onClose }: Props) => {
     try {
       const res = await createAdmin(data)
       if (res.stat_code?.includes('ERR')) throw new Error(res.stat_msg)
-
       toast({
         title: 'Admin successfully added!',
         variant: 'default',
@@ -100,6 +100,23 @@ export const AddAdminForm = ({ onClose }: Props) => {
         />
         <FormField
           control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem >
+              <FormLabel className='mb-2 block'>
+                <Typography variant='paragraph-l-medium'>
+                  Username
+                </Typography>
+              </FormLabel>
+              <FormControl>
+                <Text placeholder='Enter username for the admin' value={field.value} onChange={field.onChange} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem >
@@ -143,7 +160,7 @@ export const AddAdminForm = ({ onClose }: Props) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <PhoneNumber value={field.value} onChange={({ value, phoneCode }) => field.onChange(`${phoneCode} ${value}`)} />
+                <PhoneNumber value={field.value} onChange={({ value, phoneCode }) => field.onChange(`${phoneCode ? `${phoneCode} ` : ''}${value}`)} />
               </FormControl>
               <FormMessage />
             </FormItem>

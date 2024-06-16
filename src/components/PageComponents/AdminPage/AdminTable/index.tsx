@@ -18,18 +18,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
 
+import { EnhancedPermissionType } from '@/helper/hooks/usePermissions';
+
 import { AdminType } from '@/types/admin';
 import { Pagination as PaginationRes } from '@/types/network';
 
 type Props = PropsWithRef<{
   data: AdminType[];
   pagination: PaginationRes;
+  adminPermissions: EnhancedPermissionType
 }>;
 
 
 
 
-const AdminTable = ({ data, pagination }: Props) => {
+const AdminTable = ({ data, pagination, adminPermissions }: Props) => {
 
   const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
@@ -85,11 +88,9 @@ const AdminTable = ({ data, pagination }: Props) => {
       header: 'Status',
       cell: ({ row }) => {
         return (
-          <Select value={row.original.status} onValueChange={(value) => {
-            if (value === 'inactive') {
-              setConfirmationModalOpen(true);
-              setSelectedRow(row.original);
-            }
+          <Select disabled={!adminPermissions['admin-update-status']} value={row.original.status} onValueChange={(value) => {
+            setConfirmationModalOpen(true);
+            setSelectedRow(row.original);
           }}>
             <SelectTrigger variant='badge' className={cn(
               {
@@ -127,10 +128,12 @@ const AdminTable = ({ data, pagination }: Props) => {
             <Eye onClick={() => {
               onClickDetail(row.original);
             }} />
-            <Edit onClick={() => {
-              setSelectedRow(row.original)
-              setEditModalOpen(true)
-            }} />
+            {adminPermissions['admin-update'] && (
+              <Edit onClick={() => {
+                setSelectedRow(row.original)
+                setEditModalOpen(true)
+              }} />
+            )}
           </div>
         );
       }
@@ -161,12 +164,14 @@ const AdminTable = ({ data, pagination }: Props) => {
       <section className='table-action'>
         <Search />
         <div className='flex flex-row gap-6'>
-          <Button variant="default" size="lg" onClick={() => setAddModalOpen(true)} className="gap-2">
-            <AddCircle size={20} />
-            <Typography variant='paragraph-l-bold'>
-              Add New Admin
-            </Typography>
-          </Button>
+          {adminPermissions['admin-add'] && (
+            <Button variant="default" size="lg" onClick={() => setAddModalOpen(true)} className="gap-2">
+              <AddCircle size={20} />
+              <Typography variant='paragraph-l-bold'>
+                Add New Admin
+              </Typography>
+            </Button>
+          )}
           <Button variant="secondary" size="md" onClick={() => setFilterModalOpen(true)}>
             <Setting4 size={20} />
             <Typography variant='paragraph-l-bold'>
@@ -221,7 +226,15 @@ const AdminTable = ({ data, pagination }: Props) => {
       </Table>
       <Pagination pagination={pagination} />
       <AdminFilterModal open={filterModalOpen} onOpenChange={(value) => setFilterModalOpen(value)} />
-      <AdminDetailModal open={detailModalOpen} onOpenChange={(value) => setDetailModalOpen(value)} memberData={selectedRow} />
+      <AdminDetailModal
+        open={detailModalOpen}
+        onOpenChange={(value) => setDetailModalOpen(value)}
+        adminData={selectedRow}
+        onEdit={() => {
+          setDetailModalOpen(false)
+          setEditModalOpen(true)
+        }}
+      />
       <AddAdminModal open={addModalOpen} onOpenChange={(value) => setAddModalOpen(value)} />
       <StatusConfirmationModal
         open={confirmationModalOpen}

@@ -45,7 +45,7 @@ const PhoneNumber = React.forwardRef<HTMLInputElement, Props>(({ prefixIcon, suf
 
     onChange?.({
       value: correctPhoneNumber,
-      phoneCode: `+${selected.code}`
+      phoneCode: correctPhoneNumber ? `+${selected.code}` : ''
     })
   }
 

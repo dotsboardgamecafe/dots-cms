@@ -10,3 +10,9 @@ export function snakeCaseToString(data?: string): string {
     return firstLetter.toUpperCase() + restString.join('')
   }).join(' ')
 }
+
+export function isValidEmailFormat(email: string): boolean {
+  const emailRegexp = new RegExp(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g)
+
+  return emailRegexp.test(email)
+}

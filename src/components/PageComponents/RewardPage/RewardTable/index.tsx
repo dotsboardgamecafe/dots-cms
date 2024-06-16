@@ -276,6 +276,7 @@ const RewardTable = ({ data, pagination, tiers }: Props) => {
           <Separator />
           <RewardView data={selectedRow} onEdit={() => {
             setEditModalOpen(true);
+            setDetailModalOpen(false)
           }} />
         </ModalContent>
       </Modal>

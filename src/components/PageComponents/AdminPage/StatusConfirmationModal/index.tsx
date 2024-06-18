@@ -20,7 +20,7 @@ const StatusConfirmationModal = ({ open, onOpenChange, adminData }: Props) => {
 
 
   const onConfirm = async () => {
-    await updateStatusAdmin({ param: adminData?.admin_code, body: { status: 'inactive' } });
+    await updateStatusAdmin({ param: adminData?.admin_code, body: { status: adminData?.status === 'active' ? 'inactive' : 'active' } });
     onOpenChange(false);
   };
 
@@ -32,12 +32,12 @@ const StatusConfirmationModal = ({ open, onOpenChange, adminData }: Props) => {
             <Danger size={32} className='text-white' variant='Bold' />
           </div>
           <Typography variant='heading-h4'>
-            Are you sure to inactive this item?
+            Are you sure to {adminData?.status === 'active' ? 'inactive' : 'activate'} this item?
           </Typography>
         </section>
         <section className='flex gap-6'>
           <Button className='flex-1' size="lg" variant="secondary" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm}>Yes, Inactive</Button>
+          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm}>Yes, {adminData?.status === 'active' ? 'Inactive' : 'Activate'}</Button>
         </section>
       </ModalContent>
     </Modal>

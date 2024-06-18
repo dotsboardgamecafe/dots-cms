@@ -22,3 +22,9 @@ export const updateAdmin = async (admin_code: string, payload: AddAdminPayload) 
   revalidateTag('get-admins')
   return res
 }
+
+export const updateStatusAdmin = async (options: ApiOptions) => {
+  const res = await fetcher('changeStatusAdmin', options);
+  revalidateTag('get-admins')
+  return res
+};

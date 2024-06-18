@@ -239,7 +239,7 @@ const AdminTable = ({ data, pagination, adminPermissions }: Props) => {
       <StatusConfirmationModal
         open={confirmationModalOpen}
         onOpenChange={(value) => setConfirmationModalOpen(value)}
-        memberData={selectedRow}
+        adminData={selectedRow}
       />
       <EditAdminModal
         open={editModalOpen}

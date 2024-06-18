@@ -47,6 +47,7 @@ const endpointData = {
 	editGame: { path: '/games', method: 'PUT', prefix: '' },
 	updateReward: { path: '/rewards', method: 'PUT', prefix: '' },
 	updateAdmin: { path: '/admins', method: 'PUT', prefix: '' },
+	changeStatusAdmin: { path: '/admins', method: 'PUT', prefix: 'status' },
 
 } as const;
 

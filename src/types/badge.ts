@@ -43,7 +43,8 @@ export type BadgeType<T = BadgeTimeLimitCriteriaValue | BadgeTotalSpendCriteriaV
   status: string,
   created_date: string,
   updated_date: string,
-  deleted_date: string
+  deleted_date: string,
+  description: string
 }
 
 export type TournamentBadgeType = {
@@ -68,12 +69,14 @@ export type TournamentBadgeType = {
   parent_code: string,
   created_date: string,
   updated_date: string,
-  deleted_date: string
+  deleted_date: string,
+  description: string
 }
 
 export const badgePostPayloadSchema = z.object({
   badge_category: z.string({ required_error: "You need to select the badge category.", }).min(1, "You need to select the badge category."),
   name: z.string({ required_error: "You need to input the badge name." }).min(1, "You need to input the badge name."),
+  description: z.string({ required_error: "You need to input the badge description." }).min(1, "You need to input the badge description."),
   image_url: z.string({ required_error: "You need to upload the badge image." }).min(1, "You need to upload the badge image."),
   status: z.string({ required_error: "You need to input the badge status.", }),
   vp_point: z.number({ required_error: "You need to input the amount of VP.", }).min(1, "You need to input the amount of VP."),
@@ -123,6 +126,7 @@ export const TournamentBadgePayloadSchema = z.object({
   vp_point1: z.number({ required_error: 'You need to input the VP amount for 1st position' }).min(1, 'You need to input the VP amount for 1st position'),
   vp_point2: z.number({ required_error: 'You need to input the bage image for 2nd position' }).min(1, 'You need to input the VP amount for 2nd position'),
   vp_point3: z.number({ required_error: 'You need to input the bage image for 3rd position' }).min(1, 'You need to input the VP amount for 3rd position'),
+  description: z.string({ required_error: "You need to input the badge description." }).min(1, "You need to input the badge description."),
 })
 
 export type TournamentBadgeSchemaType = z.infer<typeof TournamentBadgePayloadSchema>
@@ -134,6 +138,7 @@ export type TournamentBadgePayloadType = {
     image_url: string,
     status: string,
     vp_point: number,
+    description: string,
     badge_rule: {
       key_condition: string,
       value_type: string,

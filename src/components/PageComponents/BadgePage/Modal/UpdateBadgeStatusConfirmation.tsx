@@ -150,6 +150,7 @@ const UpdateBadgeStatusConfirmation = ({ open, onOpenChange, id, type, prevStatu
       name: badgeData.name,
       status: actionName,
       vp_point: badgeData.vp_point,
+      description: badgeData.description || ''
     }
 
     return editBadges({ param: id, body: payload })

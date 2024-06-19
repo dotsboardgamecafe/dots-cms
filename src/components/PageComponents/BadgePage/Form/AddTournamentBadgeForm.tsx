@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Buttons';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
 import InputNumber from '@/components/ui/Input/Number';
 import Text from '@/components/ui/Input/Text';
+import Textarea from '@/components/ui/Input/TextArea';
 import Upload from '@/components/ui/Input/Upload';
 import { useToast } from '@/components/ui/Toast/use-toast';
 import Typography from '@/components/ui/Typography';
@@ -35,7 +36,8 @@ export const AddTournamentBadgeForm = ({ onClose, defaultData, onSubmit }: Props
       name: defaultData?.firstPlace.name || '',
       vp_point1: defaultData?.firstPlace.vp_point || 0,
       vp_point2: defaultData?.secondPlace.vp_point || 0,
-      vp_point3: defaultData?.thirdPlace.vp_point || 0
+      vp_point3: defaultData?.thirdPlace.vp_point || 0,
+      description: defaultData?.firstPlace.description || ''
     },
     resolver: zodResolver(TournamentBadgePayloadSchema)
   }));
@@ -52,6 +54,7 @@ export const AddTournamentBadgeForm = ({ onClose, defaultData, onSubmit }: Props
           image_url: data.image_url1,
           status: data.status,
           vp_point: data.vp_point1,
+          description: data.description,
           badge_rule: {
             ...defaultData?.firstPlace.badge_rules[0],
             key_condition: 'tournament_winner',
@@ -68,6 +71,7 @@ export const AddTournamentBadgeForm = ({ onClose, defaultData, onSubmit }: Props
           image_url: data.image_url2,
           status: data.status,
           vp_point: data.vp_point2,
+          description: data.description,
           badge_rule: {
             ...defaultData?.firstPlace.badge_rules[0],
             key_condition: 'tournament_winner',
@@ -84,6 +88,7 @@ export const AddTournamentBadgeForm = ({ onClose, defaultData, onSubmit }: Props
           image_url: data.image_url3,
           status: data.status,
           vp_point: data.vp_point3,
+          description: data.description,
           badge_rule: {
             ...defaultData?.thirdPlace.badge_rules[0],
             key_condition: 'tournament_winner',
@@ -235,6 +240,23 @@ export const AddTournamentBadgeForm = ({ onClose, defaultData, onSubmit }: Props
                   </FormLabel>
                   <FormControl>
                     <InputNumber placeholder='Enter points' value={field.value} onChange={(event) => field.onChange(Number(event.target.value))} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem >
+                  <FormLabel className='mb-2 block'>
+                    <Typography variant='paragraph-l-medium'>
+                      Description
+                    </Typography>
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea note='Max 100 characters' maxLength={100} placeholder='Enter Badge Description' value={field.value} onChange={field.onChange} className='resize-none' />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

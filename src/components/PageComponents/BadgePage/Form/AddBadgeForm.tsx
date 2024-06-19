@@ -10,6 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import InputNumber from '@/components/ui/Input/Number';
 import SelectMultiple, { SelectOptionCheckBox, SelectOptionType, SelectValueContainer } from '@/components/ui/Input/SelectMultiple';
 import Text from '@/components/ui/Input/Text';
+import Textarea from '@/components/ui/Input/TextArea';
 import Upload from '@/components/ui/Input/Upload';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import { useToast } from '@/components/ui/Toast/use-toast';
@@ -74,6 +75,7 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
       name: defaultData?.name || '',
       status: defaultData?.status || 'inactive',
       vp_point: Number(defaultData?.vp_point || 0),
+      description: defaultData?.description || ''
     },
     resolver: zodResolver(badgePostPayloadSchema)
   }));
@@ -266,6 +268,23 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
                     />
                   </FormControl>
                   <FormMessage disableChildErrorWarning />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem >
+                  <FormLabel className='mb-2 block'>
+                    <Typography variant='paragraph-l-medium'>
+                      Description
+                    </Typography>
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea note='Max 100 characters' maxLength={100} placeholder='Enter Badge Description' value={field.value} onChange={field.onChange} className='resize-none' />
+                  </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />

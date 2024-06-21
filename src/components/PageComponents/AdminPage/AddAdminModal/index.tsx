@@ -7,14 +7,14 @@ import Typography from '@/components/ui/Typography';
 
 type Props = PropsWithRef<{
   open: boolean;
-  onOpenChange: ( open: boolean ) => void;
+  onOpenChange: (open: boolean) => void;
 }>;
 
-const AddAdminModal = ( { open, onOpenChange }: Props ) => {
+const AddAdminModal = ({ open, onOpenChange }: Props) => {
 
   return (
-    <Modal open={ open } onOpenChange={ onOpenChange } >
-      <ModalContent hideCloseIcon>
+    <Modal open={open} onOpenChange={onOpenChange} >
+      <ModalContent hideCloseIcon className='max-h-[90%] overflow-hidden flex flex-col'>
         <ModalHeader>
           <ModalTitle>
             <Typography variant='heading-h4'>
@@ -23,7 +23,7 @@ const AddAdminModal = ( { open, onOpenChange }: Props ) => {
           </ModalTitle>
         </ModalHeader>
         <Separator />
-        <AddAdminForm onClose={ () => onOpenChange( false ) } />
+        <AddAdminForm onClose={() => onOpenChange(false)} />
       </ModalContent>
     </Modal>
   );

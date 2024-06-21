@@ -18,6 +18,7 @@ import InputNumber from '@/components/ui/Input/Number';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/Input/RadioGroup';
 import { SelectOptionType } from "@/components/ui/Input/SelectMultiple";
 import SelectAsync from "@/components/ui/Input/SelectMultiple/async";
+import SelectGameMasters from "@/components/ui/Input/SelectMultiple/SelectGameMasters";
 import Text from '@/components/ui/Input/Text';
 import Textarea from '@/components/ui/Input/TextArea';
 import Upload from '@/components/ui/Input/Upload';
@@ -25,13 +26,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/components/ui/Toast/use-toast';
 import Typography from '@/components/ui/Typography';
 
-import { AdminType } from '@/types/admin';
 import { Pagination } from "@/types/network";
 import { AddRoomPayload, AddRoomSchema } from '@/types/room';
-
-type Props = {
-  admins: AdminType[];
-};
 
 type GameOptionType = SelectOptionType & {
   data: {
@@ -40,7 +36,7 @@ type GameOptionType = SelectOptionType & {
   }
 }
 
-const AddRoomForm = ({ admins }: Props) => {
+const AddRoomForm = () => {
   const [selectedGameBoard, setSelectedGameBoard] = useState<SingleValue<GameOptionType>>(null)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
@@ -229,22 +225,9 @@ const AddRoomForm = ({ admins }: Props) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
-                        <SelectValue aria-label={field.value} placeholder='Select Game Master'>
-                          <Typography variant='text-body-l-medium' >
-                            {admins.find(admin => admin.admin_code === field.value)?.name || ''}
-                          </Typography>
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent >
-                        {
-                          admins.map(admin => (
-                            <SelectItem value={admin.admin_code} key={admin.admin_code}>{admin.name}</SelectItem>
-                          ))
-                        }
-                      </SelectContent>
-                    </Select>
+                    <SelectGameMasters
+                      onChange={(gameMaster) => field.onChange(gameMaster?.value)}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -17,7 +17,7 @@ const EditAdminModal = ({ open, onOpenChange, adminData }: Props) => {
   if (!adminData) return null
   return (
     <Modal open={open} onOpenChange={onOpenChange} >
-      <ModalContent hideCloseIcon>
+      <ModalContent hideCloseIcon className='max-h-[90%] overflow-hidden flex flex-col'>
         <ModalHeader>
           <ModalTitle>
             <Typography variant='heading-h4'>

@@ -18,6 +18,7 @@ import InputNumber from '@/components/ui/Input/Number';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/Input/RadioGroup';
 import { SelectOptionType } from "@/components/ui/Input/SelectMultiple";
 import SelectAsync from "@/components/ui/Input/SelectMultiple/async";
+import SelectGameMasters from "@/components/ui/Input/SelectMultiple/SelectGameMasters";
 import Text from '@/components/ui/Input/Text';
 import Textarea from '@/components/ui/Input/TextArea';
 import Upload from '@/components/ui/Input/Upload';
@@ -25,12 +26,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from "@/components/ui/Toast/use-toast";
 import Typography from '@/components/ui/Typography';
 
-import { AdminType } from '@/types/admin';
 import { Pagination } from "@/types/network";
 import { AddRoomPayload, AddRoomSchema, RoomDetailType } from '@/types/room';
 
 type Props = {
-  admins: AdminType[];
   roomDetail: RoomDetailType;
 };
 
@@ -41,7 +40,7 @@ type GameOptionType = SelectOptionType & {
   }
 }
 
-const EditRoomForm = ({ admins, roomDetail }: Props) => {
+const EditRoomForm = ({ roomDetail }: Props) => {
   const [selectedGameBoard, setSelectedGameBoard] = useState<SingleValue<GameOptionType>>(roomDetail ? { value: roomDetail.game_code, label: `${roomDetail.game_name} ${roomDetail.cafe_name}`, data: { cafe_name: roomDetail.cafe_name, cafe_code: roomDetail.cafe_code } } : null)
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
@@ -224,24 +223,6 @@ const EditRoomForm = ({ admins, roomDetail }: Props) => {
                       onChange={(newValue) => handleGameBoardChange(newValue, field.onChange)}
                       isSearchable
                     />
-                    {/* <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
-                        <SelectValue aria-label={field.value} placeholder='Select Game'>
-                          <Typography variant='text-body-l-medium' >
-                            {
-                              games.find(game => game.game_code === field.value)?.name || ''
-                            }
-                          </Typography>
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent >
-                        {
-                          games.map(game => (
-                            <SelectItem value={game.game_code} key={game.game_code}>{game.name}</SelectItem>
-                          ))
-                        }
-                      </SelectContent>
-                    </Select> */}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -259,22 +240,10 @@ const EditRoomForm = ({ admins, roomDetail }: Props) => {
                       </Typography>
                     </FormLabel>
                     <FormControl>
-                      <Select value={field.value} onValueChange={field.onChange}>
-                        <SelectTrigger>
-                          <SelectValue aria-label={field.value} placeholder='Select Game Master'>
-                            <Typography variant='text-body-l-medium' >
-                              {admins.find(admin => admin.admin_code === field.value)?.name || ''}
-                            </Typography>
-                          </SelectValue>
-                        </SelectTrigger>
-                        <SelectContent >
-                          {
-                            admins.map(admin => (
-                              <SelectItem value={admin.admin_code} key={admin.admin_code}>{admin.name}</SelectItem>
-                            ))
-                          }
-                        </SelectContent>
-                      </Select>
+                      <SelectGameMasters
+                        defaultData={{ value: roomDetail.game_master_code, label: roomDetail.game_master_name }}
+                        onChange={(gameMaster) => field.onChange(gameMaster?.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

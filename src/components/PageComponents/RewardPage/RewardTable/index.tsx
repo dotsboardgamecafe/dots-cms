@@ -245,7 +245,7 @@ const RewardTable = ({ data, pagination, tiers }: Props) => {
       </Table>
       <Pagination pagination={pagination} />
       <Modal open={addModalOpen} onOpenChange={setAddModalOpen} >
-        <ModalContent hideCloseIcon>
+        <ModalContent hideCloseIcon className='max-h-[90%] overflow-hidden flex flex-col'>
           <ModalHeader>
             <Typography variant='heading-h4'>
               Add New Voucher
@@ -256,7 +256,7 @@ const RewardTable = ({ data, pagination, tiers }: Props) => {
         </ModalContent>
       </Modal>
       <Modal open={editModalOpen} onOpenChange={setEditModalOpen} >
-        <ModalContent hideCloseIcon>
+        <ModalContent hideCloseIcon className='max-h-[90%] overflow-hidden flex flex-col'>
           <ModalHeader>
             <Typography variant='heading-h4'>
               Edit Voucher
@@ -267,7 +267,7 @@ const RewardTable = ({ data, pagination, tiers }: Props) => {
         </ModalContent>
       </Modal>
       <Modal open={detailModalOpen} onOpenChange={setDetailModalOpen} >
-        <ModalContent hideCloseIcon>
+        <ModalContent hideCloseIcon className='max-h-[90%] overflow-hidden flex flex-col'>
           <ModalHeader>
             <Typography variant='text-body-xl-heavy'>
               {selectedRow?.name}

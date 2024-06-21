@@ -1,11 +1,9 @@
-import { getAdmins } from '@/lib/api/admin';
 
 import Header from '@/components/LayoutComponents/Header';
 import PageContainer from '@/components/LayoutComponents/PageContainer';
 import AddRoomForm from '@/components/PageComponents/RoomPage/AddRoom/form';
 
 const AddRoomPage = async () => {
-  const admins = await getAdmins({ limit: 999999 });
 
   return (
     <>
@@ -17,7 +15,7 @@ const AddRoomPage = async () => {
         ]}
       />
       <PageContainer>
-        <AddRoomForm admins={admins.data} />
+        <AddRoomForm />
       </PageContainer>
     </>
   );

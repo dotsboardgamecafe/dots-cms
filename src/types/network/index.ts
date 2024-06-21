@@ -15,7 +15,7 @@ export interface Pagination {
 	order?: string;
 	page?: number;
 	post_type?: string;
-	sort?: 'DESC' | 'ASC';
+	sort?: 'DESC' | 'ASC' | `${'ASC' | 'DESC'},${'ASC' | 'DESC'}`;
 	status?: string;
 	search?: string;
 	tag?: string;

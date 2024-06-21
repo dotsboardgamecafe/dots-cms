@@ -26,7 +26,7 @@ const AddCafeModal = ({ open, onOpenChange, settings }: Props) => {
 
   return (
     <Modal open={open} onOpenChange={onOpenChange} >
-      <ModalContent hideCloseIcon>
+      <ModalContent hideCloseIcon className='max-h-[90%] overflow-hidden flex flex-col'>
         <ModalHeader>
           <ModalTitle>
             Add New Cafe

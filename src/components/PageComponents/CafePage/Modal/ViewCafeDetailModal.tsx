@@ -18,13 +18,13 @@ type Props = PropsWithRef<{
 const ViewCafeDetailModal = ({ open, onOpenChange, cafeData, onEdit }: Props) => {
   return (
     <Modal open={open} onOpenChange={onOpenChange} >
-      <ModalContent hideCloseIcon>
+      <ModalContent hideCloseIcon className='max-h-[90%] overflow-hidden flex flex-col'>
         <ModalHeader>
           <ModalTitle className='break-all'>
             {cafeData?.name || '-'}
           </ModalTitle>
         </ModalHeader>
-        <div className='gap-6 flex flex-col'>
+        <div className='gap-6 flex flex-col flex-grow overflow-y-auto'>
           <section className='flex flex-col  gap-1'>
             <Typography variant='paragraph-l-regular'>
               Address

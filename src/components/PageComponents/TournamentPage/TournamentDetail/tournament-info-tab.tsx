@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/Buttons';
 import TextLabel from '@/components/ui/TextLabel';
 import Typography from '@/components/ui/Typography';
 
+import { formatTournamentDate } from '@/helper/datetime';
 import { currencyFormat } from '@/helper/string';
 
 import { BadgeType } from '@/types/badge';
@@ -24,15 +25,7 @@ type Props = {
 const TournamentInfo = ({ tournamentDetail }: Props) => {
   const router = useRouter()
 
-  const tournamentDate = useMemo(() => {
-    const startDate = dayjs(tournamentDetail.start_date)
-    const endDate = dayjs(tournamentDetail.end_date)
-    const currentDate = dayjs(new Date())
-    const isSameYear = startDate.year() === endDate.year() && currentDate.year() === endDate.year()
-    const isSameMonth = isSameYear && (startDate.month() === endDate.month())
-
-    return `${startDate.format(`MMM, Do${isSameYear ? '' : ' YYYY'}`)} - ${endDate.format(`${isSameMonth ? '' : 'MMM, '}Do${isSameYear ? '' : ' YYYY'}`)}`
-  }, [tournamentDetail.start_date, tournamentDetail.end_date])
+  const tournamentDate = useMemo(() => formatTournamentDate(tournamentDetail.start_date, tournamentDetail.end_date), [tournamentDetail.start_date, tournamentDetail.end_date])
 
   const firstWinnerBadge: BadgeType | undefined = tournamentDetail?.tournament_badges.find((badge) => badge.badge_rules[0].value.position === 1)
   const secondWinnerBadge: BadgeType | undefined = tournamentDetail?.tournament_badges.find((badge) => badge.badge_rules[0].value.position === 2)

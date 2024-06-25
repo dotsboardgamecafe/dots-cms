@@ -5,7 +5,6 @@ import dayjsFormats from 'dayjs/plugin/advancedFormat';
 import { AddCircle, Edit, Eye } from 'iconsax-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -33,9 +32,9 @@ type Props = {
 const RoomTable = ({ data, pagination }: Props) => {
   const [statusConfirmationModalOpen, setStatusConfirmationModalOpen] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<RoomType>();
-  const router = useRouter();
 
   const getRoomStatus = (roomData: RoomType): string => {
+
     if (roomData.status !== 'active') return roomData.status
     const isAlreadyPast = dayjs(roomData.end_date).isBefore(dayjs())
 
@@ -131,7 +130,7 @@ const RoomTable = ({ data, pagination }: Props) => {
       cell: ({ row }) => {
         return (
           <Select value={getRoomStatus(row.original)}
-            disabled={getRoomStatus(row.original) === 'inactive' || row.original.current_used_slot > 0}
+            disabled={getRoomStatus(row.original) === 'inactive'}
             onValueChange={(value) => {
               if (value === 'inactive') {
                 setStatusConfirmationModalOpen(true);

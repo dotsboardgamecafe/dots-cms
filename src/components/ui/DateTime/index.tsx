@@ -24,10 +24,6 @@ const DateTime = ({ start_date, end_date, onDateChange, onEndDateChange }: Props
     const parsedTime = parseTime(time);
     const selectedDate = dayjs(start_date).set('hours', parsedTime.hour).set('minutes', parsedTime.minutes).toDate();
     onDateChange(selectedDate);
-
-    if (end_date && dayjs(end_date).isBefore(selectedDate)) {
-      onEndDateChange(dayjs(end_date).set('date', dayjs(end_date).get('date') + 1).toDate())
-    }
   };
 
   const onChangeEndTime = (evt: ChangeEvent<HTMLInputElement>) => {

@@ -246,6 +246,11 @@ const AddRoomForm = () => {
                   <FormControl>
                     <DateTime
                       onDateChange={(date) => {
+                        let endDate = dayjs(date).set('hours', dayjs(field.value.end_date).get('hour') || 0).set('minutes', dayjs(field.value.end_date).get('minutes') || 0)
+                        if (endDate.isBefore(dayjs(date))) {
+                          endDate = endDate.set('date', dayjs(date).get('date') + 1)
+                        }
+
                         field.onChange({ ...field.value, start_date: date });
                       }}
                       onEndDateChange={(date) => {

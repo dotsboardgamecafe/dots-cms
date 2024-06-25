@@ -11,7 +11,7 @@ import TournamentTable from '@/components/PageComponents/TournamentPage/DataTabl
 import { PageProps } from '@/types/common';
 
 const RoomPage = async ({ searchParams }: PageProps) => {
-  const tournaments = await getTournaments({ pagination: { order: 'tournaments.status', sort: 'ASC', ...searchParams } });
+  const tournaments = await getTournaments({ pagination: { order: 'tournaments.status,tournaments.created_date', sort: 'ASC,DESC', ...searchParams } });
   return (
     <>
       <Header title='Tournament' subtitle={[{

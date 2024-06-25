@@ -216,9 +216,8 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Play">Play</SelectItem>
-                        <SelectItem value="Retail">Retail</SelectItem>
-                        <SelectItem value="Spent">Spent</SelectItem>
+                        <SelectItem value="play">Play</SelectItem>
+                        <SelectItem value="spent">Spent</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>

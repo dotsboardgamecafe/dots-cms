@@ -65,8 +65,10 @@ const AddRoomForm = () => {
       const payload: AddRoomPayload = {
         booking_price: +data.price,
         difficulty: data.level,
-        end_date: dayjs(data.schedule.end_date).toISOString(),
-        start_date: dayjs(data.schedule.start_date).toISOString(),
+        end_date: dayjs(data.schedule.end_date).format('YYYY-MM-DD'),
+        start_date: dayjs(data.schedule.start_date).format('YYYY-MM-DD'),
+        start_time: dayjs(data.schedule.start_date).format('HH:mm:ss'),
+        end_time: dayjs(data.schedule.end_date).format('HH:mm:ss'),
         game_master_code: data.game_master,
         instruction: 'instruction',
         maximum_participant: +data.player_slot,

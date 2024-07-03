@@ -13,8 +13,10 @@ export type RoomType = {
   description: string,
   instruction: string,
   difficulty: string,
-  start_date: string,
-  end_date: string,
+  start_date: string;
+  end_date: string;
+  start_time: string;
+  end_time: string;
   instagram_link: string,
   status: string,
   game_master_name: string,
@@ -40,6 +42,8 @@ export type RoomDetailType = {
   difficulty: string;
   start_date: string;
   end_date: string;
+  start_time: string;
+  end_time: string;
   instagram_link: string;
   status: string;
   booking_price: number;
@@ -110,8 +114,10 @@ export type AddRoomPayload = {
   description?: string;
   instruction?: string;
   difficulty?: string;
-  start_date?: string;
-  end_date?: string;
+  start_date: string,
+  end_date: string,
+  start_time: string,
+  end_time: string,
   maximum_participant?: number;
   booking_price?: number;
   reward_point?: number;

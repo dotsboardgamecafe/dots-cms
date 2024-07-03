@@ -42,6 +42,8 @@ type GameOptionType = SelectOptionType & {
 
 const EditRoomForm = ({ roomDetail }: Props) => {
   const [selectedGameBoard, setSelectedGameBoard] = useState<SingleValue<GameOptionType>>(roomDetail ? { value: roomDetail.game_code, label: `${roomDetail.game_name} ${roomDetail.cafe_name}`, data: { cafe_name: roomDetail.cafe_name, cafe_code: roomDetail.cafe_code } } : null)
+  const [startHour, startMinute] = roomDetail.start_time.split(':')
+  const [endHour, endMinute] = roomDetail.end_time.split(':')
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const { toast } = useToast()
@@ -53,8 +55,8 @@ const EditRoomForm = ({ roomDetail }: Props) => {
       price: roomDetail.booking_price,
       points: String(roomDetail.reward_point),
       schedule: {
-        start_date: dayjs(roomDetail.start_date).toDate(),
-        end_date: dayjs(roomDetail.end_date).toDate(),
+        start_date: dayjs(roomDetail.start_date).set('hour', Number(startHour)).set('minute', Number(startMinute)).toDate(),
+        end_date: dayjs(roomDetail.end_date).set('hour', Number(endHour)).set('minute', Number(endMinute)).toDate(),
       },
       banner: roomDetail.room_banner_url,
       description: roomDetail.description,
@@ -74,8 +76,10 @@ const EditRoomForm = ({ roomDetail }: Props) => {
     const payload: AddRoomPayload = {
       booking_price: +data.price,
       difficulty: data.level,
-      end_date: dayjs(data.schedule.end_date).toISOString(),
-      start_date: dayjs(data.schedule.start_date).toISOString(),
+      end_date: dayjs(data.schedule.end_date).format('YYYY-MM-DD'),
+      start_date: dayjs(data.schedule.start_date).format('YYYY-MM-DD'),
+      start_time: dayjs(data.schedule.start_date).format('HH:mm:ss'),
+      end_time: dayjs(data.schedule.end_date).format('HH:mm:ss'),
       game_code: data.game_code,
       game_master_code: data.game_master,
       instruction: 'instruction',

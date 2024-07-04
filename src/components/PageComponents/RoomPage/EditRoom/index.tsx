@@ -95,7 +95,9 @@ const EditRoomForm = ({ roomDetail }: Props) => {
     };
 
     try {
-      await updateRoom({ body: payload, param: roomDetail.room_code });
+      const res = await updateRoom({ body: payload, param: roomDetail.room_code });
+      if (res.stat_code?.includes('ERR')) throw new Error(res.stat_code)
+
       toast({
         title: 'Successfully update the room',
         variant: 'default',

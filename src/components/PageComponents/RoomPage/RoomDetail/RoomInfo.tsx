@@ -22,7 +22,7 @@ const RoomInfo = ({ roomDetail }: Props) => {
       <TextLabel title='Room Type' value={roomDetail.room_type} className='border-b border-gray-200 capitalize' />
       <TextLabel title='Game Name' value={roomDetail.game_name} className='border-b border-gray-200 capitalize' />
       <TextLabel title='Game Master' value={roomDetail.game_master_name} className='border-b border-gray-200 capitalize' />
-      <TextLabel title='Schedule' value={formatRoomSchedule(roomDetail.start_date, roomDetail.end_date)} className='border-b border-gray-200 capitalize' />
+      <TextLabel title='Schedule' value={formatRoomSchedule(roomDetail.start_date, roomDetail.end_date, roomDetail.start_time, roomDetail.end_time)} className='border-b border-gray-200 capitalize' />
       <TextLabel title='Location' value={roomDetail.cafe_name} className='border-b border-gray-200 capitalize' />
       <TextLabel title='Level' value={roomDetail.difficulty} className='border-b border-gray-200 capitalize' />
       <TextLabel title='Updated Slot' value={`${roomDetail.current_used_slot} / ${roomDetail.maximum_participant} Players `} className='border-b border-gray-200 capitalize' />

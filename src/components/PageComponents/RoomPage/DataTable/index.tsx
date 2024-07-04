@@ -71,7 +71,7 @@ const RoomTable = ({ data, pagination }: Props) => {
       cell: ({ row }) => {
         return (
           <Typography variant='paragraph-l-regular'>
-            {dayjs(row.original.start_date).format('ddd Do, HH:mm')} - {dayjs(row.original.end_date).format('HH:mm')}
+            {dayjs(row.original.start_date).format('ddd Do, ') + row.original.start_time} - {row.original.end_time}
           </Typography>
         );
       }

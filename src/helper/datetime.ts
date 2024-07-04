@@ -3,8 +3,8 @@ import dayjsFormats from 'dayjs/plugin/advancedFormat';
 
 dayjs.extend(dayjsFormats);
 
-export const formatRoomSchedule = (start_date: string, end_date: string) => {
-  return `${dayjs(start_date).format('ddd Do, HH:mm')} - ${dayjs(end_date).format('HH:mm')}`;
+export const formatRoomSchedule = (start_date: string, end_date: string, start_time: string, end_time: string) => {
+  return `${dayjs(start_date).format('ddd Do, ') + start_time} - ${end_time}`;
 };
 
 export const formatTournamentDate = (start_date: string, end_date: string): string => {

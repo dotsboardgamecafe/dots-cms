@@ -82,7 +82,10 @@ const AddRoomForm = () => {
         image_url: data.banner,
         instagram_link: '',
       };
-      await createRoom({ body: payload });
+
+      const res = await createRoom({ body: payload });
+      if (res.stat_code?.includes('ERR')) throw new Error(res.stat_code)
+
       toast({
         title: `Room successfully Created`,
         variant: 'default',

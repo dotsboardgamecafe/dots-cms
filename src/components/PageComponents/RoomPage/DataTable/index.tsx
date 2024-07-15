@@ -36,7 +36,7 @@ const RoomTable = ({ data, pagination }: Props) => {
   const getRoomStatus = (roomData: RoomType): string => {
 
     if (roomData.status !== 'active') return roomData.status
-    const isAlreadyPast = dayjs(roomData.end_date).isBefore(dayjs())
+    const isAlreadyPast = dayjs(`${roomData.end_date} ${roomData.end_time}`).isBefore(dayjs())
 
     if (isAlreadyPast) return 'inactive'
     return roomData.status

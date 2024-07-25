@@ -8,17 +8,17 @@ import GameTable from '@/components/PageComponents/GamePage/GameTable';
 import { Pagination } from '@/types/network';
 
 
-const GamePage = async ( { searchParams }: { searchParams: Pagination; } ) => {
-  const games = await getGameList( { pagination: searchParams } );
-  const gameTypeList = await getGameCategories( { pagination: { limit: 99999 } } );
+const GamePage = async ({ searchParams }: { searchParams: Pagination; }) => {
+  const games = await getGameList({ pagination: { ...searchParams, status: 'active' } });
+  const gameTypeList = await getGameCategories({ pagination: { limit: 99999 } });
   return (
     <>
-      <Header title='Game Catalog' subtitle={ [ {
+      <Header title='Game Catalog' subtitle={[{
         label: 'All Game Information',
         link: '/game'
-      } ] } />
+      }]} />
       <PageContainer>
-        <GameTable data={ games.data } pagination={ games.pagination } gameTypes={ gameTypeList.data } />
+        <GameTable data={games.data} pagination={games.pagination} gameTypes={gameTypeList.data} />
       </PageContainer>
     </>
   );

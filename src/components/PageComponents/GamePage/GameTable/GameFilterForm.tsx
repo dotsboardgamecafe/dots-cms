@@ -38,7 +38,6 @@ export const GameFilterForm = ({ onClose, control, gameTypes }: Props) => {
 
   const form = useForm<GameFilterType>(({
     defaultValues: {
-      status: searchParams.get('status') || '',
       game_type: searchParams.get('game_type')?.split(',') || [],
       sort: searchParams.get('sort') as Pagination['sort'] || null,
       order: searchParams.get('order') || '',
@@ -50,15 +49,13 @@ export const GameFilterForm = ({ onClose, control, gameTypes }: Props) => {
   }));
 
   const handleFormSubmit = (data: GameFilterType) => {
-    const params = new URLSearchParams(searchParams);
-    params.delete('status')
+    const params = new URLSearchParams(searchParams)
     params.delete('game_type')
     params.delete('sort')
     params.delete('order')
     params.delete('min_duration')
     params.delete('max_duration')
 
-    if (data.status) params.set('status', data.status)
     if (data.game_type.length > 0) params.set('game_type', data.game_type.join(','))
     if (data.sort) {
       params.set('sort', data.sort)
@@ -72,7 +69,6 @@ export const GameFilterForm = ({ onClose, control, gameTypes }: Props) => {
   };
 
   const resetFilter = useCallback(() => {
-    form.setValue('status', '')
     form.setValue('game_type', [])
     form.setValue('sort', null)
     form.setValue('duration', { min: null, max: null })
@@ -181,58 +177,6 @@ export const GameFilterForm = ({ onClose, control, gameTypes }: Props) => {
                     <FormLabel className="font-normal">
                       <Typography variant='text-body-l-regular'>
                         {'>120 min'}
-                      </Typography>
-                    </FormLabel>
-                  </FormItem>
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem >
-              <FormLabel className='mb-2 block'>
-                <Typography variant='text-body-xl-heavy'>
-                  Status
-                </Typography>
-              </FormLabel>
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  value={field.value}
-                  className="flex flex-row "
-                >
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="" />
-                    </FormControl>
-                    <FormLabel className="font-normal">
-                      <Typography variant='text-body-l-regular'>
-                        All Status
-                      </Typography>
-                    </FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="active" />
-                    </FormControl>
-                    <FormLabel className="font-normal">
-                      <Typography variant='text-body-l-regular'>
-                        Active
-                      </Typography>
-                    </FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="inactive" />
-                    </FormControl>
-                    <FormLabel className="font-normal">
-                      <Typography variant='text-body-l-regular'>
-                        Inactive
                       </Typography>
                     </FormLabel>
                   </FormItem>

@@ -75,7 +75,7 @@ export const AddAdminForm = ({ onClose }: Props) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Upload value={field.value} onChange={field.onChange} variant='small' />
+                <Upload value={field.value} onChange={field.onChange} variant='small' description='Suggested Resolution 400 x 400 px' />
               </FormControl>
               <FormMessage />
             </FormItem>

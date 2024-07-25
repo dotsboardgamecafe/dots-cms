@@ -15,10 +15,10 @@ type Props = {
   onChange: (value: string[]) => void;
   variant?: Variants;
   value: string[];
-
+  description?: string;
 };
 
-const MultiUpload = ({ onChange, variant = 'default', value }: Props) => {
+const MultiUpload = ({ onChange, variant = 'default', value, description }: Props) => {
   const [selectedFile, setSelectedFile] = useState<File>();
   const [images, setImages] = useState<File[]>([]);
   const [preview, setPreview] = useState<string>();
@@ -146,6 +146,11 @@ const MultiUpload = ({ onChange, variant = 'default', value }: Props) => {
 
         <input type="file" accept="image/*" ref={ref} className='hidden' onChange={onImageChange} />
       </div>
+      {description && (
+        <Typography variant='text-body-m-regular' className='text-gray-500'>
+          {description}
+        </Typography>
+      )}
       {
         renderImageList()
       }

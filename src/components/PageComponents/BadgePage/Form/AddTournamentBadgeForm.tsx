@@ -135,7 +135,7 @@ export const AddTournamentBadgeForm = ({ onClose, defaultData, onSubmit }: Props
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Upload id={field.name} value={field.value} onChange={field.onChange} variant='small' />
+                    <Upload id={field.name} value={field.value} onChange={field.onChange} variant='small' description='Suggested Resolution 400 x 400 px' />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -152,7 +152,7 @@ export const AddTournamentBadgeForm = ({ onClose, defaultData, onSubmit }: Props
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Upload id={field.name} value={field.value} onChange={field.onChange} variant='small' />
+                    <Upload id={field.name} value={field.value} onChange={field.onChange} variant='small' description='Suggested Resolution 400 x 400 px' />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -169,7 +169,7 @@ export const AddTournamentBadgeForm = ({ onClose, defaultData, onSubmit }: Props
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Upload id={field.name} value={field.value} onChange={field.onChange} variant='small' />
+                    <Upload id={field.name} value={field.value} onChange={field.onChange} variant='small' description='Suggested Resolution 400 x 400 px' />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

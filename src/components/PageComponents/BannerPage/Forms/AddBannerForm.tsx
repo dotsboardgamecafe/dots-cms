@@ -136,7 +136,7 @@ export const AddBannerForm = ({ onClose, defaultData, onSubmit }: Props) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Upload value={field.value} onChange={field.onChange} variant='default' />
+                <Upload value={field.value} onChange={field.onChange} variant='default' description='Suggested Resolution 960 x 270 px' />
               </FormControl>
               <FormMessage />
             </FormItem>

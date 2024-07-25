@@ -352,7 +352,7 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
                         </Typography>
                       </FormLabel>
                       <FormControl>
-                        <Upload onChange={field.onChange} value={field.value} />
+                        <Upload onChange={field.onChange} value={field.value} description="Suggested Resolution 400 x 400 px" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -369,7 +369,7 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
                         </Typography>
                       </FormLabel>
                       <FormControl>
-                        <MultiUpload onChange={(value) => { field.onChange(value) }} value={field.value} />
+                        <MultiUpload onChange={(value) => { field.onChange(value) }} value={field.value} description="Suggested Resolution 400 x 400 px" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

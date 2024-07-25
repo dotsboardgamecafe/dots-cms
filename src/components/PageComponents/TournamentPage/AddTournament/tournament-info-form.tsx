@@ -234,7 +234,7 @@ const TournamentInfoForm: React.FC<{ tournamentDetail?: TournamentDetailType }> 
               </Typography>
             </FormLabel>
             <FormControl>
-              <Upload value={field.value} onChange={field.onChange} />
+              <Upload value={field.value} onChange={field.onChange} description="Suggested Resolution 960 x 270 px" />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -251,7 +251,7 @@ const TournamentInfoForm: React.FC<{ tournamentDetail?: TournamentDetailType }> 
               </Typography>
             </FormLabel>
             <FormControl>
-              <Textarea note='Max 100 characters' maxLength={100} placeholder='Game Description...' className='min-h-[225px]' {...field} />
+              <Textarea placeholder='Game Description...' className='min-h-[225px]' {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

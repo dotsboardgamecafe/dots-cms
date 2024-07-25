@@ -17,9 +17,10 @@ type Props = {
   value?: string;
   multiple?: boolean;
   id?: string,
+  description?: string,
 };
 
-const Upload = ({ onChange, variant = 'default', value, multiple = false, id }: Props) => {
+const Upload = ({ onChange, variant = 'default', value, multiple = false, id, description }: Props) => {
   const [selectedFile, setSelectedFile] = useState<File>();
   const [preview, setPreview] = useState<string>();
   const [imageViewerOpen, setImageViewerOpen] = useState<boolean>(false);
@@ -121,6 +122,11 @@ const Upload = ({ onChange, variant = 'default', value, multiple = false, id }: 
 
         <input id={id} type="file" accept="image/*" ref={ref} className='hidden' onChange={onImageChange} />
       </div>
+      {description && (
+        <Typography variant='text-body-m-regular' className='text-gray-500'>
+          {description}
+        </Typography>
+      )}
       {
         multiple && renderImageList()
       }

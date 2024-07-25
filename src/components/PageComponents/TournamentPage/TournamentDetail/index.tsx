@@ -29,7 +29,7 @@ const TournamentDetail = ({ tournamentDetail }: Props) => {
             <TabsTrigger value="players" className='gap-2'>
               <People size={24} />
               <Typography variant='text-body-xxl-heavy'>
-                Join Players
+                Participants
               </Typography>
             </TabsTrigger>
           </TabsList>

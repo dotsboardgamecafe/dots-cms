@@ -115,7 +115,7 @@ const PrizeForm: React.FC<{ tournamentBadges?: TournamentDetailType['tournament_
               </Typography>
             </FormLabel>
             <FormControl>
-              <Upload value={field.value} onChange={field.onChange} />
+              <Upload value={field.value} onChange={field.onChange} description="Suggested Resolution 708 x 945 px" />
             </FormControl>
             <FormMessage />
           </FormItem>

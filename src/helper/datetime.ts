@@ -4,7 +4,7 @@ import dayjsFormats from 'dayjs/plugin/advancedFormat';
 dayjs.extend(dayjsFormats);
 
 export const formatRoomSchedule = (start_date: string, end_date: string, start_time: string, end_time: string) => {
-  return `${dayjs(start_date).format('ddd Do, ') + start_time} - ${end_time}`;
+  return `${dayjs(start_date).format('ddd, DD MMM YYYY')} ${formatTimeHourMinutes(start_time)} - ${formatTimeHourMinutes(end_time)}`;
 };
 
 export const formatTournamentDate = (start_date: string, end_date: string): string => {
@@ -27,3 +27,12 @@ export const formatTournamentDate = (start_date: string, end_date: string): stri
 export const formatDate = (date: string) => {
   return dayjs(date).format('MMM Do, YYYY');
 };
+
+export function formatTimeHourMinutes(time: string): string {
+  const splitTime: string[] = time.split(':')
+  const [hour, minute] = splitTime
+
+  if (!hour && !minute) return 'Invalid Time'
+
+  return `${hour}:${minute}`
+}

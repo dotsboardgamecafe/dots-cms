@@ -169,7 +169,7 @@ export const RewardAddForm = ({ onClose, tiers }: Props) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Upload onChange={field.onChange} value={field.value} />
+                <Upload onChange={field.onChange} value={field.value} description='Suggested Resolution 1080 x 1080 px' />
               </FormControl>
               <FormMessage />
             </FormItem>

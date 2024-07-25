@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
 
+import { formatTimeHourMinutes } from '@/helper/datetime';
 import { snakeCaseToString } from '@/helper/string';
 
 import { Pagination as PaginationType } from '@/types/network';
@@ -66,12 +67,23 @@ const RoomTable = ({ data, pagination }: Props) => {
       }
     },
     {
-      accessorKey: 'schedule',
-      header: 'Schedule',
+      accessorKey: 'date',
+      header: 'Date',
       cell: ({ row }) => {
         return (
           <Typography variant='paragraph-l-regular'>
-            {dayjs(row.original.start_date).format('ddd Do, ') + row.original.start_time} - {row.original.end_time}
+            {dayjs(row.original.start_date).format('ddd, DD MMM YYYY')}
+          </Typography>
+        );
+      }
+    },
+    {
+      accessorKey: 'time',
+      header: 'Time',
+      cell: ({ row }) => {
+        return (
+          <Typography variant='paragraph-l-regular'>
+            {formatTimeHourMinutes(row.original.start_time)} - {formatTimeHourMinutes(row.original.end_time)}
           </Typography>
         );
       }

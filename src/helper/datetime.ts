@@ -27,3 +27,12 @@ export const formatTournamentDate = (start_date: string, end_date: string): stri
 export const formatDate = (date: string) => {
   return dayjs(date).format('MMM Do, YYYY');
 };
+
+export const formatTimeHourMinutes = (time: string): string => {
+  const splitTime: string[] = time.split(':')
+  const [hour, minute] = splitTime
+
+  if (!hour && !minute) return 'Invalid Time'
+
+  return `${hour}:${minute}`
+}

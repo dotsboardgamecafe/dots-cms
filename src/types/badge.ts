@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export type BadgeRuleNameType = 'spesific_board_game_category' | 'total_spend' | 'time_limit'
+export type BadgeRuleNameType = 'spesific_board_game_category' | 'total_spend' | 'time_limit' | 'playing_games' | 'tournament_won'
 
 export enum MappingBadgeRuleNameTypeToDisplay {
   spesific_board_game_category = 'Spesific Board Game Category',
@@ -25,6 +25,8 @@ export type BadgeTimeLimitCriteriaValue = {
 }
 
 export type BadgeTotalSpendCriteriaValue = number
+export type BadgeTournamentWonCriteriaValue = number
+export type BadgePlayingGamesCriteriaValue = number
 
 export type BadgeSpesificGameBoardCriteriaValue = {
   game_code: string[]
@@ -32,7 +34,7 @@ export type BadgeSpesificGameBoardCriteriaValue = {
   total_played: number
 }
 
-export type BadgeType<T = BadgeTimeLimitCriteriaValue | BadgeTotalSpendCriteriaValue | BadgeSpesificGameBoardCriteriaValue | { position: number }> = {
+export type BadgeType<T = BadgeTimeLimitCriteriaValue | BadgeTotalSpendCriteriaValue | BadgeSpesificGameBoardCriteriaValue | BadgeTournamentWonCriteriaValue | BadgePlayingGamesCriteriaValue | { position: number }> = {
   badge_code: string,
   badge_category: string,
   parent_code: string,

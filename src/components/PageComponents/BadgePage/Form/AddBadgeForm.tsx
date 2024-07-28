@@ -36,6 +36,8 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
   const criteriaOptions: SelectOptionType[] = useMemo(() => ([
     { value: 'time_limit', label: 'Time Limit Rule' },
     { value: 'spesific_board_game_category', label: 'Board Game Rule' },
+    { value: 'playing_games', label: 'Total Board Game Played' },
+    { value: 'tournament_won', label: 'Total Tournaments Won' },
     { value: 'total_spend', label: 'Spent' }
   ]), [])
 
@@ -128,6 +130,16 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
       })
       case 'total_spend': return ({
         key_condition: "total_spend",
+        value_type: "int",
+        value: 0
+      })
+      case 'playing_games': return ({
+        key_condition: "playing_games",
+        value_type: "int",
+        value: 0
+      })
+      case 'tournament_won': return ({
+        key_condition: "tournament_won",
         value_type: "int",
         value: 0
       })

@@ -256,7 +256,7 @@ const AddRoomForm = () => {
                           endDate = endDate.set('date', dayjs(date).get('date') + 1)
                         }
 
-                        field.onChange({ ...field.value, start_date: date });
+                        field.onChange({ ...field.value, start_date: date, end_date: endDate.toDate() });
                       }}
                       onEndDateChange={(date) => {
                         field.onChange({ ...field.value, end_date: date });

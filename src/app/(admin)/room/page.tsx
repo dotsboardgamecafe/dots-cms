@@ -10,7 +10,11 @@ import RoomTable from '@/components/PageComponents/RoomPage/DataTable';
 import { Pagination } from '@/types/network';
 
 const RoomPage = async ({ searchParams }: { searchParams: Pagination; }) => {
-  const rooms = await getRooms({ pagination: { order: 'rooms.status,rooms.created_date', sort: 'ASC,DESC', ...searchParams } });
+  const isFilterAll: boolean = searchParams.status === 'all'
+  const pagination: Pagination = { order: 'rooms.status,rooms.created_date', sort: 'ASC,DESC', status: 'active', ...searchParams }
+  if (isFilterAll) delete pagination.status
+
+  const rooms = await getRooms({ pagination: pagination });
   return (
     <>
       <Header title='Room Play' subtitle={[{

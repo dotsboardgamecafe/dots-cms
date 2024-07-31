@@ -2,13 +2,15 @@
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import dayjsFormats from 'dayjs/plugin/advancedFormat';
-import { AddCircle, Edit, Eye } from 'iconsax-react';
+import { AddCircle, Edit, Eye, Setting4, Trash } from 'iconsax-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
+import RoomFilterModal from '@/components/PageComponents/RoomPage/FilterModal/RoomFilterModal';
 import StatusConfirmationModal from '@/components/PageComponents/TournamentPage/StatusConfirmationModal';
+import { Button } from '@/components/ui/Buttons';
 import Search from '@/components/ui/Input/Search';
 import Pagination from '@/components/ui/Pagination/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
@@ -31,6 +33,7 @@ type Props = {
 const TournamentTable = ({ data, pagination }: Props) => {
   const [statusConfirmationModalOpen, setStatusConfirmationModalOpen] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<TournamentType>();
+  const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false)
 
   const getTournamentStatus = (tournamentData: TournamentType): string => {
     if (tournamentData.status !== 'active') return tournamentData.status
@@ -108,7 +111,7 @@ const TournamentTable = ({ data, pagination }: Props) => {
       cell: ({ row }) => {
         return (
           <Select value={getTournamentStatus(row.original)}
-            disabled={getTournamentStatus(row.original) === 'inactive'}
+            disabled={true}
             onValueChange={() => {
               setStatusConfirmationModalOpen(true);
               setSelectedRow(row.original);
@@ -152,6 +155,14 @@ const TournamentTable = ({ data, pagination }: Props) => {
             <Link href={`/tournament/edit/${row.original.tournament_code}`} >
               <Edit className='cursor-pointer' />
             </Link>
+            {(getTournamentStatus(row.original) === 'active' && !row.original.current_used_slot) && (
+              <Button className='p-0' variant='link' onClick={() => {
+                setStatusConfirmationModalOpen(true);
+                setSelectedRow(row.original);
+              }}>
+                <Trash className='cursor-pointer' />
+              </Button>
+            )}
           </div>
         );
       }
@@ -186,6 +197,12 @@ const TournamentTable = ({ data, pagination }: Props) => {
             </Typography>
           </button>
         </Link>
+        <button className="rounded-[8px] gap-[8px] px-5 py-3 border-gray-300 border flex flex-row items-center text-nowrap" onClick={() => setIsOpenFilter(true)}>
+          <Setting4 />
+          <Typography variant='paragraph-l-bold'>
+            Filter
+          </Typography>
+        </button>
       </section>
       <Table>
         <TableHeader>
@@ -237,6 +254,10 @@ const TournamentTable = ({ data, pagination }: Props) => {
         open={statusConfirmationModalOpen}
         onOpenChange={(value) => setStatusConfirmationModalOpen(value)}
         tournamentData={selectedRow}
+      />
+      <RoomFilterModal
+        open={isOpenFilter}
+        onOpenChange={(isOpenFilter) => setIsOpenFilter(isOpenFilter)}
       />
     </div>
   );

@@ -8,7 +8,13 @@ import { Pagination } from '@/types/network';
 
 
 const BannerPage = async ({ searchParams }: { searchParams: Pagination; }) => {
-  const banners = await getBanners({ pagination: searchParams })
+  const isFilterByAllStatus = searchParams.status === 'all'
+  const pagination: Pagination = { status: 'publish', ...searchParams }
+
+  if (isFilterByAllStatus) delete pagination.status
+
+  const banners = await getBanners({ pagination })
+
   return (
     <>
       <Header title='Banner' subtitle={[{

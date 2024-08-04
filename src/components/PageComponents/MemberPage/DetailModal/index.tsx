@@ -31,6 +31,7 @@ const MemberDetailModal = ({ open, onOpenChange, memberData }: Props) => {
             <TextLabel title='Email Address' value={memberData?.email} />
             <TextLabel title='Phone Number' value={memberData?.phone_number} />
             <TextLabel title='Tier Level' value={memberData?.latest_tier} />
+            <TextLabel title='Total Spent' value={`Rp ${memberData?.total_spent || 0}`} />
             <TextLabel title='Status' value={memberData?.status} className='capitalize' />
             <Link href={`/member/invoices/${memberData?.user_code}`}>
               <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>

@@ -1,6 +1,6 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import { Eye, ReceiptItem, Setting4 } from 'iconsax-react';
+import { Eye, ReceiptItem, Setting4, Trash } from 'iconsax-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PropsWithRef, useEffect, useState } from 'react';
@@ -92,12 +92,7 @@ const MemberTable = ({ data, pagination }: Props) => {
       header: 'Status',
       cell: ({ row }) => {
         return (
-          <Select value={row.original.status} disabled={row.original.status === 'inactive'} onValueChange={(value) => {
-            if (value === 'inactive') {
-              setConfirmationModalOpen(true);
-              setSelectedRow(row.original);
-            }
-          }}>
+          <Select value={row.original.status} disabled>
             <SelectTrigger variant='badge' className={cn(
               {
                 'bg-error-50': row.original.status === 'inactive',
@@ -130,15 +125,23 @@ const MemberTable = ({ data, pagination }: Props) => {
       header: 'Action',
       cell: ({ row }) => {
         return (
-          <div className='flex flex-row items-center gap-1' >
-            <Link href={`/member/invoices/${row.original.user_code}`}>
+          <div className='flex flex-row items-center gap-4' >
+            <Link className='p-0' href={`/member/invoices/${row.original.user_code}`}>
               <ReceiptItem />
             </Link>
-            <Button variant='link' onClick={() => {
+            <Button className='p-0' variant='link' onClick={() => {
               onClickDetail(row.original);
             }}>
               <Eye />
             </Button>
+            {(row.original.status === 'active') && (
+              <Button className='p-0' variant='link' onClick={() => {
+                setConfirmationModalOpen(true);
+                setSelectedRow(row.original);
+              }}>
+                <Trash className='cursor-pointer' />
+              </Button>
+            )}
           </div>
         );
       }

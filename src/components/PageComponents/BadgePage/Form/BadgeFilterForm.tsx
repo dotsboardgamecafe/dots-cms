@@ -31,7 +31,7 @@ export const BadgeFilterForm = ({ onClose, control }: Props) => {
 
   const form = useForm<BadgeFilterType>(({
     defaultValues: {
-      status: searchParams.get('status') || '',
+      status: searchParams.get('status') || 'active',
       badge_category: searchParams.get('badge_category') || '',
       sort: searchParams.get('sort') as Pagination['sort'] || null,
       order: searchParams.get('order') || ''
@@ -57,7 +57,7 @@ export const BadgeFilterForm = ({ onClose, control }: Props) => {
   };
 
   const resetFilter = useCallback(() => {
-    form.setValue('status', '')
+    form.setValue('status', 'active')
     form.setValue('badge_category', '')
     form.setValue('sort', null)
   }, [form])

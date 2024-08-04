@@ -1,4 +1,4 @@
-import { Game, Layer, Like, Magicpen, MedalStar, Profile2User, Ranking, Shop, Ticket } from 'iconsax-react';
+import { Game, Layer, Like, Magicpen, MedalStar, Profile2User, Ranking, Setting, Shop, Ticket } from 'iconsax-react';
 import { ReactNode } from 'react';
 
 type MenuItems = {
@@ -43,6 +43,14 @@ const SidebarMenus: MenuItems[] = [
       {
         title: 'Admin', href: '/admin', icon: () => <span />, permissions: 'admin'
       }
+    ]
+  },
+  {
+    title: 'Settings', href: '#', icon: (active) => <Setting variant={active ? 'Bold' : 'Outline'} />, permissions: 'mechanics',
+    child: [
+      {
+        title: 'Game Mechanics', href: '/mechanic', icon: () => <span />, permissions: 'mechanics'
+      },
     ]
   },
 ];

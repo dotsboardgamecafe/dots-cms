@@ -17,6 +17,7 @@ const endpointData = {
 	getRewards: { path: '/rewards', method: 'GET', prefix: '' },
 	getTournamentBadgeDetails: { path: '/tournament-badges', method: 'GET', prefix: '' },
 	getUserInvoices: { path: '/invoices', method: 'GET', prefix: 'history' },
+	getGameMechanics: { path: '/game-mechanics', method: 'GET', prefix: '' },
 
 	// POST
 	auth: { path: '/auths/login', method: 'POST', prefix: '' },
@@ -32,6 +33,7 @@ const endpointData = {
 	addReward: { path: '/rewards', method: 'POST', prefix: '' },
 	claimInvoice: { path: '/invoices', method: 'POST', prefix: 'claim' },
 	createAdmin: { path: '/admins', method: 'POST', prefix: '' },
+	addGameMechanics: { path: '/game-mechanics', method: 'POST', prefix: '' },
 
 	// PUT
 	changeStatusMember: { path: '/users', method: 'PUT', prefix: 'status' },
@@ -48,7 +50,10 @@ const endpointData = {
 	updateReward: { path: '/rewards', method: 'PUT', prefix: '' },
 	updateAdmin: { path: '/admins', method: 'PUT', prefix: '' },
 	changeStatusAdmin: { path: '/admins', method: 'PUT', prefix: 'status' },
+	updateGameMechanics: { path: '/game-mechanics', method: 'PUT', prefix: '' },
 
+	// DELETE
+	deleteGameMechanics: { path: '/game-mechanics', method: 'DELETE', prefix: '' },
 } as const;
 
 // Typing schema, do not modify if not necessary

@@ -9,8 +9,14 @@ import { Pagination } from '@/types/network';
 
 
 const GamePage = async ({ searchParams }: { searchParams: Pagination; }) => {
-  const games = await getGameList({ pagination: { ...searchParams, status: 'active' } });
+  const isFilterAll: boolean = searchParams.status === 'all'
+  const pagination: Pagination = { status: 'active', ...searchParams }
+
+  if (isFilterAll) delete pagination.status
+
+  const games = await getGameList({ pagination });
   const gameTypeList = await getGameCategories({ pagination: { limit: 99999 } });
+
   return (
     <>
       <Header title='Game Catalog' subtitle={[{

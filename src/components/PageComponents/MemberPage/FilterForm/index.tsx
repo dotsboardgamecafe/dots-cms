@@ -34,7 +34,7 @@ export const MemberFilterForm = ({ onClose }: Props) => {
     defaultValues: {
       status: searchParams.get('status') || '',
       latest_tier: searchParams.get('latest_tier')?.split(',') || [],
-      sort: searchParams.get('sort') || ''
+      sort: searchParams.get('sort') || 'active'
     },
     resolver: zodResolver(schema)
   }));
@@ -42,7 +42,7 @@ export const MemberFilterForm = ({ onClose }: Props) => {
   useEffect(() => {
     form.setValue('latest_tier', searchParams.get('latest_tier')?.split(',') || []);
     form.setValue('sort', searchParams.get('sort') || '');
-    form.setValue('status', searchParams.get('status') || '');
+    form.setValue('status', searchParams.get('status') || 'active');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
@@ -80,7 +80,7 @@ export const MemberFilterForm = ({ onClose }: Props) => {
                 <RadioGroup value={field.value} onValueChange={field.onChange} className='flex flex-row gap-8'>
                   <FormItem className="flex items-center gap-2">
                     <FormControl>
-                      <RadioGroupItem value="" />
+                      <RadioGroupItem value="all" />
                     </FormControl>
                     <FormLabel className="font-normal">
                       <Typography variant='text-body-l-regular'>

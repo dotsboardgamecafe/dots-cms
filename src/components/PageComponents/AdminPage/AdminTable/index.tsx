@@ -1,6 +1,6 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import { AddCircle, Edit, Eye, Setting4 } from 'iconsax-react';
+import { AddCircle, Edit, Eye, Setting4, Trash } from 'iconsax-react';
 import Image from 'next/image';
 import { PropsWithRef, useEffect, useState } from 'react';
 
@@ -33,7 +33,6 @@ type Props = PropsWithRef<{
 
 
 const AdminTable = ({ data, pagination, adminPermissions }: Props) => {
-
   const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
   const [confirmationModalOpen, setConfirmationModalOpen] = useState<boolean>(false);
@@ -88,10 +87,7 @@ const AdminTable = ({ data, pagination, adminPermissions }: Props) => {
       header: 'Status',
       cell: ({ row }) => {
         return (
-          <Select disabled={!adminPermissions['admin-update-status']} value={row.original.status} onValueChange={(value) => {
-            setConfirmationModalOpen(true);
-            setSelectedRow(row.original);
-          }}>
+          <Select disabled value={row.original.status} >
             <SelectTrigger variant='badge' className={cn(
               {
                 'bg-error-50': row.original.status === 'inactive',
@@ -133,6 +129,14 @@ const AdminTable = ({ data, pagination, adminPermissions }: Props) => {
                 setSelectedRow(row.original)
                 setEditModalOpen(true)
               }} />
+            )}
+            {((row.original.status === 'active') && adminPermissions['admin-delete']) && (
+              <Button className='p-0' variant='link' onClick={() => {
+                setConfirmationModalOpen(true);
+                setSelectedRow(row.original);
+              }}>
+                <Trash className='cursor-pointer' />
+              </Button>
             )}
           </div>
         );

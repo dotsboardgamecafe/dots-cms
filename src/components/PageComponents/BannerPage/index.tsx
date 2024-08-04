@@ -1,12 +1,13 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { AddCircle, Edit, Eye } from 'iconsax-react';
+import { AddCircle, Edit, Eye, Setting4, Trash } from 'iconsax-react';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
 import BannerListTable from '@/components/PageComponents/BannerPage/BannerListTable';
+import BannerFilterModal from '@/components/PageComponents/BannerPage/FilterModal/BannerFilterModal';
 import AddBannerModal from '@/components/PageComponents/BannerPage/Modals/AddBannerModal';
 import BannerStatusConfirmationModal from '@/components/PageComponents/BannerPage/Modals/ConfirmationModal';
 import EditBannerModal from '@/components/PageComponents/BannerPage/Modals/EditBannerModal';
@@ -31,6 +32,7 @@ const BannerPageContent = ({ data, pagination }: Props) => {
   const [showViewDetailModal, setShowViewDetailModal] = useState<boolean>(false);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false);
+  const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false)
 
   const [selectedBanner, setSelectedBanner] = useState<TBannerData>();
 
@@ -76,10 +78,7 @@ const BannerPageContent = ({ data, pagination }: Props) => {
       header: 'Status',
       cell: ({ row }) => {
         return (
-          <Select value={row.original.status} onValueChange={() => {
-            setShowConfirmationModal(true);
-            setSelectedBanner(row.original);
-          }}>
+          <Select value={row.original.status} disabled >
             <SelectTrigger variant='badge' className={cn(
               {
                 'bg-error-50': row.original.status === 'unpublish',
@@ -113,18 +112,26 @@ const BannerPageContent = ({ data, pagination }: Props) => {
       cell: ({ row }) => {
         return (
           <div className='flex flex-row items-center gap-4'>
-            <Button variant='link' onClick={() => {
+            <Button variant='link' className='p-0' onClick={() => {
               setSelectedBanner(row.original);
               setShowViewDetailModal(true);
             }}>
               <Eye className='cursor-pointer' />
             </Button>
-            <Button variant='link' onClick={() => {
+            <Button variant='link' className='p-0' onClick={() => {
               setSelectedBanner(row.original);
               setShowEditModal(true);
             }}>
               <Edit className='cursor-pointer' />
             </Button>
+            {(row.original.status === 'publish') && (
+              <Button className='p-0' variant='link' onClick={() => {
+                setShowConfirmationModal(true);
+                setSelectedBanner(row.original);
+              }}>
+                <Trash className='cursor-pointer' />
+              </Button>
+            )}
           </div>
         );
       }
@@ -143,6 +150,12 @@ const BannerPageContent = ({ data, pagination }: Props) => {
             Add New Banner
           </Typography>
         </Button>
+        <button className="rounded-[8px] gap-[8px] px-5 py-3 border-gray-300 border flex flex-row items-center text-nowrap" onClick={() => setIsOpenFilter(true)}>
+          <Setting4 />
+          <Typography variant='paragraph-l-bold'>
+            Filter
+          </Typography>
+        </button>
       </section>
       <BannerListTable data={data} pagination={pagination} columnConfig={columns} />
       <AddBannerModal open={showAddBannerModal} onOpenChange={(isOpen) => setShowAddBannerModal(isOpen)} />
@@ -156,6 +169,10 @@ const BannerPageContent = ({ data, pagination }: Props) => {
           setShowViewDetailModal(false);
           setShowEditModal(true);
         }} />
+      <BannerFilterModal
+        open={isOpenFilter}
+        onOpenChange={(isOpenFilter) => setIsOpenFilter(isOpenFilter)}
+      />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import { AddCircle, Edit, Eye, Setting4 } from 'iconsax-react';
+import { AddCircle, Edit, Eye, Setting4, Trash } from 'iconsax-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -111,12 +111,7 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
       header: 'Status',
       cell: ({ row }) => {
         return (
-          <Select value={row.original.status}
-            onValueChange={() => {
-              setIsOpenChangeStatus(true);
-              setSelectedGame(row.original);
-            }}
-          >
+          <Select value={row.original.status} disabled >
             <SelectTrigger variant='badge' className={cn(
               {
                 'bg-error-50': row.original.status === 'inactive',
@@ -155,6 +150,14 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
             <Link href={`/game/edit/${row.original.game_code}`} >
               <Edit className='cursor-pointer' />
             </Link>
+            {(row.original.status === 'active') && (
+              <Button className='p-0' variant='link' onClick={() => {
+                setIsOpenChangeStatus(true);
+                setSelectedGame(row.original);
+              }}>
+                <Trash className='cursor-pointer' />
+              </Button>
+            )}
           </div>
         );
       }

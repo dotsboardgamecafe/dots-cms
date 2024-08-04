@@ -16,6 +16,7 @@ export type MemberType = {
   created_date: string;
   updated_date: string;
   deleted_date: string;
+  total_spent: number;
 };
 
 export const AddMemberSchema = z.object({

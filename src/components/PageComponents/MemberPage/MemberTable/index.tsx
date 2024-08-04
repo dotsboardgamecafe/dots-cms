@@ -88,6 +88,17 @@ const MemberTable = ({ data, pagination }: Props) => {
       }
     },
     {
+      accessorKey: 'total_spent',
+      header: 'Total Spent',
+      cell: ({ row }) => {
+        return (
+          <Typography variant='paragraph-l-regular'>
+            Rp {row.original.total_spent || '0'}
+          </Typography>
+        );
+      }
+    },
+    {
       accessorKey: 'status',
       header: 'Status',
       cell: ({ row }) => {

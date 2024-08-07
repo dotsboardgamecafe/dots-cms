@@ -44,13 +44,13 @@ const StatusConfirmationModal = ({ open, onOpenChange, tournamentData }: Props) 
     try {
       await editTournament({ param: tournamentData.tournament_code, body: payload });
       toast({
-        title: `Successfully ${tournamentData.status === 'active' ? 'Close' : 'Open'} the Tournament`,
+        title: `Successfully delete the Tournament`,
         variant: 'default',
       });
     } catch (error) {
       toast({
         title: 'Something went wrong',
-        description: `Failed to ${tournamentData.status === 'active' ? 'Close' : 'Open'} the Tournament`,
+        description: `Failed to delete the Tournament`,
         variant: 'destructive',
       });
     }
@@ -65,12 +65,12 @@ const StatusConfirmationModal = ({ open, onOpenChange, tournamentData }: Props) 
             <Danger size={32} className='text-white' variant='Bold' />
           </div>
           <Typography variant='heading-h4'>
-            Are you sure to {tournamentData.status === 'active' ? 'close' : 'open'} this tournament?
+            Are you sure to delete this tournament?
           </Typography>
         </section>
         <section className='flex gap-6'>
           <Button className='flex-1' size="lg" variant="secondary" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm}>Yes, {tournamentData.status === 'active' ? 'Close' : 'Open'} it</Button>
+          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm}>Yes, Delete</Button>
         </section>
       </ModalContent>
     </Modal>

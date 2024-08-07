@@ -52,12 +52,12 @@ const StatusConfirmationModal = ({ open, onOpenChange, gameData }: Props) => {
             <Danger size={32} className='text-white' variant='Bold' />
           </div>
           <Typography variant='heading-h4'>
-            Are you sure to {isActive ? 'inacitve' : 'activate'} this game?
+            Are you sure to delete this game?
           </Typography>
         </section>
         <section className='flex gap-6'>
           <Button className='flex-1' size="lg" variant="secondary" onClick={() => onOpenChange(false)} disabled={isSubmitting}>Cancel</Button>
-          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm} loading={isSubmitting} disabled={isSubmitting}>Yes, {isActive ? 'In-active' : 'Actovate'} it</Button>
+          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm} loading={isSubmitting} disabled={isSubmitting}>Yes, Delete</Button>
         </section>
       </ModalContent>
     </Modal>

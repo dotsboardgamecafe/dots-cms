@@ -30,7 +30,7 @@ const BannerStatusConfirmationModal = ({ open, onOpenChange, bannerData }: Props
     updateBanners({ param: bannerData?.banner_code, body: { ...bannerData, name: bannerData.title, status: actionName } })
       .then(() => {
         toast({
-          title: `Banner successfully ${actionName}ed`,
+          title: `Banner successfully deleted`,
           variant: 'default',
         });
         onOpenChange(false)
@@ -38,7 +38,7 @@ const BannerStatusConfirmationModal = ({ open, onOpenChange, bannerData }: Props
       .catch(() => {
         toast({
           title: 'Something went wrong',
-          description: `failed to ${actionName} the banner`,
+          description: `failed to delete the banner`,
           variant: 'destructive',
         });
       })
@@ -53,12 +53,12 @@ const BannerStatusConfirmationModal = ({ open, onOpenChange, bannerData }: Props
             <Danger size={32} className='text-white' variant='Bold' />
           </div>
           <Typography variant='heading-h4'>
-            Are you sure to {actionName} this item?
+            Are you sure to delete this item?
           </Typography>
         </section>
         <section className='flex gap-6'>
           <Button className='flex-1' size="lg" variant="secondary" onClick={() => onOpenChange(false)} disabled={isSubmitting}>Cancel</Button>
-          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm} disabled={isSubmitting}>Yes, {actionName}</Button>
+          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm} disabled={isSubmitting}>Yes, Delete</Button>
         </section>
       </ModalContent>
     </Modal>

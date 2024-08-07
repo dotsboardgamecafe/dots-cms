@@ -12,32 +12,32 @@ import { MemberType } from '@/types/member';
 
 type Props = PropsWithRef<{
   open: boolean;
-  onOpenChange: ( open: boolean ) => void;
+  onOpenChange: (open: boolean) => void;
   memberData?: MemberType;
 }>;
 
-const StatusConfirmationModal = ( { open, onOpenChange, memberData }: Props ) => {
+const StatusConfirmationModal = ({ open, onOpenChange, memberData }: Props) => {
 
 
   const onConfirm = async () => {
-    await updateStatusMembers( { param: memberData?.user_code, body: { status: 'inactive' } } );
-    onOpenChange( false );
+    await updateStatusMembers({ param: memberData?.user_code, body: { status: 'inactive' } });
+    onOpenChange(false);
   };
 
   return (
-    <Modal open={ open } onOpenChange={ onOpenChange } >
+    <Modal open={open} onOpenChange={onOpenChange} >
       <ModalContent hideCloseIcon className='flex gap-8 flex-col'>
         <section className='flex flex-col items-center gap-4'>
           <div className='h-16 w-16 rounded-full bg-brand-blue-electric flex items-center justify-center border-[6px]'>
-            <Danger size={ 32 } className='text-white' variant='Bold' />
+            <Danger size={32} className='text-white' variant='Bold' />
           </div>
           <Typography variant='heading-h4'>
-            Are you sure to inactive this item?
+            Are you sure to delete this member?
           </Typography>
         </section>
         <section className='flex gap-6'>
-          <Button className='flex-1' size="lg" variant="secondary" onClick={ () => onOpenChange( false ) }>Cancel</Button>
-          <Button className='flex-1' size="lg" variant="default" onClick={ onConfirm }>Yes, Inactive</Button>
+          <Button className='flex-1' size="lg" variant="secondary" onClick={() => onOpenChange(false)}>Cancel</Button>
+          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm}>Yes, Delete</Button>
         </section>
       </ModalContent>
     </Modal>

@@ -41,7 +41,7 @@ const UpdateBadgeStatusConfirmation = ({ open, onOpenChange, id, type, prevStatu
     res.
       then(() => {
         toast({
-          title: `Badge successfully ${actionName === 'active' ? 'activated' : 'inactivated'}`,
+          title: `Badge successfully deleted`,
           variant: 'default',
         });
         onOpenChange(false)
@@ -49,7 +49,7 @@ const UpdateBadgeStatusConfirmation = ({ open, onOpenChange, id, type, prevStatu
       .catch(() => {
         toast({
           title: 'Something went wrong',
-          description: `failed to ${actionName === 'active' ? 'activated' : actionName} the badge`,
+          description: `failed to delete the badge`,
           variant: 'destructive',
         });
       })
@@ -164,12 +164,12 @@ const UpdateBadgeStatusConfirmation = ({ open, onOpenChange, id, type, prevStatu
             <Danger size={32} className='text-white' variant='Bold' />
           </div>
           <Typography variant='heading-h4'>
-            Are you sure to {actionName === 'active' ? 'activate' : actionName} this item?
+            Are you sure to delete this item?
           </Typography>
         </section>
         <section className='flex gap-6'>
           <Button className='flex-1' size="lg" variant="secondary" onClick={() => onOpenChange(false)} disabled={isSubmitting}>Cancel</Button>
-          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm} disabled={isSubmitting}>Yes, {actionName}</Button>
+          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm} disabled={isSubmitting}>Yes, Delete</Button>
         </section>
       </ModalContent>
     </Modal>

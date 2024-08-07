@@ -32,12 +32,12 @@ const StatusConfirmationModal = ({ open, onOpenChange, roomData }: Props) => {
             <Danger size={32} className='text-white' variant='Bold' />
           </div>
           <Typography variant='heading-h4'>
-            Are you sure to close this room?
+            Are you sure to delete this room?
           </Typography>
         </section>
         <section className='flex gap-6'>
           <Button className='flex-1' size="lg" variant="secondary" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm}>Yes, Close it</Button>
+          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm}>Yes, Delete</Button>
         </section>
       </ModalContent>
     </Modal>

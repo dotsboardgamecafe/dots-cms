@@ -126,6 +126,16 @@ export const BadgeFilterForm = ({ onClose, control }: Props) => {
                       </Typography>
                     </FormLabel>
                   </FormItem>
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="tournament" />
+                    </FormControl>
+                    <FormLabel className="font-normal">
+                      <Typography variant='text-body-l-regular'>
+                        Tournament
+                      </Typography>
+                    </FormLabel>
+                  </FormItem>
                 </RadioGroup>
               </FormControl>
               <FormMessage />

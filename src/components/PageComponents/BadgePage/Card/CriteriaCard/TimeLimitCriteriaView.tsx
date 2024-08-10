@@ -12,8 +12,6 @@ type Props = {
 dayjs.extend(dayjsFormats)
 
 const TimeLimitCriteriaView: React.FC<Props> = ({ data }) => {
-  const isSeasonal = data.category_badge_rule === 'seasonal'
-
   return (
     <Card>
       <CardHeader>
@@ -22,14 +20,6 @@ const TimeLimitCriteriaView: React.FC<Props> = ({ data }) => {
         </Typography>
       </CardHeader>
       <CardContent>
-        <section className='flex gap-2'>
-          <Typography variant='paragraph-l-regular' className='flex-grow basis-0'>
-            Category
-          </Typography>
-          <Typography variant='paragraph-xl-regular' className='capitalize flex-grow basis-0'>
-            {data.value.category}
-          </Typography>
-        </section>
         <section className='flex gap-2'>
           <Typography variant='paragraph-l-regular' className='flex-grow basis-0'>
             Start Date
@@ -46,7 +36,7 @@ const TimeLimitCriteriaView: React.FC<Props> = ({ data }) => {
             {dayjs(data.value.end_date).format('MMM Do, YYYY')}
           </Typography>
         </section>
-        {isSeasonal && (
+        {data.value.name && (
           <section className='flex gap-2'>
             <Typography variant='paragraph-l-regular' className='flex-grow basis-0'>
               Event Name

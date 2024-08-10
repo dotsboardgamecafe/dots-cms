@@ -123,7 +123,7 @@ const Upload = ({ onChange, variant = 'default', value, multiple = false, id, de
         <input id={id} type="file" accept="image/*" ref={ref} className='hidden' onChange={onImageChange} />
       </div>
       {description && (
-        <Typography variant='text-body-m-regular' className='text-gray-500'>
+        <Typography variant='text-body-m-regular' className='text-gray-500 mt-2'>
           {description}
         </Typography>
       )}

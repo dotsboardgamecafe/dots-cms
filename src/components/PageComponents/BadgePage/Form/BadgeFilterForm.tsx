@@ -160,7 +160,7 @@ export const BadgeFilterForm = ({ onClose, control }: Props) => {
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="" />
+                      <RadioGroupItem value="all" />
                     </FormControl>
                     <FormLabel className="font-normal">
                       <Typography variant='text-body-l-regular'>

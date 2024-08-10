@@ -27,3 +27,9 @@ export const editGame = async (options: ApiOptions) => {
 export const getGameDetail = async (gameCode: string, options?: ApiOptions) => {
   return await fetcher<GameType>('getGames', { ...options, param: gameCode, requestOpt: { next: { tags: [`get-game-detail-${gameCode}`] } } })
 }
+
+export const deleteGame = async (game_code: GameType['game_code']) => {
+  const res = await fetcher('deleteGame', { param: game_code });
+  revalidateTag('getGames')
+  return res
+};

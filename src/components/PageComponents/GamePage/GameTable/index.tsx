@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
+import DeleteConfirmationModal from '@/components/PageComponents/GamePage/GameTable/DeleteConfirmationModal';
 import GameFilterModal from '@/components/PageComponents/GamePage/GameTable/GameFilterModal';
 import StatusConfirmationModal from '@/components/PageComponents/GamePage/GameTable/StatusConfirmationModal';
 import { Button } from '@/components/ui/Buttons';
@@ -27,6 +28,7 @@ type Props = {
 
 
 const GameTable = ({ data, pagination, gameTypes }: Props) => {
+  const [isOpenDeleteConfimationModal, setIsOpenDeleteConfirmationModal] = useState<boolean>(false);
   const [isOpenChangeStatus, setIsOpenChangeStatus] = useState<boolean>(false);
   const [selectedGame, setSelectedGame] = useState<GameType | undefined>();
   const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false);
@@ -111,7 +113,10 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
       header: 'Status',
       cell: ({ row }) => {
         return (
-          <Select value={row.original.status} disabled >
+          <Select value={row.original.status} onValueChange={() => {
+            setIsOpenChangeStatus(true)
+            setSelectedGame(row.original)
+          }} >
             <SelectTrigger variant='badge' className={cn(
               {
                 'bg-error-50': row.original.status === 'inactive',
@@ -150,14 +155,12 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
             <Link href={`/game/edit/${row.original.game_code}`} >
               <Edit className='cursor-pointer' />
             </Link>
-            {(row.original.status === 'active') && (
-              <Button className='p-0' variant='link' onClick={() => {
-                setIsOpenChangeStatus(true);
-                setSelectedGame(row.original);
-              }}>
-                <Trash className='cursor-pointer' />
-              </Button>
-            )}
+            <Button className='p-0' variant='link' onClick={() => {
+              setIsOpenDeleteConfirmationModal(true);
+              setSelectedGame(row.original);
+            }}>
+              <Trash className='cursor-pointer' />
+            </Button>
           </div>
         );
       }
@@ -244,6 +247,11 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
         </TableBody>
       </Table>
       <Pagination pagination={pagination} />
+      <DeleteConfirmationModal
+        open={isOpenDeleteConfimationModal}
+        onOpenChange={(isOpen) => setIsOpenDeleteConfirmationModal(isOpen)}
+        gameData={selectedGame}
+      />
       <StatusConfirmationModal
         open={isOpenChangeStatus}
         onOpenChange={(isOpen) => setIsOpenChangeStatus(isOpen)}

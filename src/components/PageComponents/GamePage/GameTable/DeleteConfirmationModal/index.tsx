@@ -29,7 +29,7 @@ const DeleteConfirmationModal = ({ open, onOpenChange, gameData }: Props) => {
 
     try {
       const res = await deleteGame(gameData.game_code);
-      if (res.stat_msg?.includes('err')) throw new Error(res.stat_msg)
+      if (res.stat_code?.includes('ERR')) throw new Error(res.stat_msg)
 
       toast({
         title: `Successfully delete game ${gameData?.name || ''}`,

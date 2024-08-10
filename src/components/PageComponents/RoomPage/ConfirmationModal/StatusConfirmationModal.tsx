@@ -29,7 +29,7 @@ const StatusConfirmationModal = ({ open, onOpenChange, roomData }: Props) => {
   const onConfirm = async () => {
     try {
       const res = await updateRoomStatus({ param: roomData?.room_code, body: { status: actionType } });
-      if (res.stat_msg?.includes('err')) throw new Error(res.stat_msg)
+      if (res.stat_code?.includes('ERR')) throw new Error(res.stat_msg)
 
       toast({
         title: `Successfully ${actionMessage} the room ${roomData?.name || ''}`,

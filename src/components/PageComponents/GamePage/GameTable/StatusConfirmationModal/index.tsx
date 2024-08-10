@@ -46,7 +46,7 @@ const StatusConfirmationModal = ({ open, onOpenChange, gameData }: Props) => {
 
     try {
       const res = await editGame({ param: gameData.game_code, body: payload });
-      if (res.stat_msg?.includes('err')) throw new Error(res.stat_msg)
+      if (res.stat_code?.includes('ERR')) throw new Error(res.stat_msg)
 
       toast({
         title: `Successfully ${actionTypeMessage} the game ${gameData?.name || ''}`,

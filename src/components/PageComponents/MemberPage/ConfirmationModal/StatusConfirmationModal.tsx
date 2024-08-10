@@ -25,7 +25,7 @@ const StatusConfirmationModal = ({ open, onOpenChange, memberData }: Props) => {
   const onConfirm = async () => {
     try {
       const res = await updateStatusMembers({ param: memberData?.user_code, body: { status: actionType } });
-      if (res.stat_msg?.includes('err')) {
+      if (res.stat_code?.includes('ERR')) {
         throw new Error(res.stat_msg)
       }
 

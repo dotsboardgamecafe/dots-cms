@@ -25,7 +25,7 @@ const DeleteConfirmationModal = ({ open, onOpenChange, memberData }: Props) => {
   const onConfirm = async () => {
     try {
       const res = await deleteMember(memberData.user_code);
-      if (res.stat_msg?.includes('err')) throw new Error(res.stat_msg)
+      if (res.stat_code?.includes('ERR')) throw new Error(res.stat_msg)
 
       toast({
         title: `Successfully delete a member ${memberData?.fullname || ''}`,

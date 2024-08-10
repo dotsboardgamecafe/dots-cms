@@ -68,7 +68,7 @@ const TimeLimitCriteriaInput: React.FC<{ parentPath: string, onRemove?: () => vo
             <FormItem className="space-y-3">
               <FormLabel>
                 <Typography variant='paragraph-l-medium'>
-                  Event
+                  Event (optional)
                 </Typography>
               </FormLabel>
               <FormControl>

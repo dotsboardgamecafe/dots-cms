@@ -35,3 +35,9 @@ export const claimMemberInvoice = async (member_code: MemberType['user_code'], i
   revalidateTag(`get-invoices-${member_code}`)
   return res
 }
+
+export const deleteMember = async (member_code: MemberType['user_code']) => {
+  const res = await fetcher('deleteMember', { param: member_code });
+  revalidateTag('get-members')
+  return res
+};

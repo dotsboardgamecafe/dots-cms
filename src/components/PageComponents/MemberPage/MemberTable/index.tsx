@@ -7,9 +7,10 @@ import { PropsWithRef, useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
+import DeleteConfirmationModal from '@/components/PageComponents/MemberPage/ConfirmationModal/DeleteConfirmationModal';
+import StatusConfirmationModal from '@/components/PageComponents/MemberPage/ConfirmationModal/StatusConfirmationModal';
 import MemberDetailModal from '@/components/PageComponents/MemberPage/DetailModal';
 import MemberFilterModal from '@/components/PageComponents/MemberPage/FilterModal';
-import StatusConfirmationModal from '@/components/PageComponents/MemberPage/StatusConfirmationModal';
 import { Button } from '@/components/ui/Buttons';
 import Search from '@/components/ui/Input/Search';
 import Pagination from '@/components/ui/Pagination/pagination';
@@ -25,14 +26,11 @@ type Props = PropsWithRef<{
   pagination: PaginationRes;
 }>;
 
-
-
-
-
 const MemberTable = ({ data, pagination }: Props) => {
   const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
-  const [confirmationModalOpen, setConfirmationModalOpen] = useState<boolean>(false);
+  const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState<boolean>(false);
+  const [changeStatusConfirmationModalOpen, setChangeStatusConfirmationModalOpen] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<MemberType>();
   const columns: ColumnDef<MemberType>[] = [
     {
@@ -103,7 +101,14 @@ const MemberTable = ({ data, pagination }: Props) => {
       header: 'Status',
       cell: ({ row }) => {
         return (
-          <Select value={row.original.status} disabled>
+          <Select
+            value={row.original.status}
+            disabled={row.original.status === 'deleted'}
+            onValueChange={() => {
+              setChangeStatusConfirmationModalOpen(true)
+              setSelectedRow(row.original)
+            }}
+          >
             <SelectTrigger variant='badge' className={cn(
               {
                 'bg-error-50': row.original.status === 'inactive',
@@ -145,14 +150,12 @@ const MemberTable = ({ data, pagination }: Props) => {
             }}>
               <Eye />
             </Button>
-            {(row.original.status === 'active') && (
-              <Button className='p-0' variant='link' onClick={() => {
-                setConfirmationModalOpen(true);
-                setSelectedRow(row.original);
-              }}>
-                <Trash className='cursor-pointer' />
-              </Button>
-            )}
+            <Button className='p-0' variant='link' onClick={() => {
+              setDeleteConfirmationModalOpen(true);
+              setSelectedRow(row.original);
+            }}>
+              <Trash className='cursor-pointer' />
+            </Button>
           </div>
         );
       }
@@ -238,8 +241,13 @@ const MemberTable = ({ data, pagination }: Props) => {
       <MemberFilterModal open={filterModalOpen} onOpenChange={(value) => setFilterModalOpen(value)} />
       <MemberDetailModal open={detailModalOpen} onOpenChange={(value) => setDetailModalOpen(value)} memberData={selectedRow} />
       <StatusConfirmationModal
-        open={confirmationModalOpen}
-        onOpenChange={(value) => setConfirmationModalOpen(value)}
+        open={changeStatusConfirmationModalOpen}
+        onOpenChange={(value) => setChangeStatusConfirmationModalOpen(value)}
+        memberData={selectedRow}
+      />
+      <DeleteConfirmationModal
+        open={deleteConfirmationModalOpen}
+        onOpenChange={(value) => setDeleteConfirmationModalOpen(value)}
         memberData={selectedRow}
       />
     </div>

@@ -90,8 +90,12 @@ const AddTournamentForm = ({ defaultData, tournamentData }: Props) => {
     };
 
     try {
-      if (defaultData) await editTournament({ body: payload, param: tournamentData?.tournament_code });
-      else await addTournament({ body: payload });
+      let response
+      if (defaultData) response = await editTournament({ body: payload, param: tournamentData?.tournament_code });
+      else response = await addTournament({ body: payload });
+
+      if (response.stat_code?.includes('ERR')) throw new Error(response.stat_msg)
+
       toast({
         title: `Tournament successfully ${defaultData ? 'updated!' : 'added!'}`,
         variant: 'default',

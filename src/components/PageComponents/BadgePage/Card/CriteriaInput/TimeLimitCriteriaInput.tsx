@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/Buttons";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card/card"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, useFormField } from '@/components/ui/Form';
 import DatePicker from "@/components/ui/Input/DatePicker";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/Input/RadioGroup";
 import Text from "@/components/ui/Input/Text";
 import Typography from "@/components/ui/Typography"
 
@@ -26,39 +25,6 @@ const TimeLimitCriteriaInput: React.FC<{ parentPath: string, onRemove?: () => vo
         </Button>
       </CardHeader>
       <CardContent className="flex flex-col gap-6">
-        <FormField
-          name={`${parentPath}.category`}
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <RadioGroup value={field.value} onValueChange={field.onChange} className='flex flex-row gap-8'>
-                  <FormItem className="flex items-center gap-2">
-                    <FormControl>
-                      <RadioGroupItem value="time_limit" />
-                    </FormControl>
-                    <FormLabel className="font-normal">
-                      <Typography variant='text-body-l-regular'>
-                        Spesific
-                      </Typography>
-                    </FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center gap-2">
-                    <FormControl>
-                      <RadioGroupItem value="seasonal" />
-                    </FormControl>
-                    <FormLabel className="font-normal">
-                      <Typography variant='text-body-l-regular'>
-                        Seasonal
-                      </Typography>
-                    </FormLabel>
-                  </FormItem>
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <section className="flex flex-row flex-nowrap gap-6">
           <FormField
             control={form.control}
@@ -95,25 +61,27 @@ const TimeLimitCriteriaInput: React.FC<{ parentPath: string, onRemove?: () => vo
             )}
           />
         </section>
-        {form.watch(`${parentPath}.category`) === 'seasonal' && (
-          <FormField
-            control={form.control}
-            name={`${parentPath}.name`}
-            render={({ field }) => (
-              <FormItem className="space-y-3">
-                <FormLabel>
-                  <Typography variant='paragraph-l-medium'>
-                    Event
-                  </Typography>
-                </FormLabel>
-                <FormControl>
-                  <Text placeholder='Enter event name' value={field.value} onChange={field.onChange} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )}
+        <FormField
+          control={form.control}
+          name={`${parentPath}.name`}
+          render={({ field }) => (
+            <FormItem className="space-y-3">
+              <FormLabel>
+                <Typography variant='paragraph-l-medium'>
+                  Event
+                </Typography>
+              </FormLabel>
+              <FormControl>
+                <Text placeholder='Enter event name' value={field.value} onChange={(event) => {
+                  if (event.target.value.length > 0) form.setValue(`${parentPath}.category`, 'seasonal')
+                  else form.setValue(`${parentPath}.category`, 'time_limit')
+                  field.onChange(event)
+                }} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </CardContent>
     </Card >
   )

@@ -75,7 +75,7 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
       badge_rule: defaultBadgeRulesValue || [],
       image_url: defaultData?.image_url || '',
       name: defaultData?.name || '',
-      status: defaultData?.status || 'inactive',
+      status: defaultData?.status || 'active',
       vp_point: Number(defaultData?.vp_point || 0),
       description: defaultData?.description || ''
     },
@@ -90,7 +90,9 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
   const handleFormSubmit = (data: Partial<BadgePostPayloadType>) => {
     setIsSubmitting(true);
     onSubmit(data as BadgePostPayloadType)
-      .then(() => {
+      .then((response) => {
+        if (response.stat_code?.includes('ERR')) throw new Error(response.stat_msg)
+
         onClose();
         toast({
           title: `Badge successfully ${defaultData ? 'updated!' : 'added!'}`,
@@ -113,7 +115,7 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
         key_condition: "time_limit",
         value_type: "json",
         value: {
-          category: "",
+          category: "time_limit",
           name: "",
           start_date: "",
           end_date: ""
@@ -212,7 +214,7 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
               control={form.control}
               name="badge_category"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className='space-y-3'>
                   <FormLabel htmlFor={field.name} className='mb-2 block'>
                     <Typography variant='paragraph-l-medium'>
                       Category Badge
@@ -258,7 +260,7 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
               control={form.control}
               name="badge_rule"
               render={({ field }) => (
-                <FormItem >
+                <FormItem className='space-y-3'>
                   <FormLabel disableChildErrorWarning htmlFor={field.name} className='mb-2 block'>
                     <Typography variant='paragraph-l-medium'>
                       Required Criteria
@@ -286,7 +288,7 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
               control={form.control}
               name="description"
               render={({ field }) => (
-                <FormItem >
+                <FormItem className='space-y-3'>
                   <FormLabel className='mb-2 block'>
                     <Typography variant='paragraph-l-medium'>
                       Description

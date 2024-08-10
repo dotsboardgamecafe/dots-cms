@@ -37,6 +37,7 @@ const StatusConfirmationModal = ({ open, onOpenChange, gameData }: Props) => {
       game_type: gameData.game_type,
       image_url: gameData.image_url,
       maximum_participant: gameData.maximum_participant,
+      minimal_participant: gameData.minimal_participant,
       name: gameData.name,
       admin_code: gameData.game_masters?.admin_code || '',
       duration: gameData.duration,

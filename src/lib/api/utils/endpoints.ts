@@ -56,6 +56,7 @@ const endpointData = {
 	deleteGameMechanics: { path: '/game-mechanics', method: 'DELETE', prefix: '' },
 	deleteMember: { path: '/users', method: 'DELETE', prefix: '' },
 	deleteGame: { path: '/games', method: 'DELETE', prefix: '' },
+	deleteRoom: { path: '/rooms', method: 'DELETE', prefix: '' },
 } as const;
 
 // Typing schema, do not modify if not necessary

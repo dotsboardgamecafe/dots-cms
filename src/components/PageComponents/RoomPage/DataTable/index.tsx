@@ -9,8 +9,9 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
+import DeleteConfirmationModal from '@/components/PageComponents/RoomPage/ConfirmationModal/DeleteConfirmationModal';
+import StatusConfirmationModal from '@/components/PageComponents/RoomPage/ConfirmationModal/StatusConfirmationModal';
 import RoomFilterModal from '@/components/PageComponents/RoomPage/FilterModal/RoomFilterModal';
-import StatusConfirmationModal from '@/components/PageComponents/RoomPage/StatusConfirmationModal';
 import { Button } from '@/components/ui/Buttons';
 import Search from '@/components/ui/Input/Search';
 import Pagination from '@/components/ui/Pagination/pagination';
@@ -34,14 +35,19 @@ type Props = {
 
 const RoomTable = ({ data, pagination }: Props) => {
   const [statusConfirmationModalOpen, setStatusConfirmationModalOpen] = useState<boolean>(false);
+  const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<RoomType>();
   const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false)
 
   const getRoomStatus = (roomData: RoomType): string => {
     if (roomData.status !== 'active') return roomData.status
-    const isAlreadyPast = dayjs(`${roomData.end_date} ${roomData.end_time}`).isBefore(dayjs())
+    const isAlreadyPast = checkIsPastDate(dayjs(`${roomData.end_date} ${roomData.end_time}`))
     if (isAlreadyPast) return 'inactive'
     return roomData.status
+  }
+
+  function checkIsPastDate(date: dayjs.Dayjs): boolean {
+    return dayjs(date).isBefore(dayjs())
   }
 
   const columns: ColumnDef<RoomType>[] = useMemo(() => [
@@ -143,12 +149,14 @@ const RoomTable = ({ data, pagination }: Props) => {
       cell: ({ row }) => {
         return (
           <Select value={getRoomStatus(row.original)}
-            disabled={true}
-            onValueChange={(value) => {
-              if (value === 'inactive') {
-                setStatusConfirmationModalOpen(true);
-                setSelectedRow(row.original);
-              }
+            disabled={
+              row.original.status === 'closed' ||
+              (row.original.status === 'active' && row.original.current_used_slot > 0) ||
+              checkIsPastDate(dayjs(`${row.original.end_date} ${row.original.end_time}`))
+            }
+            onValueChange={() => {
+              setStatusConfirmationModalOpen(true);
+              setSelectedRow(row.original);
             }}
           >
             <SelectTrigger variant='badge' className={cn(
@@ -189,9 +197,9 @@ const RoomTable = ({ data, pagination }: Props) => {
             <Link href={`/room/edit/${row.original.room_code}`} >
               <Edit className='cursor-pointer' />
             </Link>
-            {getRoomStatus(row.original) === 'active' && (
+            {(getRoomStatus(row.original) !== 'closed' && !(row.original.status === 'active' && row.original.current_used_slot > 0)) && (
               <Button className='p-0' variant='link' onClick={() => {
-                setStatusConfirmationModalOpen(true);
+                setDeleteConfirmationModalOpen(true);
                 setSelectedRow(row.original);
               }}>
                 <Trash className='cursor-pointer' />
@@ -204,20 +212,12 @@ const RoomTable = ({ data, pagination }: Props) => {
   ]
     , []);
 
-
   const table = useReactTable({
     data: data,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     columns,
   });
-
-  const getMaxPage = () => {
-    if (pagination.count && pagination.limit) {
-      return Math.ceil(pagination?.count / pagination?.limit);
-    }
-    return 1;
-  };
 
   useEffect(() => {
     if (!pagination.limit) return
@@ -294,6 +294,11 @@ const RoomTable = ({ data, pagination }: Props) => {
       <StatusConfirmationModal
         open={statusConfirmationModalOpen}
         onOpenChange={(value) => setStatusConfirmationModalOpen(value)}
+        roomData={selectedRow}
+      />
+      <DeleteConfirmationModal
+        open={deleteConfirmationModalOpen}
+        onOpenChange={(value) => setDeleteConfirmationModalOpen(value)}
         roomData={selectedRow}
       />
       <RoomFilterModal

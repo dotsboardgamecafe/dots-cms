@@ -2,10 +2,11 @@
 import { Danger } from 'iconsax-react';
 import { PropsWithRef } from 'react';
 
-import { updateRoomStatus } from '@/lib/api/room';
+import { deleteRoom } from '@/lib/api/room';
 
 import { Button } from '@/components/ui/Buttons';
 import { Modal, ModalContent } from '@/components/ui/Modal';
+import { useToast } from '@/components/ui/Toast/use-toast';
 import Typography from '@/components/ui/Typography';
 
 import { RoomType } from '@/types/room';
@@ -16,11 +17,26 @@ type Props = PropsWithRef<{
   roomData?: RoomType;
 }>;
 
-const StatusConfirmationModal = ({ open, onOpenChange, roomData }: Props) => {
+const DeleteConfirmationModal = ({ open, onOpenChange, roomData }: Props) => {
+  const { toast } = useToast()
 
+  if (!roomData?.room_code) return null
 
   const onConfirm = async () => {
-    await updateRoomStatus({ param: roomData?.room_code, body: { status: 'inactive' } });
+    try {
+      const res = await deleteRoom(roomData.room_code);
+      if (res.stat_msg?.includes('err')) throw new Error(res.stat_msg)
+      toast({
+        title: `Successfully delete a room ${roomData?.name || ''}`,
+        variant: 'default',
+      });
+    } catch (error) {
+      toast({
+        title: 'Something went wrong',
+        description: `failed to delete a room ${roomData?.name || ''}`,
+        variant: 'destructive',
+      });
+    }
     onOpenChange(false);
   };
 
@@ -32,7 +48,7 @@ const StatusConfirmationModal = ({ open, onOpenChange, roomData }: Props) => {
             <Danger size={32} className='text-white' variant='Bold' />
           </div>
           <Typography variant='heading-h4'>
-            Are you sure to delete this room?
+            Are you sure to delete the room {roomData.name}?
           </Typography>
         </section>
         <section className='flex gap-6'>
@@ -44,4 +60,4 @@ const StatusConfirmationModal = ({ open, onOpenChange, roomData }: Props) => {
   );
 };
 
-export default StatusConfirmationModal;
+export default DeleteConfirmationModal;

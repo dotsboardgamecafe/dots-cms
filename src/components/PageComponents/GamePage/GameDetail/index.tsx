@@ -23,7 +23,7 @@ const GameDetail = ({ gameDetail }: Props) => {
           <TextLabel title='Game Type' value={gameDetail.game_type} className='border-b border-gray-200 capitalize' />
           <TextLabel title='Level' value={gameDetail.level} className='border-b border-gray-200 capitalize' />
           <TextLabel title='Duration' value={`${gameDetail.duration} minutes`} className='border-b border-gray-200 capitalize' />
-          <TextLabel title='Players' value={gameDetail.maximum_participant} className='border-b border-gray-200 capitalize' />
+          <TextLabel title='Players' value={`${gameDetail.minimal_participant} - ${gameDetail.maximum_participant}`} className='border-b border-gray-200 capitalize' />
           <TextLabel title='Cafe Location' value={gameDetail.cafe_name} className='border-b border-gray-200 capitalize' />
           <section className='grid col-span-2'>
             <TextLabel title='Game Mechanics' value={(

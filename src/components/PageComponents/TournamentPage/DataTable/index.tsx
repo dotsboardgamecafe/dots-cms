@@ -9,7 +9,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 import RoomFilterModal from '@/components/PageComponents/RoomPage/FilterModal/RoomFilterModal';
-import StatusConfirmationModal from '@/components/PageComponents/TournamentPage/StatusConfirmationModal';
+import DeleteConfirmationModal from '@/components/PageComponents/TournamentPage/ConfirmationModal/DeleteConfirmationModal';
+import StatusConfirmationModal from '@/components/PageComponents/TournamentPage/ConfirmationModal/StatusConfirmationModal';
 import { Button } from '@/components/ui/Buttons';
 import Search from '@/components/ui/Input/Search';
 import Pagination from '@/components/ui/Pagination/pagination';
@@ -17,7 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
 
-import { formatTournamentDate } from '@/helper/datetime';
+import { checkIsPastDate, formatTournamentDate } from '@/helper/datetime';
 
 import { Pagination as PaginationType } from '@/types/network';
 import { TournamentType } from '@/types/tournament';
@@ -32,12 +33,13 @@ type Props = {
 
 const TournamentTable = ({ data, pagination }: Props) => {
   const [statusConfirmationModalOpen, setStatusConfirmationModalOpen] = useState<boolean>(false);
+  const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<TournamentType>();
   const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false)
 
   const getTournamentStatus = (tournamentData: TournamentType): string => {
     if (tournamentData.status !== 'active') return tournamentData.status
-    const isAlreadyPast = dayjs(`${tournamentData.end_date} ${tournamentData.end_time}`).isBefore(dayjs())
+    const isAlreadyPast = checkIsPastDate(dayjs(`${tournamentData.end_date} ${tournamentData.end_time}`))
 
     if (isAlreadyPast) return 'inactive'
     return tournamentData.status
@@ -111,7 +113,11 @@ const TournamentTable = ({ data, pagination }: Props) => {
       cell: ({ row }) => {
         return (
           <Select value={getTournamentStatus(row.original)}
-            disabled={true}
+            disabled={
+              row.original.status === 'closed' ||
+              (row.original.status === 'active' && row.original.current_used_slot > 0) ||
+              checkIsPastDate(dayjs(`${row.original.end_date} ${row.original.end_time}`))
+            }
             onValueChange={() => {
               setStatusConfirmationModalOpen(true);
               setSelectedRow(row.original);
@@ -155,9 +161,9 @@ const TournamentTable = ({ data, pagination }: Props) => {
             <Link href={`/tournament/edit/${row.original.tournament_code}`} >
               <Edit className='cursor-pointer' />
             </Link>
-            {(getTournamentStatus(row.original) === 'active' && !row.original.current_used_slot) && (
+            {getTournamentStatus(row.original) !== 'closed' && !(getTournamentStatus(row.original) === 'active' && row.original.current_used_slot > 0) && (
               <Button className='p-0' variant='link' onClick={() => {
-                setStatusConfirmationModalOpen(true);
+                setDeleteConfirmationModalOpen(true);
                 setSelectedRow(row.original);
               }}>
                 <Trash className='cursor-pointer' />
@@ -253,6 +259,11 @@ const TournamentTable = ({ data, pagination }: Props) => {
       <StatusConfirmationModal
         open={statusConfirmationModalOpen}
         onOpenChange={(value) => setStatusConfirmationModalOpen(value)}
+        tournamentData={selectedRow}
+      />
+      <DeleteConfirmationModal
+        open={deleteConfirmationModalOpen}
+        onOpenChange={(value) => setDeleteConfirmationModalOpen(value)}
         tournamentData={selectedRow}
       />
       <RoomFilterModal

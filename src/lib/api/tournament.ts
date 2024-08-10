@@ -33,3 +33,17 @@ export const setTournamentWinner = async (options: ApiOptions<SetTournamentWinne
   revalidateTag(`get-tournament-${options.param}`);
   return res
 }
+
+export const updateTournamentsStatus = async (tournament_code: TournamentType['tournament_rules'], status: 'active' | 'inactive') => {
+  const res = await fetcher('updateTournamentsStatus', { param: tournament_code, body: { status } });
+  revalidateTag('getTournaments');
+  revalidateTag(`get-tournament-${tournament_code}`);
+  return res;
+};
+
+export const deleteTournament = async (tournament_code: TournamentType['tournament_code']) => {
+  const res = await fetcher('deleteTournament', { param: tournament_code });
+  revalidateTag('getTournaments');
+  revalidateTag(`get-tournament-${tournament_code}`);
+  return res;
+};

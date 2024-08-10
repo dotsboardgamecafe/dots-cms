@@ -2,14 +2,14 @@
 import { Danger } from 'iconsax-react';
 import { PropsWithRef } from 'react';
 
-import { editTournament } from '@/lib/api/tournament';
+import { updateTournamentsStatus } from '@/lib/api/tournament';
 
 import { Button } from '@/components/ui/Buttons';
 import { Modal, ModalContent } from '@/components/ui/Modal';
 import { useToast } from '@/components/ui/Toast/use-toast';
 import Typography from '@/components/ui/Typography';
 
-import { AddTournamentPayload, TournamentType } from '@/types/tournament';
+import { TournamentType } from '@/types/tournament';
 
 type Props = PropsWithRef<{
   open: boolean;
@@ -22,35 +22,23 @@ const StatusConfirmationModal = ({ open, onOpenChange, tournamentData }: Props) 
 
   if (!tournamentData) return null
 
+  const isActive = tournamentData.status === 'active'
+  const actionType: 'inactive' | 'active' = isActive ? 'inactive' : 'active'
+  const actionMessage: string = isActive ? 'inactivate' : 'activate'
+
   const onConfirm = async () => {
-    const payload: AddTournamentPayload = {
-      badge_codes: tournamentData.tournament_badges.map((badge) => badge.badge_code),
-      booking_price: tournamentData.booking_price,
-      end_date: tournamentData.end_date,
-      start_date: tournamentData.start_date,
-      end_time: tournamentData.end_time,
-      game_code: tournamentData.game_code,
-      image_url: tournamentData.image_url,
-      level: tournamentData.difficulty,
-      location_code: tournamentData.cafe_code,
-      name: tournamentData.name,
-      participant_vp: tournamentData.participant_vp,
-      player_slot: tournamentData.player_slot,
-      prizes_img_url: tournamentData.prizes_img_url,
-      start_time: tournamentData.start_time,
-      status: tournamentData.status === 'active' ? 'inactive' : 'active',
-      tournament_rules: tournamentData.tournament_rules
-    }
     try {
-      await editTournament({ param: tournamentData.tournament_code, body: payload });
+      const res = await updateTournamentsStatus(tournamentData.tournament_code, actionType);
+      if (res.stat_code?.includes('ERR')) throw new Error(res.stat_msg)
+
       toast({
-        title: `Successfully delete the Tournament`,
+        title: `Successfully ${actionMessage} the Tournament ${tournamentData.name}`,
         variant: 'default',
       });
     } catch (error) {
       toast({
         title: 'Something went wrong',
-        description: `Failed to delete the Tournament`,
+        description: `Failed to ${actionMessage} the Tournament ${tournamentData.name}`,
         variant: 'destructive',
       });
     }
@@ -65,12 +53,12 @@ const StatusConfirmationModal = ({ open, onOpenChange, tournamentData }: Props) 
             <Danger size={32} className='text-white' variant='Bold' />
           </div>
           <Typography variant='heading-h4'>
-            Are you sure to delete this tournament?
+            Are you sure to {actionMessage} the tournament {tournamentData.name}?
           </Typography>
         </section>
         <section className='flex gap-6'>
           <Button className='flex-1' size="lg" variant="secondary" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm}>Yes, Delete</Button>
+          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm}>Yes, {actionMessage}</Button>
         </section>
       </ModalContent>
     </Modal>

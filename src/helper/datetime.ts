@@ -36,3 +36,7 @@ export function formatTimeHourMinutes(time: string): string {
 
   return `${hour}:${minute}`
 }
+
+export function checkIsPastDate(date: dayjs.Dayjs): boolean {
+  return dayjs(date).isBefore(dayjs())
+}

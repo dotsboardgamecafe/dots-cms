@@ -37,6 +37,7 @@ const StatusConfirmationModal = ({ open, onOpenChange, gameData }: Props) => {
       game_type: gameData.game_type,
       image_url: gameData.image_url,
       maximum_participant: gameData.maximum_participant,
+      minimal_participant: gameData.minimal_participant,
       name: gameData.name,
       admin_code: gameData.game_masters?.admin_code || '',
       duration: gameData.duration,
@@ -46,7 +47,7 @@ const StatusConfirmationModal = ({ open, onOpenChange, gameData }: Props) => {
 
     try {
       const res = await editGame({ param: gameData.game_code, body: payload });
-      if (res.stat_msg?.includes('err')) throw new Error(res.stat_msg)
+      if (res.stat_code?.includes('ERR')) throw new Error(res.stat_msg)
 
       toast({
         title: `Successfully ${actionTypeMessage} the game ${gameData?.name || ''}`,

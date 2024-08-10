@@ -51,11 +51,14 @@ const endpointData = {
 	updateAdmin: { path: '/admins', method: 'PUT', prefix: '' },
 	changeStatusAdmin: { path: '/admins', method: 'PUT', prefix: 'status' },
 	updateGameMechanics: { path: '/game-mechanics', method: 'PUT', prefix: '' },
+	updateTournamentsStatus: { path: '/tournaments', method: 'PUT', prefix: 'status' },
 
 	// DELETE
 	deleteGameMechanics: { path: '/game-mechanics', method: 'DELETE', prefix: '' },
 	deleteMember: { path: '/users', method: 'DELETE', prefix: '' },
 	deleteGame: { path: '/games', method: 'DELETE', prefix: '' },
+	deleteRoom: { path: '/rooms', method: 'DELETE', prefix: '' },
+	deleteTournament: { path: '/tournaments', method: 'DELETE', prefix: '' },
 } as const;
 
 // Typing schema, do not modify if not necessary

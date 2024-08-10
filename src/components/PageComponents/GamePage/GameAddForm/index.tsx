@@ -49,7 +49,8 @@ const AddGameForm = ({ cafes, admins }: Props) => {
       game_categories: [],
       game_type: '',
       image_url_collection: [],
-      players: ''
+      minimal_participant: '',
+      maximum_participant: ''
     },
     resolver: zodResolver(AddGameSchema),
 
@@ -65,7 +66,8 @@ const AddGameForm = ({ cafes, admins }: Props) => {
     setIsSubmitting(true)
     // eslint-disable-next-line no-console, unused-imports/no-unused-vars
     const payload: AddGamePayload = {
-      maximum_participant: Number(data.players),
+      maximum_participant: Number(data.maximum_participant),
+      minimal_participant: Number(data.minimal_participant),
       cafe_code: data.cafe_code,
       name: data.name,
       image_url: data.image_url,
@@ -99,7 +101,7 @@ const AddGameForm = ({ cafes, admins }: Props) => {
   };
 
   async function checkFieldGameInformationValidation() {
-    const result: boolean = await form.trigger(['name', 'game_type', 'game_categories', 'description', 'cafe_code', 'players', 'duration', 'level', 'admin_code'])
+    const result: boolean = await form.trigger(['name', 'game_type', 'game_categories', 'description', 'cafe_code', 'minimal_participant', 'maximum_participant', 'duration', 'level', 'admin_code'])
     return result
   }
 
@@ -209,6 +211,40 @@ const AddGameForm = ({ cafes, admins }: Props) => {
                 />
                 <FormField
                   control={form.control}
+                  name="minimal_participant"
+                  render={({ field }) => (
+                    <FormItem className="space-y-3">
+                      <FormLabel>
+                        <Typography variant='paragraph-l-medium'>
+                          Minimal Players
+                        </Typography>
+                      </FormLabel>
+                      <FormControl>
+                        <InputNumber placeholder='Set Minimal Players' onChange={field.onChange} value={field.value} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="maximum_participant"
+                  render={({ field }) => (
+                    <FormItem className="space-y-3">
+                      <FormLabel>
+                        <Typography variant='paragraph-l-medium'>
+                          Maximum Players
+                        </Typography>
+                      </FormLabel>
+                      <FormControl>
+                        <InputNumber placeholder='Set Maximum Players' onChange={field.onChange} value={field.value} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
                   name="duration"
                   render={({ field }) => (
                     <FormItem className="space-y-3">
@@ -219,23 +255,6 @@ const AddGameForm = ({ cafes, admins }: Props) => {
                       </FormLabel>
                       <FormControl>
                         <InputNumber placeholder='Set Duration' onChange={field.onChange} value={field.value} suffixIcon='Minutes' />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="players"
-                  render={({ field }) => (
-                    <FormItem className="space-y-3">
-                      <FormLabel>
-                        <Typography variant='paragraph-l-medium'>
-                          Players
-                        </Typography>
-                      </FormLabel>
-                      <FormControl>
-                        <InputNumber placeholder='Set Maximum Players' onChange={field.onChange} value={field.value} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -307,7 +326,6 @@ const AddGameForm = ({ cafes, admins }: Props) => {
                     </FormItem>
                   )}
                 />
-                <div></div>
                 <FormField
                   control={form.control}
                   name="description"

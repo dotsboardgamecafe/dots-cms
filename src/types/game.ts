@@ -45,7 +45,8 @@ export const AddGameSchema = z.object({
   description: z.string({ required_error: 'Game description is required' }).min(1, 'Game description is required'),
   level: z.number({ required_error: 'Game level is required' }),
   duration: z.string({ required_error: 'Game duration is required' }).min(1, 'Game duration is required'),
-  players: z.string({ required_error: 'Game player is required' }).min(1, 'Game player is required'),
+  minimal_participant: z.string({ required_error: 'Game minimum participant is required' }).min(1, 'Game minimum participant is required'),
+  maximum_participant: z.string({ required_error: 'Game maximum participant is required' }).min(1, 'Game maximum participant is required'),
   status: z.string({ required_error: 'Game status is required' }),
   game_categories: z.array(z.string()).min(1, 'Game categories is required'),
   game_type: z.string({ required_error: 'Game type is required' }).min(1, 'Game type is required'),
@@ -66,7 +67,7 @@ export type AddGamePayload = {
   status: string;
   game_categories: GameCategory[],
   level?: number,
-  minimal_participant?: string,
+  minimal_participant: number,
   maximum_participant: number,
   admin_code: string,
   duration: number

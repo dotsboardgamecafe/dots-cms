@@ -6,6 +6,7 @@ import { updateStatusAdmin } from '@/lib/api/admin';
 
 import { Button } from '@/components/ui/Buttons';
 import { Modal, ModalContent } from '@/components/ui/Modal';
+import { useToast } from '@/components/ui/Toast/use-toast';
 import Typography from '@/components/ui/Typography';
 
 import { AdminType } from '@/types/admin';
@@ -17,10 +18,30 @@ type Props = PropsWithRef<{
 }>;
 
 const StatusConfirmationModal = ({ open, onOpenChange, adminData }: Props) => {
+  const { toast } = useToast()
 
+  if (!adminData) return null
+
+  const actionName: string = adminData.status === 'inactive' ? 'active' : 'inactive'
+  const actionDisplay: string = actionName === 'active' ? 'activate' : 'inactivate'
 
   const onConfirm = async () => {
-    await updateStatusAdmin({ param: adminData?.admin_code, body: { status: adminData?.status === 'active' ? 'inactive' : 'active' } });
+    try {
+      const res = await updateStatusAdmin({ param: adminData?.admin_code, body: { status: actionName } });
+
+      if (res.stat_code?.includes('ERR')) throw new Error(res.stat_msg)
+
+      toast({
+        title: `Admin successfully ${actionDisplay}d`,
+        variant: 'default',
+      });
+    } catch (error) {
+      toast({
+        title: 'Something went wrong',
+        description: `failed to ${actionDisplay} the admin`,
+        variant: 'destructive',
+      });
+    }
     onOpenChange(false);
   };
 
@@ -32,12 +53,12 @@ const StatusConfirmationModal = ({ open, onOpenChange, adminData }: Props) => {
             <Danger size={32} className='text-white' variant='Bold' />
           </div>
           <Typography variant='heading-h4'>
-            Are you sure to delete this item?
+            Are you sure to {actionDisplay} the admin {adminData.name}?
           </Typography>
         </section>
         <section className='flex gap-6'>
           <Button className='flex-1' size="lg" variant="secondary" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm}>Yes, Delete</Button>
+          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm}>Yes, {actionDisplay}</Button>
         </section>
       </ModalContent>
     </Modal>

@@ -25,24 +25,27 @@ const BannerStatusConfirmationModal = ({ open, onOpenChange, bannerData }: Props
 
   const actionName: string = bannerData.status === 'unpublish' ? 'publish' : 'unpublish'
 
-  const onConfirm = () => {
+  const onConfirm = async () => {
     setIsSubmitting(true)
-    updateBanners({ param: bannerData?.banner_code, body: { ...bannerData, name: bannerData.title, status: actionName } })
-      .then(() => {
-        toast({
-          title: `Banner successfully deleted`,
-          variant: 'default',
-        });
-        onOpenChange(false)
-      })
-      .catch(() => {
-        toast({
-          title: 'Something went wrong',
-          description: `failed to delete the banner`,
-          variant: 'destructive',
-        });
-      })
-      .finally(() => setIsSubmitting(false))
+
+    try {
+      const res = await updateBanners({ param: bannerData?.banner_code, body: { ...bannerData, name: bannerData.title, status: actionName } })
+      if (res.stat_code?.includes('ERR')) throw new Error(res.stat_msg)
+
+      toast({
+        title: `Banner successfully ${actionName}`,
+        variant: 'default',
+      });
+      onOpenChange(false)
+    } catch (error) {
+      toast({
+        title: 'Something went wrong',
+        description: `failed to ${actionName} the banner`,
+        variant: 'destructive',
+      });
+    }
+
+    setIsSubmitting(false)
   };
 
   return (
@@ -53,12 +56,12 @@ const BannerStatusConfirmationModal = ({ open, onOpenChange, bannerData }: Props
             <Danger size={32} className='text-white' variant='Bold' />
           </div>
           <Typography variant='heading-h4'>
-            Are you sure to delete this item?
+            Are you sure to {actionName} the banner {bannerData.title}?
           </Typography>
         </section>
         <section className='flex gap-6'>
           <Button className='flex-1' size="lg" variant="secondary" onClick={() => onOpenChange(false)} disabled={isSubmitting}>Cancel</Button>
-          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm} disabled={isSubmitting}>Yes, Delete</Button>
+          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm} disabled={isSubmitting}>Yes, {actionName}</Button>
         </section>
       </ModalContent>
     </Modal>

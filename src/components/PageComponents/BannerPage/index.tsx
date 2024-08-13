@@ -9,7 +9,8 @@ import { cn } from '@/lib/utils';
 import BannerListTable from '@/components/PageComponents/BannerPage/BannerListTable';
 import BannerFilterModal from '@/components/PageComponents/BannerPage/FilterModal/BannerFilterModal';
 import AddBannerModal from '@/components/PageComponents/BannerPage/Modals/AddBannerModal';
-import BannerStatusConfirmationModal from '@/components/PageComponents/BannerPage/Modals/ConfirmationModal';
+import BannerStatusConfirmationModal from '@/components/PageComponents/BannerPage/Modals/ChangeStatusConfirmationModal';
+import BannerDeleteConfirmationModal from '@/components/PageComponents/BannerPage/Modals/DeleteConfirmationModal';
 import EditBannerModal from '@/components/PageComponents/BannerPage/Modals/EditBannerModal';
 import ViewBannerDetailModal from '@/components/PageComponents/BannerPage/Modals/ViewBannerDetailModal';
 import { Button } from '@/components/ui/Buttons';
@@ -31,7 +32,8 @@ const BannerPageContent = ({ data, pagination }: Props) => {
   const [showAddBannerModal, setShowAddBannerModal] = useState<boolean>(false);
   const [showViewDetailModal, setShowViewDetailModal] = useState<boolean>(false);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
-  const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false);
+  const [showChangeStatusConfirmationModal, setShowChangeStatusConfirmationModal] = useState<boolean>(false);
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState<boolean>(false);
   const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false)
 
   const [selectedBanner, setSelectedBanner] = useState<TBannerData>();
@@ -78,7 +80,10 @@ const BannerPageContent = ({ data, pagination }: Props) => {
       header: 'Status',
       cell: ({ row }) => {
         return (
-          <Select value={row.original.status} disabled >
+          <Select value={row.original.status} onValueChange={() => {
+            setShowChangeStatusConfirmationModal(true);
+            setSelectedBanner(row.original);
+          }} >
             <SelectTrigger variant='badge' className={cn(
               {
                 'bg-error-50': row.original.status === 'unpublish',
@@ -124,14 +129,12 @@ const BannerPageContent = ({ data, pagination }: Props) => {
             }}>
               <Edit className='cursor-pointer' />
             </Button>
-            {(row.original.status === 'publish') && (
-              <Button className='p-0' variant='link' onClick={() => {
-                setShowConfirmationModal(true);
-                setSelectedBanner(row.original);
-              }}>
-                <Trash className='cursor-pointer' />
-              </Button>
-            )}
+            <Button className='p-0' variant='link' onClick={() => {
+              setShowDeleteConfirmationModal(true);
+              setSelectedBanner(row.original);
+            }}>
+              <Trash className='cursor-pointer' />
+            </Button>
           </div>
         );
       }
@@ -160,7 +163,8 @@ const BannerPageContent = ({ data, pagination }: Props) => {
       <BannerListTable data={data} pagination={pagination} columnConfig={columns} />
       <AddBannerModal open={showAddBannerModal} onOpenChange={(isOpen) => setShowAddBannerModal(isOpen)} />
       <EditBannerModal open={showEditModal} onOpenChange={(isOpen) => setShowEditModal(isOpen)} bannerData={selectedBanner} />
-      <BannerStatusConfirmationModal open={showConfirmationModal} onOpenChange={(isOpen) => setShowConfirmationModal(isOpen)} bannerData={selectedBanner} />
+      <BannerStatusConfirmationModal open={showChangeStatusConfirmationModal} onOpenChange={(isOpen) => setShowChangeStatusConfirmationModal(isOpen)} bannerData={selectedBanner} />
+      <BannerDeleteConfirmationModal open={showDeleteConfirmationModal} onOpenChange={(isOpen) => setShowDeleteConfirmationModal(isOpen)} bannerData={selectedBanner} />
       <ViewBannerDetailModal
         open={showViewDetailModal}
         onOpenChange={((isOpen) => setShowViewDetailModal(isOpen))}

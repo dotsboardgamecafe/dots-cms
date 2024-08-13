@@ -1,48 +1,49 @@
 'use client';
 import { Danger } from 'iconsax-react';
-import { PropsWithRef } from 'react';
+import { PropsWithRef, useState } from 'react';
 
-import { updateStatusAdmin } from '@/lib/api/admin';
+import { deleteBanner } from '@/lib/api/banner';
 
 import { Button } from '@/components/ui/Buttons';
 import { Modal, ModalContent } from '@/components/ui/Modal';
 import { useToast } from '@/components/ui/Toast/use-toast';
 import Typography from '@/components/ui/Typography';
 
-import { AdminType } from '@/types/admin';
+import { TBannerData } from '@/types/banner';
 
 type Props = PropsWithRef<{
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  adminData?: AdminType;
+  bannerData?: TBannerData;
 }>;
 
-const StatusConfirmationModal = ({ open, onOpenChange, adminData }: Props) => {
+const BannerDeleteConfirmationModal = ({ open, onOpenChange, bannerData }: Props) => {
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const { toast } = useToast()
 
-  if (!adminData) return null
-
-  const actionName: string = adminData.status === 'inactive' ? 'active' : 'inactive'
-  const actionDisplay: string = actionName === 'active' ? 'activate' : 'inactivate'
+  if (!bannerData) return null
 
   const onConfirm = async () => {
-    try {
-      const res = await updateStatusAdmin({ param: adminData?.admin_code, body: { status: actionName } });
+    setIsSubmitting(true)
 
+    try {
+      const res = await deleteBanner(bannerData.banner_code)
       if (res.stat_code?.includes('ERR')) throw new Error(res.stat_msg)
 
       toast({
-        title: `Admin successfully ${actionDisplay}d`,
+        title: `Banner successfully deleted`,
         variant: 'default',
       });
+      onOpenChange(false)
     } catch (error) {
       toast({
         title: 'Something went wrong',
-        description: `failed to ${actionDisplay} the admin`,
+        description: `failed to delete the banner`,
         variant: 'destructive',
       });
     }
-    onOpenChange(false);
+
+    setIsSubmitting(false)
   };
 
   return (
@@ -53,16 +54,16 @@ const StatusConfirmationModal = ({ open, onOpenChange, adminData }: Props) => {
             <Danger size={32} className='text-white' variant='Bold' />
           </div>
           <Typography variant='heading-h4'>
-            Are you sure to {actionDisplay} the admin {adminData.name}?
+            Are you sure to delete the banner {bannerData.title}?
           </Typography>
         </section>
         <section className='flex gap-6'>
-          <Button className='flex-1' size="lg" variant="secondary" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm}>Yes, {actionDisplay}</Button>
+          <Button className='flex-1' size="lg" variant="secondary" onClick={() => onOpenChange(false)} disabled={isSubmitting}>Cancel</Button>
+          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm} disabled={isSubmitting}>Yes, Delete</Button>
         </section>
       </ModalContent>
     </Modal>
   );
 };
 
-export default StatusConfirmationModal;
+export default BannerDeleteConfirmationModal;

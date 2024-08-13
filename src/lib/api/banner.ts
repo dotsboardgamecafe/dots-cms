@@ -28,3 +28,9 @@ export const updateBanners = async (options: ApiOptions<TPostBannerPayload>) => 
   revalidateTag('getBanners');
   return res
 };
+
+export const deleteBanner = async (banner_code: TBannerData['banner_code']) => {
+  const res = await fetcher('deleteBanner', { param: banner_code });
+  revalidateTag('getBanners');
+  return res
+};

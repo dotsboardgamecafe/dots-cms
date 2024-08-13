@@ -1,6 +1,6 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { AddCircle, Edit, Eye, Setting4, Trash } from 'iconsax-react';
+import { AddCircle, Edit, Eye, Setting4 } from 'iconsax-react';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 
@@ -92,7 +92,10 @@ const BadgePageContent = ({ data, pagination }: Props) => {
       header: 'Status',
       cell: ({ row }) => {
         return (
-          <Select value={row.original.status} disabled >
+          <Select value={row.original.status} onValueChange={() => {
+            setStatusConfirmationModalOpen(true);
+            setSelectedRow(row.original);
+          }} >
             <SelectTrigger variant='badge' className={cn(
               {
                 'bg-error-50': row.original.status === 'inactive',
@@ -139,14 +142,6 @@ const BadgePageContent = ({ data, pagination }: Props) => {
             }}>
               <Edit className='cursor-pointer' />
             </Button>
-            {(row.original.status === 'active') && (
-              <Button className='p-0' variant='link' onClick={() => {
-                setStatusConfirmationModalOpen(true);
-                setSelectedRow(row.original);
-              }}>
-                <Trash className='cursor-pointer' />
-              </Button>
-            )}
           </div>
         );
       }

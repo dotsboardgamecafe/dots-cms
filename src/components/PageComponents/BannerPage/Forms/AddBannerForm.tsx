@@ -33,7 +33,7 @@ export const AddBannerForm = ({ onClose, defaultData, onSubmit }: Props) => {
       description: '',
       image_url: '',
       title: '',
-      status: 'unpublish',
+      status: 'publish',
       ...defaultData
     },
     resolver: zodResolver(AddBannerSchema)

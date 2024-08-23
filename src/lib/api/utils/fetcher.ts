@@ -22,8 +22,8 @@ export type ApiOptions<T = unknown> = {
 
 const baseUrl = config.baseUrl ?? 'localhost:3000/v1';
 
-const fetcher = async <Response> ( endpointKey: EndpointKey, options?: ApiOptions ): Promise<SuccessResponse<Response>> => {
-	const endpoint = endpoints[ endpointKey ];
+const fetcher = async <Response>(endpointKey: EndpointKey, options?: ApiOptions): Promise<SuccessResponse<Response>> => {
+	const endpoint = endpoints[endpointKey];
 	const fetchOpt: Record<string, unknown> = {};
 	const safeQueryParam = options?.query ?? {};
 	const safePagination = options?.pagination ?? {};
@@ -37,43 +37,47 @@ const fetcher = async <Response> ( endpointKey: EndpointKey, options?: ApiOption
 
 	let url = baseUrl + endpoint.path;
 
-	if ( options?.param ) {
+	if (options?.param) {
 		url += `/${options.param}`;
 	}
-	if ( endpoint.prefix ) {
+	if (endpoint.prefix) {
 		url += `/${endpoint.prefix}`;
 	}
 
-	url += '?' + generateQueryString( {
+	url += '?' + generateQueryString({
 		...safeQueryParam,
 		...safePagination
-	} );
+	});
 
-	if ( options && options.body ) {
-		fetchOpt[ 'body' ] = options.isUpload ? options.body : JSON.stringify( options.body );
+	if (options && options.body) {
+		fetchOpt['body'] = options.isUpload ? options.body : JSON.stringify(options.body);
 	}
 
-	const res = await fetch( url, {
+	const res = await fetch(url, {
 		method: endpoint.method,
 		headers,
 		...fetchOpt,
 		...options?.requestOpt
-	} );
+	});
 	const response = await res.json();
 
-	if ( !res.ok ) {
-		if ( typeof window === 'undefined' ) { // check the origin of the caller is server rendered / client rendered
+	if (!res.ok) {
+		if (typeof window === 'undefined') { // check the origin of the caller is server rendered / client rendered
 			// just use console.error since throw, would result in crashing the service
 			// eslint-disable-next-line no-console
-			console.error( { endpoint, response, options } );
-			if ( response.stat_msg.toLowerCase() === 'token is invalid' ) {
-				redirect( '/login?err=expired_session' );
+			console.error({ endpoint, response, options });
+			if (response.stat_msg.toLowerCase() === 'token is invalid') {
+				redirect('/login?err=expired_session');
 			}
 		} else {
 			// if client rendered we can safely use throw
-			throw new Error( response.stat_msg );
+
+			throw new Error(response.stat_msg);
 		}
 	}
+
+	// Add a net to catch the error action (POST | PUT | DELETE | PATCH) request on the client side that use the client side fetching
+	if (endpoint.method !== 'GET' && response.stat_code?.includes('ERR')) throw new Error(response.stat_msg)
 
 	// Check if the endpoint def have payload def or not if yes then return typed response
 	return response;

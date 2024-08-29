@@ -335,7 +335,7 @@ const EditGameForm = ({ cafes, defaultValue, admins }: Props) => {
                         </Typography>
                       </FormLabel>
                       <FormControl>
-                        <Textarea note='Max 100 characters' maxLength={100} placeholder='Game Description...' className='min-h-[200px]' {...field} />
+                        <Textarea placeholder='Game Description...' className='min-h-[200px]' {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

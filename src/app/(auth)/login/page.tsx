@@ -18,17 +18,17 @@ import LoginForm from '@/components/PageComponents/LoginPage/LoginForm';
 // Before you begin editing, follow all comments with `STARTERCONF`,
 // to customize the default configuration.
 
-export default async function LoginPage ( { searchParams }: { searchParams: { err: string; }; } ) {
+export default async function LoginPage({ searchParams }: { searchParams: { err: string; }; }) {
 
   return (
     <section className='h-screen grid grid-cols-[1fr_auto] gap-16 align-middle justify-center items-center p-8 pr-[103px]'>
       <div className='h-full rounded-[32px] bg-[#EEEEF9]  relative'>
         <Image src="/images/login_figure.png" alt="login image" sizes="100vw" fill
-          style={ { objectFit: 'cover' } } priority={ true } />
+          style={{ objectFit: 'cover' }} priority={true} />
       </div>
-      {/* Form Section */ }
+      {/* Form Section */}
       <div className='w-[465px] flex-col gap-10 flex '>
-        <Image src="/images/logo.png" alt='logo image' width={ 140 } height={ 64 } style={ { width: '140px', height: '64px' } } />
+        <Image src="/images/logo-dots.png" alt='logo image' width={140} height={140} style={{ width: '140px', height: 'fit-content' }} />
         <React.Suspense>
           <LoginForm />
         </React.Suspense>

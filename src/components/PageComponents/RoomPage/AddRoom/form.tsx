@@ -345,7 +345,7 @@ const AddRoomForm = () => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Upload onChange={field.onChange} description="Suggested Resolution 960 x 270 px" />
+                    <Upload onChange={field.onChange} description="Suggested Resolution 960 x 540 px" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

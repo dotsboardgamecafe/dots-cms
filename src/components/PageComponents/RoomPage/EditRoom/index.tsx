@@ -379,7 +379,7 @@ const EditRoomForm = ({ roomDetail }: Props) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Upload onChange={field.onChange} value={field.value} description="Suggested Resolution 960 x 270 px" />
+                    <Upload onChange={field.onChange} value={field.value} description="Suggested Resolution 960 x 540 px" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

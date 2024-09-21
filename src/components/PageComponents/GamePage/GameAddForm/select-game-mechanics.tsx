@@ -38,7 +38,7 @@ const DisplaySelectedValue: React.FC<PropsWithChildren<ValueContainerProps<Selec
 const SelectGameMechanics: React.FC<SelectGameMechanicsProps> = ({ onChange, defaultValue, id }) => {
   const [selectedOption, setSelectedOption] = useState<MultiValue<GameMechanicsOption> | undefined>(defaultValue)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const loadGameOptions = async (search: string, loadedOptions: any, pagination?: Pagination) => {
+  const loadOptions = async (search: string, loadedOptions: any, pagination?: Pagination) => {
     const payload = { ...pagination }
     if (search) payload.keyword = search
 
@@ -47,13 +47,13 @@ const SelectGameMechanics: React.FC<SelectGameMechanicsProps> = ({ onChange, def
       const newOptions = response.data.map((category) => ({ value: category.content_value, label: category.content_value, data: category }))
 
       return {
-        options: [...loadedOptions, ...newOptions],
+        options: newOptions,
         hasMore: (response.pagination.total_page || 1) < (response.pagination.page || 1),
-        additional: response.pagination
+        additional: { ...response.pagination, page: (response.pagination.page || 0) + 1 }
       }
     } catch (error) {
       return {
-        options: loadedOptions,
+        options: [],
         hasMore: (pagination?.total_page || 1) < (pagination?.page || 1),
         additional: pagination
       }
@@ -69,7 +69,7 @@ const SelectGameMechanics: React.FC<SelectGameMechanicsProps> = ({ onChange, def
   return (
     <SelectAsync<true, GameMechanicsOption>
       id={id}
-      loadOptions={loadGameOptions}
+      loadOptions={loadOptions}
       placeholder='Select game mechanics'
       value={selectedOption}
       onChange={(newValue) => handleGameBoardChange(newValue)}

@@ -8,7 +8,6 @@ import { useForm } from 'react-hook-form';
 import { SingleValue } from "react-select";
 import { z } from 'zod';
 
-import { getGameList } from "@/lib/api/games";
 import { createRoom } from '@/lib/api/room';
 
 import { Button } from '@/components/ui/Buttons';
@@ -16,8 +15,7 @@ import DateTime from '@/components/ui/DateTime';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
 import InputNumber from '@/components/ui/Input/Number';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/Input/RadioGroup';
-import { SelectOptionType } from "@/components/ui/Input/SelectMultiple";
-import SelectAsync from "@/components/ui/Input/SelectMultiple/async";
+import SelectBoardGame, { GameOptionType } from "@/components/ui/Input/SelectMultiple/SelectBoardGame";
 import SelectGameMasters from "@/components/ui/Input/SelectMultiple/SelectGameMasters";
 import Text from '@/components/ui/Input/Text';
 import Textarea from '@/components/ui/Input/TextArea';
@@ -26,15 +24,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/components/ui/Toast/use-toast';
 import Typography from '@/components/ui/Typography';
 
-import { Pagination } from "@/types/network";
 import { AddRoomPayload, AddRoomSchema } from '@/types/room';
-
-type GameOptionType = SelectOptionType & {
-  data: {
-    cafe_name: string
-    cafe_code: string
-  }
-}
 
 const AddRoomForm = () => {
   const [selectedGameBoard, setSelectedGameBoard] = useState<SingleValue<GameOptionType>>(null)
@@ -103,31 +93,8 @@ const AddRoomForm = () => {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const loadGameOptions = async (search: string, loadedOptions: any, pagination?: Pagination) => {
-    const payload = { ...pagination }
-    if (search) payload.keyword = search
-
-    try {
-      const response = await getGameList({ pagination: { ...payload }, query: { status: 'active' } })
-      const newOptions = response.data.map((game) => ({ value: game.game_code, label: `${game.name} ${game.cafe_name}`, data: game }))
-
-      return {
-        options: [...loadedOptions, ...newOptions],
-        hasMore: (response.pagination.total_page || 1) < (response.pagination.page || 1),
-        additional: response.pagination
-      }
-    } catch (error) {
-      return {
-        options: loadedOptions,
-        hasMore: (pagination?.total_page || 1) < (pagination?.page || 1),
-        additional: pagination
-      }
-    }
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleGameBoardChange = (newValue: SingleValue<GameOptionType>, callBack: (data: any) => void) => {
-    form.setValue('location', newValue?.data.cafe_code || '')
+    form.setValue('location', newValue?.data?.cafe_code || '')
     callBack(newValue?.value)
     setSelectedGameBoard(newValue)
   }
@@ -207,8 +174,7 @@ const AddRoomForm = () => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <SelectAsync<false, GameOptionType>
-                      loadOptions={loadGameOptions}
+                    <SelectBoardGame<false>
                       placeholder='Select game board'
                       value={selectedGameBoard}
                       onChange={(newValue) => handleGameBoardChange(newValue, field.onChange)}
@@ -280,7 +246,7 @@ const AddRoomForm = () => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Text value={selectedGameBoard?.data.cafe_name} disabled placeholder="Please select game board" />
+                    <Text value={selectedGameBoard?.data?.cafe_name} disabled placeholder="Please select game board" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

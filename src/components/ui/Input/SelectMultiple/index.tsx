@@ -111,7 +111,7 @@ export function SelectOptionCheckBox<OptionType = SelectOptionType, isMulti exte
   )
 }
 
-export const SelectValueContainer: React.FC<PropsWithChildren<ValueContainerProps<SelectOptionType, true> & { renderValue: (options: Options<unknown>) => ReactNode }>> = memo(({ children, renderValue, ...props }) => {
+export const SelectValueContainer: React.FC<PropsWithChildren<ValueContainerProps<any, true> & { renderValue: (options: Options<unknown>) => ReactNode }>> = memo(({ children, renderValue, ...props }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { getValue, hasValue } = props
   const childrenLength = React.Children.count(children)

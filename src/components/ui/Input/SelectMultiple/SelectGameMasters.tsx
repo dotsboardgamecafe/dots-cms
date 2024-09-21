@@ -22,23 +22,24 @@ function SelectGameMasters<T>({ onChange, defaultData, isMulti }: Props<T>) {
   const [selectedGameMasters, setSelectedGameMasters] = useState<SingleValue<GameMastersOptionType> | MultiValue<GameMastersOptionType>>(defaultData as SingleValue<GameMastersOptionType> | MultiValue<GameMastersOptionType>)
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const loadGameMasters = async (search: string, loadedOptions: any, pagination?: Pagination) => {
+  const loadOptions = async (search: string, loadedOptions: any, pagination?: Pagination) => {
     const payload = { ...pagination }
     if (search) payload.keyword = search
 
     try {
       const response = await getAdmins({ pagination: { ...payload }, query: { status: 'active' } })
       const newOptions = response.data.map((admin) => ({ value: admin.admin_code, label: admin.name, data: admin }))
+      const maxPage: number = Math.ceil((response.pagination.count || 0) / (response.pagination.limit || 0))
 
       return {
-        options: [...loadedOptions, ...newOptions],
-        hasMore: (response.pagination.total_page || 1) < (response.pagination.page || 1),
-        additional: response.pagination
+        options: newOptions,
+        hasMore: (maxPage) > (response.pagination.page || 1),
+        additional: { ...response.pagination, page: (response.pagination.page || 0) + 1 }
       }
     } catch (error) {
       return {
-        options: loadedOptions,
-        hasMore: (pagination?.total_page || 1) < (pagination?.page || 1),
+        options: [],
+        hasMore: (Math.ceil((pagination?.count || 0) / (pagination?.limit || 0))) > (pagination?.page || 1),
         additional: pagination
       }
     }
@@ -52,7 +53,7 @@ function SelectGameMasters<T>({ onChange, defaultData, isMulti }: Props<T>) {
 
   return (
     <SelectAsync<T extends 'multi' ? true : false, GameMastersOptionType>
-      loadOptions={loadGameMasters}
+      loadOptions={loadOptions}
       placeholder='Select game master'
       value={selectedGameMasters}
       onChange={(newValue) => handleGameMasterChange(newValue as T extends 'multi' ? MultiValue<GameMastersOptionType> : SingleValue<GameMastersOptionType>)}

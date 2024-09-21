@@ -2,9 +2,7 @@
 import { Trash } from "iconsax-react";
 import { memo, PropsWithChildren, useEffect, useMemo, useState } from "react";
 import { MultiValue, Options, ValueContainerProps } from "react-select";
-import { AsyncPaginate } from "react-select-async-paginate";
 
-import { getGameList } from "@/lib/api/games";
 import { useMultiGameDetail } from "@/lib/api/games/hooks";
 
 import { Button } from "@/components/ui/Buttons";
@@ -12,11 +10,12 @@ import { Card, CardContent, CardHeader } from "@/components/ui/Card/card"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, useFormField } from '@/components/ui/Form';
 import InputNumber from "@/components/ui/Input/Number";
 import { SelectOptionCheckBox, SelectOptionType, SelectValueContainer } from "@/components/ui/Input/SelectMultiple";
+import { GameOptionType } from "@/components/ui/Input/SelectMultiple/SelectBoardGame";
+import SelectBoardGame from "@/components/ui/Input/SelectMultiple/SelectBoardGame";
 import Text from '@/components/ui/Input/Text';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
 import Typography from "@/components/ui/Typography"
 
-import { Pagination } from "@/types/network";
 
 const DisplaySelectedCriteria: React.FC<PropsWithChildren<ValueContainerProps<SelectOptionType, true>>> = memo(
   (props) => {
@@ -32,7 +31,7 @@ const DisplaySelectedCriteria: React.FC<PropsWithChildren<ValueContainerProps<Se
 
 const SpecificBoardGameCriteriaInput: React.FC<{ parentPath: string, onRemove?: () => void }> = ({ parentPath, onRemove }) => {
   const form = useFormField()
-  const [selectedGameBoard, setSelectedGameBoard] = useState<MultiValue<SelectOptionType>>()
+  const [selectedGameBoard, setSelectedGameBoard] = useState<MultiValue<GameOptionType>>()
   const gameListDisplay: string = useMemo(() => selectedGameBoard?.map((game) => game.label).join(', ') || '-', [selectedGameBoard])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -40,29 +39,7 @@ const SpecificBoardGameCriteriaInput: React.FC<{ parentPath: string, onRemove?: 
 
   const { data: gamesData, isLoading } = useMultiGameDetail(gameCodes)
 
-  const loadGameOptions = async (search: string, loadedOptions: any, pagination?: Pagination) => {
-    const payload = { ...pagination }
-    if (search) payload.keyword = search
-
-    try {
-      const response = await getGameList({ pagination: { ...payload } })
-      const newOptions = response.data.map((game) => ({ value: game.game_code, label: `${game.name} ${game.cafe_name}` }))
-
-      return {
-        options: [...loadedOptions, ...newOptions],
-        hasMore: (response.pagination.total_page || 1) < (response.pagination.page || 1),
-        additional: response.pagination
-      }
-    } catch (error) {
-      return {
-        options: loadedOptions,
-        hasMore: (pagination?.total_page || 1) < (pagination?.page || 1),
-        additional: pagination
-      }
-    }
-  }
-
-  const handleGameBoardChange = (newValue: MultiValue<SelectOptionType>, callBack: (data: any) => void) => {
+  const handleGameBoardChange = (newValue: MultiValue<GameOptionType>, callBack: (data: any) => void) => {
     const boardList = newValue.map((value) => value.value)
 
     callBack(boardList)
@@ -101,7 +78,7 @@ const SpecificBoardGameCriteriaInput: React.FC<{ parentPath: string, onRemove?: 
                   </Typography>
                 </FormLabel>
                 <FormControl>
-                  <AsyncPaginate
+                  <SelectBoardGame<true>
                     id={field.name}
                     isLoading={(!gamesData && isLoading) ? true : undefined}
                     components={{
@@ -112,7 +89,6 @@ const SpecificBoardGameCriteriaInput: React.FC<{ parentPath: string, onRemove?: 
                     hideSelectedOptions={false}
                     isMulti
                     value={selectedGameBoard}
-                    loadOptions={loadGameOptions}
                     closeMenuOnSelect={false}
                     placeholder='Select game board'
                     onChange={(newValue) => handleGameBoardChange(newValue, field.onChange)}

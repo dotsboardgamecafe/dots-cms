@@ -33,7 +33,7 @@ const PrizeForm: React.FC<{ tournamentBadges?: TournamentDetailType['tournament_
     if (search) payload.keyword = search
 
     try {
-      const response = await getBadges({ pagination: { ...payload }, query: { badge_category: 'tournament', status: 'active' } })
+      const response = await getBadges({ pagination: { ...payload, limit: 30 }, query: { badge_category: 'tournament', status: 'active' } })
       const groupedBadges = groupBy(response.data, (badgeData) => badgeData.parent_code)
       const newOptions = Object.keys(groupedBadges).map((badgeGroupKey) => {
         const badgeGroupData = groupedBadges[badgeGroupKey]
@@ -44,17 +44,19 @@ const PrizeForm: React.FC<{ tournamentBadges?: TournamentDetailType['tournament_
           label: generalBadgeData.name,
           data: badgeGroupData
         }
-      })
+      }) as unknown
+
+      const maxPage: number = Math.ceil((response.pagination.count || 0) / (response.pagination.limit || 0))
 
       return {
-        options: [...loadedOptions, ...newOptions],
-        hasMore: (response.pagination.total_page || 1) < (response.pagination.page || 1),
-        additional: response.pagination
+        options: newOptions as TournamentOption[],
+        hasMore: (maxPage) > (response.pagination.page || 1),
+        additional: { ...response.pagination, page: (response.pagination.page || 0) + 1 }
       }
     } catch (error) {
       return {
-        options: loadedOptions,
-        hasMore: (pagination?.total_page || 1) < (pagination?.page || 1),
+        options: [],
+        hasMore: (Math.ceil((pagination?.count || 0) / (pagination?.limit || 0))) > (pagination?.page || 1),
         additional: pagination
       }
     }

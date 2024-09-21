@@ -8,7 +8,6 @@ import { useForm } from 'react-hook-form';
 import { SingleValue } from "react-select";
 import { z } from 'zod';
 
-import { getGameList } from "@/lib/api/games";
 import { updateRoom } from '@/lib/api/room';
 
 import { Button } from '@/components/ui/Buttons';
@@ -16,8 +15,7 @@ import DateTime from '@/components/ui/DateTime';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
 import InputNumber from '@/components/ui/Input/Number';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/Input/RadioGroup';
-import { SelectOptionType } from "@/components/ui/Input/SelectMultiple";
-import SelectAsync from "@/components/ui/Input/SelectMultiple/async";
+import SelectBoardGame, { GameOptionType } from "@/components/ui/Input/SelectMultiple/SelectBoardGame";
 import SelectGameMasters from "@/components/ui/Input/SelectMultiple/SelectGameMasters";
 import Text from '@/components/ui/Input/Text';
 import Textarea from '@/components/ui/Input/TextArea';
@@ -26,19 +24,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from "@/components/ui/Toast/use-toast";
 import Typography from '@/components/ui/Typography';
 
-import { Pagination } from "@/types/network";
 import { AddRoomPayload, AddRoomSchema, RoomDetailType } from '@/types/room';
 
 type Props = {
   roomDetail: RoomDetailType;
 };
-
-type GameOptionType = SelectOptionType & {
-  data: {
-    cafe_name: string
-    cafe_code: string
-  }
-}
 
 const EditRoomForm = ({ roomDetail }: Props) => {
   const [selectedGameBoard, setSelectedGameBoard] = useState<SingleValue<GameOptionType>>(roomDetail ? { value: roomDetail.game_code, label: `${roomDetail.game_name} ${roomDetail.cafe_name}`, data: { cafe_name: roomDetail.cafe_name, cafe_code: roomDetail.cafe_code } } : null)
@@ -118,31 +108,8 @@ const EditRoomForm = ({ roomDetail }: Props) => {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const loadGameOptions = async (search: string, loadedOptions: any, pagination?: Pagination) => {
-    const payload = { ...pagination }
-    if (search) payload.keyword = search
-
-    try {
-      const response = await getGameList({ pagination: { ...payload }, query: { status: 'active' } })
-      const newOptions = response.data.map((game) => ({ value: game.game_code, label: `${game.name} ${game.cafe_name}`, data: game }))
-
-      return {
-        options: [...loadedOptions, ...newOptions],
-        hasMore: (response.pagination.total_page || 1) < (response.pagination.page || 1),
-        additional: response.pagination
-      }
-    } catch (error) {
-      return {
-        options: loadedOptions,
-        hasMore: (pagination?.total_page || 1) < (pagination?.page || 1),
-        additional: pagination
-      }
-    }
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleGameBoardChange = (newValue: SingleValue<GameOptionType>, callBack: (data: any) => void) => {
-    form.setValue('location', newValue?.data.cafe_code || '')
+    form.setValue('location', newValue?.data?.cafe_code || '')
     callBack(newValue?.value)
     setSelectedGameBoard(newValue)
   }
@@ -222,8 +189,7 @@ const EditRoomForm = ({ roomDetail }: Props) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <SelectAsync<false, GameOptionType>
-                      loadOptions={loadGameOptions}
+                    <SelectBoardGame<false>
                       placeholder='Select game board'
                       value={selectedGameBoard}
                       onChange={(newValue) => handleGameBoardChange(newValue, field.onChange)}
@@ -298,7 +264,7 @@ const EditRoomForm = ({ roomDetail }: Props) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Text value={selectedGameBoard?.data.cafe_name} disabled />
+                    <Text value={selectedGameBoard?.data?.cafe_name} disabled />
                     {/* <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger>
                         <SelectValue aria-label={field.value} placeholder='Select Location'>
@@ -413,7 +379,7 @@ const EditRoomForm = ({ roomDetail }: Props) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Upload onChange={field.onChange} value={field.value} description="Suggested Resolution 960 x 270 px" />
+                    <Upload onChange={field.onChange} value={field.value} description="Suggested Resolution 960 x 540 px" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -430,7 +396,7 @@ const EditRoomForm = ({ roomDetail }: Props) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Textarea note='Max 100 characters' maxLength={100} placeholder='Game Description...' className='min-h-[225px]' {...field} />
+                    <Textarea placeholder='Game Description...' className='min-h-[225px]' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

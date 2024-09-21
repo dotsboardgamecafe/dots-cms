@@ -4,13 +4,10 @@ import dayjsFormats from 'dayjs/plugin/advancedFormat';
 import { useState } from "react"
 import { SingleValue } from "react-select"
 
-import { getGameList } from "@/lib/api/games"
-
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, useFormField } from "@/components/ui/Form"
 import { DateRangePicker } from "@/components/ui/Input/DateRange"
 import InputNumber from "@/components/ui/Input/Number"
-import { SelectOptionType } from "@/components/ui/Input/SelectMultiple"
-import SelectAsync from "@/components/ui/Input/SelectMultiple/async"
+import SelectBoardGame, { GameOptionType } from "@/components/ui/Input/SelectMultiple/SelectBoardGame";
 import Text from "@/components/ui/Input/Text"
 import Textarea from "@/components/ui/Input/TextArea"
 import TimeRangeInput from "@/components/ui/Input/TimeRangeInput"
@@ -18,15 +15,9 @@ import Upload from "@/components/ui/Input/Upload"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select"
 import Typography from "@/components/ui/Typography"
 
-import { GameType } from "@/types/game"
-import { Pagination } from "@/types/network"
 import { TournamentDetailType } from "@/types/tournament";
 
 dayjs.extend(dayjsFormats)
-
-type GameOptionType = SelectOptionType & {
-  data: Partial<GameType>,
-}
 
 const TournamentInfoForm: React.FC<{ tournamentDetail?: TournamentDetailType }> = ({ tournamentDetail }) => {
   const [selectedGameBoard, setSelectedGameBoard] = useState<SingleValue<GameOptionType>>(tournamentDetail ? { value: tournamentDetail.game_code, label: `${tournamentDetail.game_name} ${tournamentDetail.cafe_name}`, data: { cafe_name: tournamentDetail.cafe_name } } : null)
@@ -34,31 +25,8 @@ const TournamentInfoForm: React.FC<{ tournamentDetail?: TournamentDetailType }> 
   const form = useFormField()
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const loadGameOptions = async (search: string, loadedOptions: any, pagination?: Pagination) => {
-    const payload = { ...pagination }
-    if (search) payload.keyword = search
-
-    try {
-      const response = await getGameList({ pagination: { ...payload }, query: { status: 'active' } })
-      const newOptions = response.data.map((game) => ({ value: game.game_code, label: `${game.name} ${game.cafe_name}`, data: game }))
-
-      return {
-        options: [...loadedOptions, ...newOptions],
-        hasMore: (response.pagination.total_page || 1) < (response.pagination.page || 1),
-        additional: response.pagination
-      }
-    } catch (error) {
-      return {
-        options: loadedOptions,
-        hasMore: (pagination?.total_page || 1) < (pagination?.page || 1),
-        additional: pagination
-      }
-    }
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleGameBoardChange = (newValue: SingleValue<GameOptionType>, callBack: (data: any) => void) => {
-    form.setValue('tournament_info.location', newValue?.data.cafe_code)
+    form.setValue('tournament_info.location', newValue?.data?.cafe_code)
     callBack(newValue?.value)
     setSelectedGameBoard(newValue)
   }
@@ -94,8 +62,7 @@ const TournamentInfoForm: React.FC<{ tournamentDetail?: TournamentDetailType }> 
               </Typography>
             </FormLabel>
             <FormControl>
-              <SelectAsync<false, GameOptionType>
-                loadOptions={loadGameOptions}
+              <SelectBoardGame<false>
                 placeholder='Select game board'
                 value={selectedGameBoard}
                 onChange={(newValue) => handleGameBoardChange(newValue, field.onChange)}
@@ -217,7 +184,7 @@ const TournamentInfoForm: React.FC<{ tournamentDetail?: TournamentDetailType }> 
           </Typography>
         </FormLabel>
         <FormControl>
-          <Text value={selectedGameBoard?.data.cafe_name || ''} placeholder="Please select the game board" disabled />
+          <Text value={selectedGameBoard?.data?.cafe_name || ''} placeholder="Please select the game board" disabled />
         </FormControl>
         <FormMessage />
       </FormItem>
@@ -234,7 +201,7 @@ const TournamentInfoForm: React.FC<{ tournamentDetail?: TournamentDetailType }> 
               </Typography>
             </FormLabel>
             <FormControl>
-              <Upload value={field.value} onChange={field.onChange} description="Suggested Resolution 960 x 270 px" />
+              <Upload value={field.value} onChange={field.onChange} description="Suggested Resolution 960 x 540 px" />
             </FormControl>
             <FormMessage />
           </FormItem>

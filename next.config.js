@@ -10,7 +10,7 @@ const nextConfig = {
 
   reactStrictMode: true,
   swcMinify: true,
-
+  output: 'standalone',
   webpack(config) {
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule) =>
@@ -59,6 +59,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'example.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'dots-production.s3.ap-southeast-1.amazonaws.com/dots/uploads'
       }
     ]
   }

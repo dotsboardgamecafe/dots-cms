@@ -127,7 +127,8 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
         value: {
           game_code: [],
           need_gm: true,
-          total_played: 0
+          total_played: 0,
+          booking_price: 0
         }
       })
       case 'total_spend': return ({

@@ -90,7 +90,8 @@ export const badgePostPayloadSchema = z.object({
       z.object({
         game_code: z.string().array().min(1, 'You need to select the game'),
         need_gm: z.boolean({ required_error: 'You need to select the GM option' }),
-        total_played: z.number({ required_error: 'You need to input the number of played' }).min(1, 'You need to input the number of played')
+        total_played: z.number({ required_error: 'You need to input the number of played' }).min(1, 'You need to input the number of played'),
+        booking_price: z.number().optional()
       })
     ).or(
       z.object({

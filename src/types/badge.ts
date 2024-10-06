@@ -32,6 +32,7 @@ export type BadgeSpesificGameBoardCriteriaValue = {
   game_code: string[]
   need_gm: boolean
   total_played: number
+  booking_price?: number
 }
 
 export type BadgeType<T = BadgeTimeLimitCriteriaValue | BadgeTotalSpendCriteriaValue | BadgeSpesificGameBoardCriteriaValue | BadgeTournamentWonCriteriaValue | BadgePlayingGamesCriteriaValue | { position: number }> = {

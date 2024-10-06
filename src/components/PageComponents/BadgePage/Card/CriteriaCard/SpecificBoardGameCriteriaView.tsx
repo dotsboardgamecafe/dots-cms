@@ -43,6 +43,16 @@ const SpecificBoardGameCriteriaView: React.FC<Props> = ({ data }) => {
             {data.value.total_played}
           </Typography>
         </section>
+        {data.value.booking_price && (
+          <section className='flex gap-2'>
+            <Typography variant='paragraph-l-regular' className='flex-grow basis-0'>
+              Booking Price
+            </Typography>
+            <Typography variant='paragraph-xl-regular' className='capitalize flex-grow basis-0'>
+              {data.value.booking_price}
+            </Typography>
+          </section>
+        )}
       </CardContent>
     </Card>
   )

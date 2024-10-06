@@ -145,17 +145,36 @@ const SpecificBoardGameCriteriaInput: React.FC<{ parentPath: string, onRemove?: 
             )}
           />
         </section>
-        <FormItem className="space-y-3">
-          <FormLabel>
-            <Typography variant='paragraph-l-medium'>
-              Board Game List
-            </Typography>
-          </FormLabel>
-          <FormControl>
-            <Text placeholder='Enter badge name' value={gameListDisplay} disabled />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
+        <section className="flex flex-row flex-nowrap gap-6">
+          <FormItem className="space-y-3">
+            <FormLabel>
+              <Typography variant='paragraph-l-medium'>
+                Board Game List
+              </Typography>
+            </FormLabel>
+            <FormControl>
+              <Text placeholder='Enter badge name' value={gameListDisplay} disabled />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+          <FormField
+            control={form.control}
+            name={`${parentPath}.booking_price`}
+            render={({ field }) => (
+              <FormItem className="space-y-3 flex-grow basis-0">
+                <FormLabel>
+                  <Typography variant='paragraph-l-medium'>
+                    Booking Price
+                  </Typography>
+                </FormLabel>
+                <FormControl>
+                  <InputNumber prefixIcon='Rp. ' placeholder='Enter booking price' value={field.value || 0} onChange={(event) => field.onChange(Number(event.target.value))} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </section>
       </CardContent>
     </Card >
   )

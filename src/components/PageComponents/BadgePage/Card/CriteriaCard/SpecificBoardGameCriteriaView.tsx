@@ -46,7 +46,7 @@ const SpecificBoardGameCriteriaView: React.FC<Props> = ({ data }) => {
         {data.value.booking_price && (
           <section className='flex gap-2'>
             <Typography variant='paragraph-l-regular' className='flex-grow basis-0'>
-              Booking Price
+              Minimum Booking Price
             </Typography>
             <Typography variant='paragraph-xl-regular' className='capitalize flex-grow basis-0'>
               {data.value.booking_price}

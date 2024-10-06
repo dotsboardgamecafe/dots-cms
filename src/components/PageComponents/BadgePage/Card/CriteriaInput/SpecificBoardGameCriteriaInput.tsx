@@ -164,11 +164,11 @@ const SpecificBoardGameCriteriaInput: React.FC<{ parentPath: string, onRemove?: 
               <FormItem className="space-y-3 flex-grow basis-0">
                 <FormLabel>
                   <Typography variant='paragraph-l-medium'>
-                    Booking Price
+                    Minimum Booking Price
                   </Typography>
                 </FormLabel>
                 <FormControl>
-                  <InputNumber prefixIcon='Rp. ' placeholder='Enter booking price' value={field.value || 0} onChange={(event) => field.onChange(Number(event.target.value))} />
+                  <InputNumber prefixIcon='Rp. ' placeholder='Enter minimum booking price' value={field.value || 0} onChange={(event) => field.onChange(Number(event.target.value))} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

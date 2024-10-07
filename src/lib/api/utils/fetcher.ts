@@ -69,6 +69,7 @@ const fetcher = async <Response>(endpointKey: EndpointKey, options?: ApiOptions)
 			if (response.stat_msg.toLowerCase() === 'token is invalid') {
 				redirect('/login?err=expired_session');
 			}
+			return response
 		} else {
 			// if client rendered we can safely use throw
 

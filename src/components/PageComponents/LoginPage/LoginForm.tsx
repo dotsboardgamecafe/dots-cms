@@ -21,40 +21,40 @@ import { LoginPayload, LoginSchema } from '@/types/users';
 const LoginForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [ loading, setLoading ] = useState( false );
+  const [loading, setLoading] = useState(false);
 
-  useEffect( () => {
-    if ( searchParams.get( 'err' ) === 'expired_session' ) {
-      form.setError( 'root', { message: 'Session expired. Please login again' } );
+  useEffect(() => {
+    if (searchParams.get('err') === 'expired_session') {
+      form.setError('root', { message: 'Session expired. Please login again' });
     }
-  }, [ searchParams ] );
+  }, [searchParams]);
 
-  const form = useForm<LoginPayload>( {
+  const form = useForm<LoginPayload>({
     defaultValues: {
       email: '',
       password: '',
     },
-    resolver: zodResolver( LoginSchema ),
-  } );
+    resolver: zodResolver(LoginSchema),
+  });
 
-  const onSubmit = async ( data: LoginPayload ) => {
+  const onSubmit = async (data: LoginPayload) => {
     try {
-      setLoading( true );
-      const res = await login( data );
-      if ( res.stat_code === ResponseCode.ERROR ) throw res.stat_msg;
-      router.push( '/room' );
-    } catch ( error: any ) {
-      form.setError( 'root', { message: error || 'Something went wrong' } );
-      setLoading( false );
+      setLoading(true);
+      const res = await login(data);
+      if (res.stat_code === ResponseCode.ERROR) throw "Wrong Email/Password";
+      router.push('/room');
+    } catch (error: any) {
+      form.setError('root', { message: error || 'Something went wrong' });
+      setLoading(false);
     } finally {
-      setLoading( false );
+      setLoading(false);
     }
   };
 
 
   return (
-    <Form { ...form }>
-      <form onSubmit={ form.handleSubmit( onSubmit ) }>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
 
         <section>
           <section id='login-heading' className='flex flex-col mb-[30px]'>
@@ -69,9 +69,9 @@ const LoginForm = () => {
           <section id='login-form' className='flex flex-col gap-5'>
             <FormMessageRoot />
             <FormField
-              control={ form.control }
+              control={form.control}
               name="email"
-              render={ ( { field } ) => (
+              render={({ field }) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
                     <Typography variant='paragraph-l-medium'>
@@ -79,16 +79,16 @@ const LoginForm = () => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Text placeholder='Enter email address' value={ field.value } onChange={ field.onChange } />
+                    <Text placeholder='Enter email address' value={field.value} onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
-              ) }
+              )}
             />
             <FormField
-              control={ form.control }
+              control={form.control}
               name="password"
-              render={ ( { field } ) => (
+              render={({ field }) => (
                 <FormItem className="space-y-3">
                   <FormLabel>
                     <Typography variant='paragraph-l-medium'>
@@ -96,11 +96,11 @@ const LoginForm = () => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Password placeholder='Enter password' toggler value={ field.value } onChange={ field.onChange } />
+                    <Password placeholder='Enter password' toggler value={field.value} onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
-              ) }
+              )}
             />
             <div className='flex flex-row justify-between'>
               <Checkbox label='Remember me' />
@@ -110,7 +110,7 @@ const LoginForm = () => {
                 </Typography>
               </Link>
             </div>
-            <Button variant="default" size="lg" type='submit' loading={ loading }>
+            <Button variant="default" size="lg" type='submit' loading={loading}>
               <Typography variant='paragraph-l-bold' className='text-white'>
                 Log In
               </Typography>

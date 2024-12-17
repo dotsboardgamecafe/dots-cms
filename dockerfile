@@ -7,10 +7,10 @@ WORKDIR /app
 COPY package*.json ./
 COPY . .
 
+RUN yarn install
 RUN yarn build
 
 # PACKAGING STAGE
-
 FROM node:18-alpine AS packaging_stage
 
 WORKDIR /app

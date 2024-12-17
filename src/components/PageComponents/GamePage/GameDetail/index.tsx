@@ -2,7 +2,10 @@
 // type Props = PropsWithRef<PropsWithChildren>;
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 
+import ShowQrModal from '@/components/PageComponents/GamePage/GameDetail/ShowQRModal';
+import { Button } from '@/components/ui/Buttons';
 import NextImage from '@/components/ui/Image';
 import TextLabel from '@/components/ui/TextLabel';
 import Typography from '@/components/ui/Typography';
@@ -14,6 +17,8 @@ type Props = {
 };
 
 const GameDetail = ({ gameDetail }: Props) => {
+  const [isShowQR, setIsShowQR] = useState<boolean>(false)
+
   return (
     <div className='flex flex-row gap-6 flex-wrap'>
       <Image src={gameDetail.image_url || '/images/broken-image.png'} alt='room-banner' width={375} height={215} className='rounded-xl h-[215px] w-auto' />
@@ -52,7 +57,8 @@ const GameDetail = ({ gameDetail }: Props) => {
               </div>
             )} className='border-b border-gray-200 capitalize gap-2' />
           </section>
-          <section className='grid col-span-2'>
+          <section className='flex items-center gap-4 col-span-2'>
+            <Button variant='default' onClick={() => setIsShowQR(true)}>Show QR-Code</Button>
             <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
               <Link href={`/game/edit/${gameDetail.game_code}`}>
                 Click here to Edit
@@ -61,6 +67,7 @@ const GameDetail = ({ gameDetail }: Props) => {
           </section>
         </div>
       </div>
+      <ShowQrModal open={isShowQR} onOpenChange={(isOpen) => setIsShowQR(isOpen)} gameTitle={gameDetail.name} gameId={gameDetail.game_code} />
     </div>
   );
 };

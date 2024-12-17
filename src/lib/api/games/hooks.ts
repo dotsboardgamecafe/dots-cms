@@ -6,7 +6,7 @@ import fetcher, { ApiOptions } from '@/lib/api/utils/fetcher';
 
 import { useAsyncLoader, UseAsyncLoaderReturnType } from '@/helper/hooks/useAsyncLoader';
 
-import { GameType } from '@/types/game';
+import { GameType, QRType } from '@/types/game';
 import { ResponseType } from '@/types/network';
 
 
@@ -25,4 +25,12 @@ export const useMultiGameDetail = (gameCodes: GameType['game_code'][], options?:
   }, [gameCodes.length])
 
   return { ...fetchReturn, data: fetchReturn.data?.map((gameResponse) => gameResponse.data) || [] }
+}
+
+export const useGameQr = (gameCode: GameType['game_code'], options?: ApiOptions): UseAsyncLoaderReturnType<QRType> => {
+  const fetchReturn = useAsyncLoader<ResponseType<QRType>>(() => {
+    return fetcher<QRType>('getGameQR', { param: gameCode, ...options, requestOpt: { next: { tags: [`get-qr-codes-${gameCode}`] } } })
+  })
+
+  return { ...fetchReturn, data: fetchReturn.data?.data }
 }

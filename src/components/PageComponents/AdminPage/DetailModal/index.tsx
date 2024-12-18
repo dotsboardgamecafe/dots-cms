@@ -32,6 +32,7 @@ const AdminDetailModal = ({ open, onOpenChange, adminData, onEdit }: Props) => {
           <section className='flex flex-col gap-4 overflow-y-auto'>
             <TextLabel title='Username' value={adminData?.user_name} />
             <TextLabel title='Email Address' value={adminData?.email} />
+            <TextLabel title='Role' value={adminData?.role || '-'} />
             <TextLabel title='Phone Number' value={adminData?.phone_number || '-'} />
             <TextLabel title='Status' value={adminData?.status} className='capitalize' />
             <Separator />

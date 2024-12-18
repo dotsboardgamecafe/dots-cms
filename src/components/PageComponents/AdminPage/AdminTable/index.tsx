@@ -72,6 +72,17 @@ const AdminTable = ({ data, pagination }: Props) => {
         }
       },
       {
+        accessorKey: 'role',
+        header: 'Role',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original.role || '-'}
+            </Typography>
+          );
+        }
+      },
+      {
         accessorKey: 'phone_number',
         header: 'Phone Number',
         cell: ({ row }) => {

@@ -13,6 +13,7 @@ interface IBasePermissions {
 }
 
 export interface IPermissionsContextValue {
+  [key: string]: any
   room?: IBasePermissions & {
     setWinner?: boolean
   }

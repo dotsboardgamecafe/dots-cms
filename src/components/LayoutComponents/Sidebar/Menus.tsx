@@ -9,25 +9,25 @@ import { cn } from '@/lib/utils';
 import Typography from '@/components/ui/Typography';
 
 import SidebarMenus from '@/config/menus';
-import usePermissions from '@/helper/hooks/usePermissions';
+import { usePermissions } from '@/helper/context/permissionsContext';
 
 
 const Menus = () => {
   const [activeMenuGroup, setActiveMenuGroup] = useState<string>('')
   const pathName = usePathname();
-  const permissions = usePermissions();
+  const userPermissions = usePermissions();
 
   useEffect(() => {
     setActiveMenuGroup('')
   }, [pathName])
 
-  const hasPermission = (permission: string) => {
-    return permissions?.some((item) => item.includes(permission));
+  const hasPermission = (permission: string[]) => {
+    return permission.some((permissionRequirement) => Boolean(userPermissions[permissionRequirement]))
   };
   return (
     <ul className='sidebar-menu-container'>
       {SidebarMenus.map((menu, index) => {
-        if (!hasPermission(menu.permissions) && menu.permissions !== 'menu-group') return null;
+        if (!hasPermission(menu.permissions)) return null;
         const hasChild = !!(menu.child && menu.child.length > 0)
         const isChildActive = hasChild && menu.child?.some((childMenu) => pathName.includes(childMenu.href))
         const isActive = hasChild ? activeMenuGroup === menu.title : pathName.includes(menu.href);
@@ -54,7 +54,7 @@ const Menus = () => {
             {(hasChild && (isActive || isChildActive)) && (
               <ul className='sidebar-menu-container'>
                 {menu.child?.map((childMenu, childIndex) => {
-                  if (!hasPermission(childMenu.permissions) && childMenu.permissions !== 'menu-group') return null;
+                  if (!hasPermission(childMenu.permissions)) return null;
                   const isActive = pathName.includes(childMenu.href);
                   return (
                     <li className={cn(['sidebar-menu-item', isActive && 'active'])} key={`sidebar-child-${menu.permissions}-${childIndex}`}>

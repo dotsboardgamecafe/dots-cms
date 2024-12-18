@@ -15,6 +15,7 @@ import { useToast } from '@/components/ui/Toast/use-toast';
 import Typography from '@/components/ui/Typography';
 
 import { Positions } from '@/constant/winner_position';
+import { usePermissions } from '@/helper/context/permissionsContext';
 
 import { JoinedPlayersSchema } from '@/types/game';
 import { SetTournamentWinnerType, TournamentDetailType } from '@/types/tournament';
@@ -25,6 +26,8 @@ type Props = {
 };
 
 const TournamentPlayers = ({ players, badges }: Props) => {
+  const tournamentPermission = usePermissions().tournament
+
   const param = useParams();
   const { toast } = useToast();
   const form = useForm<z.infer<typeof JoinedPlayersSchema>>({
@@ -123,7 +126,7 @@ const TournamentPlayers = ({ players, badges }: Props) => {
                       name={`players.${index}.position`}
                       render={({ field }) => (
                         <FormControl>
-                          <Select defaultValue='na' value={`${field.value}`} onValueChange={(value) => field.onChange(+value)}>
+                          <Select disabled={!tournamentPermission?.setWinner} defaultValue='na' value={`${field.value}`} onValueChange={(value) => field.onChange(+value)}>
                             <SelectTrigger className="w-[100px]">
                               <SelectValue placeholder="N/A" />
                             </SelectTrigger>
@@ -146,11 +149,13 @@ const TournamentPlayers = ({ players, badges }: Props) => {
             }
           </TableBody>
         </Table>
-        <div className='flex justify-end mt-4'>
-          <Button type='submit'>
-            Submit Winner
-          </Button>
-        </div>
+        {tournamentPermission?.setWinner && (
+          <div className='flex justify-end mt-4'>
+            <Button type='submit'>
+              Submit Winner
+            </Button>
+          </div>
+        )}
       </form>
     </Form>
   );

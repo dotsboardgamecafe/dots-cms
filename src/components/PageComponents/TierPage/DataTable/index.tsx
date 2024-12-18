@@ -16,6 +16,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
 
+import { usePermissions } from '@/helper/context/permissionsContext';
+
 import { Pagination as PaginationType } from '@/types/network';
 import { TierType } from '@/types/tier';
 
@@ -28,102 +30,110 @@ type Props = {
 };
 
 const TierTable = ({ data, pagination }: Props) => {
+  const tierPermission = usePermissions().tier
+
   const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false);
   const [isOpenDetail, setIsOpenDetail] = useState<boolean>(false);
   const [selectedTier, setSelectedTier] = useState<TierType | undefined>();
-  const columns: ColumnDef<TierType>[] = useMemo(() => [
-    {
-      header: 'Name',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular' className='capitalize'>
-            {row.original.name}
-          </Typography>
-        );
-      }
-    },
-    {
-      header: 'Min Point',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular' className='capitalize'>
-            {row.original.min_point}
-          </Typography>
-        );
-      }
-    },
-    {
-      header: 'Max Point',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {row.original.max_point}
-          </Typography>
-        );
-      }
-    },
-    {
-      header: 'Description',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {row.original.description}
-          </Typography>
-        );
-      }
-    },
+  const columns: ColumnDef<TierType>[] = useMemo(() => {
+    const result: ColumnDef<TierType>[] = [
+      {
+        header: 'Name',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular' className='capitalize'>
+              {row.original.name}
+            </Typography>
+          );
+        }
+      },
+      {
+        header: 'Min Point',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular' className='capitalize'>
+              {row.original.min_point}
+            </Typography>
+          );
+        }
+      },
+      {
+        header: 'Max Point',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original.max_point}
+            </Typography>
+          );
+        }
+      },
+      {
+        header: 'Description',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original.description}
+            </Typography>
+          );
+        }
+      },
 
-    {
-      accessorKey: 'status',
-      accessorFn: (row) => row.status,
-      header: 'Status',
-      cell: ({ row }) => {
-        return (
-          <Select value={row.original.status || 'active'}
-            disabled
-            onValueChange={() => null}
-          >
-            <SelectTrigger variant='badge' className={cn(
-              {
-                'bg-error-50': row.original.status === 'inactive',
-                'bg-blue-50': row.original.status === ''
-              }
-            )}>
-              <SelectValue aria-label={row.original.status}>
-                <Typography variant='text-body-l-medium' className={cn(
-                  'capitalize',
-                  {
-                    'text-error-700': row.original.status === 'inactive',
-                    'text-blue-700': row.original.status === 'active'
-                  }
-                )}>
-                  {row.original.status || 'active'}
-                </Typography>
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent >
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="inactive">In-Active</SelectItem>
-            </SelectContent>
-          </Select>
-        );
-      }
-    },
-    {
-      id: 'action',
-      header: 'Action',
-      cell: ({ row }) => {
-        return (
-          <div className='flex flex-row items-center gap-4'>
-            <Button variant='link' onClick={() => { setIsOpenDetail(true); setSelectedTier(row.original); }}>
-              <Eye className='cursor-pointer' />
-            </Button>
-          </div>
-        );
-      }
+      {
+        accessorKey: 'status',
+        accessorFn: (row) => row.status,
+        header: 'Status',
+        cell: ({ row }) => {
+          return (
+            <Select value={row.original.status || 'active'}
+              disabled
+              onValueChange={() => null}
+            >
+              <SelectTrigger variant='badge' className={cn(
+                {
+                  'bg-error-50': row.original.status === 'inactive',
+                  'bg-blue-50': row.original.status === ''
+                }
+              )}>
+                <SelectValue aria-label={row.original.status}>
+                  <Typography variant='text-body-l-medium' className={cn(
+                    'capitalize',
+                    {
+                      'text-error-700': row.original.status === 'inactive',
+                      'text-blue-700': row.original.status === 'active'
+                    }
+                  )}>
+                    {row.original.status || 'active'}
+                  </Typography>
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent >
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="inactive">In-Active</SelectItem>
+              </SelectContent>
+            </Select>
+          );
+        }
+      },
+    ]
+
+    if (tierPermission?.detail) {
+      result.push({
+        id: 'action',
+        header: 'Action',
+        cell: ({ row }) => {
+          return (
+            <div className='flex flex-row items-center gap-4'>
+              <Button variant='link' onClick={() => { setIsOpenDetail(true); setSelectedTier(row.original); }}>
+                <Eye className='cursor-pointer' />
+              </Button>
+            </div>
+          );
+        }
+      })
     }
-  ]
-    , []);
+
+    return result
+  }, [tierPermission?.detail]);
 
   const table = useReactTable({
     data: data,

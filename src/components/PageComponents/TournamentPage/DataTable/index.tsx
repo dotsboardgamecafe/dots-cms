@@ -18,6 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
 
+import { usePermissions } from '@/helper/context/permissionsContext';
 import { checkIsPastDate, formatTournamentDate } from '@/helper/datetime';
 
 import { Pagination as PaginationType } from '@/types/network';
@@ -32,6 +33,8 @@ type Props = {
 };
 
 const TournamentTable = ({ data, pagination }: Props) => {
+  const tournamentPermission = usePermissions().tournament
+
   const [statusConfirmationModalOpen, setStatusConfirmationModalOpen] = useState<boolean>(false);
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<TournamentType>();
@@ -45,136 +48,149 @@ const TournamentTable = ({ data, pagination }: Props) => {
     return tournamentData.status
   }
 
-  const columns: ColumnDef<TournamentType>[] = useMemo(() => [
-    {
-      header: 'Tournament Title',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular' className='capitalize'>
-            {row.original.name}
-          </Typography>
-        );
-      }
-    },
-    {
-      header: 'Level',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular' className='capitalize'>
-            {row.original.difficulty}
-          </Typography>
-        );
-      }
-    },
-    {
-      header: 'Date',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {formatTournamentDate(row.original.start_date, row.original.end_date)}
-          </Typography>
-        );
-      }
-    },
-    {
-      header: 'Time',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {`${row.original.start_time} - ${row.original.end_time}`}
-          </Typography>
-        );
-      }
-    },
-    {
-      header: 'Location',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular' className='capitalize'>
-            {row.original.cafe_name}
-          </Typography>
-        );
-      }
-    },
-    {
-      header: 'Updated Slot',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {row.original.current_used_slot} / {row.original.player_slot} Players
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'status',
-      accessorFn: (row) => row.status,
-      header: 'Status',
-      cell: ({ row }) => {
-        return (
-          <Select value={getTournamentStatus(row.original)}
-            disabled={
-              row.original.status === 'closed' ||
-              (row.original.status === 'active' && row.original.current_used_slot > 0) ||
-              checkIsPastDate(dayjs(`${row.original.end_date} ${row.original.end_time}`))
-            }
-            onValueChange={() => {
-              setStatusConfirmationModalOpen(true);
-              setSelectedRow(row.original);
-            }}
-          >
-            <SelectTrigger variant='badge' className={cn(
-              {
-                'bg-error-50': getTournamentStatus(row.original) === 'inactive',
-                'bg-blue-50': getTournamentStatus(row.original) === 'active'
+  const columns: ColumnDef<TournamentType>[] = useMemo(() => {
+    const result: ColumnDef<TournamentType>[] = [
+      {
+        header: 'Tournament Title',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular' className='capitalize'>
+              {row.original.name}
+            </Typography>
+          );
+        }
+      },
+      {
+        header: 'Level',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular' className='capitalize'>
+              {row.original.difficulty}
+            </Typography>
+          );
+        }
+      },
+      {
+        header: 'Date',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {formatTournamentDate(row.original.start_date, row.original.end_date)}
+            </Typography>
+          );
+        }
+      },
+      {
+        header: 'Time',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {`${row.original.start_time} - ${row.original.end_time}`}
+            </Typography>
+          );
+        }
+      },
+      {
+        header: 'Location',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular' className='capitalize'>
+              {row.original.cafe_name}
+            </Typography>
+          );
+        }
+      },
+      {
+        header: 'Updated Slot',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original.current_used_slot} / {row.original.player_slot} Players
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'status',
+        accessorFn: (row) => row.status,
+        header: 'Status',
+        cell: ({ row }) => {
+          return (
+            <Select value={getTournamentStatus(row.original)}
+              disabled={
+                !tournamentPermission?.status ||
+                row.original.status === 'closed' ||
+                (row.original.status === 'active' && row.original.current_used_slot > 0) ||
+                checkIsPastDate(dayjs(`${row.original.end_date} ${row.original.end_time}`))
               }
-            )}>
-              <SelectValue aria-label={getTournamentStatus(row.original)}>
-                <Typography variant='text-body-l-medium' className={cn(
-                  'capitalize',
-                  {
-                    'text-error-700': getTournamentStatus(row.original) === 'inactive',
-                    'text-blue-700': getTournamentStatus(row.original) === 'active'
-                  }
-                )}>
-                  {getTournamentStatus(row.original)}
-                </Typography>
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent >
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="inactive">Close Registration</SelectItem>
-            </SelectContent>
-          </Select>
-        );
-      }
-    },
-    {
-      id: 'action',
-      header: 'Action',
-      cell: ({ row }) => {
-        return (
-          <div className='flex flex-row items-center gap-4'>
-            <Link href={`/tournament/view/${row.original.tournament_code}`} >
-              <Eye className='cursor-pointer' />
-            </Link>
-            <Link href={`/tournament/edit/${row.original.tournament_code}`} >
-              <Edit className='cursor-pointer' />
-            </Link>
-            {getTournamentStatus(row.original) !== 'closed' && !(getTournamentStatus(row.original) === 'active' && row.original.current_used_slot > 0) && (
-              <Button className='p-0' variant='link' onClick={() => {
-                setDeleteConfirmationModalOpen(true);
+              onValueChange={() => {
+                setStatusConfirmationModalOpen(true);
                 setSelectedRow(row.original);
-              }}>
-                <Trash className='cursor-pointer' />
-              </Button>
-            )}
-          </div>
-        );
-      }
+              }}
+            >
+              <SelectTrigger variant='badge' className={cn(
+                {
+                  'bg-error-50': getTournamentStatus(row.original) === 'inactive',
+                  'bg-blue-50': getTournamentStatus(row.original) === 'active'
+                }
+              )}>
+                <SelectValue aria-label={getTournamentStatus(row.original)}>
+                  <Typography variant='text-body-l-medium' className={cn(
+                    'capitalize',
+                    {
+                      'text-error-700': getTournamentStatus(row.original) === 'inactive',
+                      'text-blue-700': getTournamentStatus(row.original) === 'active'
+                    }
+                  )}>
+                    {getTournamentStatus(row.original)}
+                  </Typography>
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent >
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="inactive">Close Registration</SelectItem>
+              </SelectContent>
+            </Select>
+          );
+        }
+      },
+    ]
+
+    if (tournamentPermission?.detail || tournamentPermission?.update || tournamentPermission?.delete) {
+      result.push({
+        id: 'action',
+        header: 'Action',
+        cell: ({ row }) => {
+          return (
+            <div className='flex flex-row items-center gap-4'>
+              {tournamentPermission.detail && (
+                <Link href={`/tournament/view/${row.original.tournament_code}`} >
+                  <Eye className='cursor-pointer' />
+                </Link>
+              )}
+              {tournamentPermission.update && (
+                <Link href={`/tournament/edit/${row.original.tournament_code}`} >
+                  <Edit className='cursor-pointer' />
+                </Link>
+              )}
+              {tournamentPermission.delete && (
+                getTournamentStatus(row.original) !== 'closed' && !(getTournamentStatus(row.original) === 'active' && row.original.current_used_slot > 0) && (
+                  <Button className='p-0' variant='link' onClick={() => {
+                    setDeleteConfirmationModalOpen(true);
+                    setSelectedRow(row.original);
+                  }}>
+                    <Trash className='cursor-pointer' />
+                  </Button>
+                )
+              )}
+            </div>
+          );
+        }
+      })
     }
-  ]
-    , []);
+
+    return result
+  }, [tournamentPermission?.detail, tournamentPermission?.delete, tournamentPermission?.status, tournamentPermission?.update]);
 
   const table = useReactTable({
     data: data,
@@ -195,14 +211,16 @@ const TournamentTable = ({ data, pagination }: Props) => {
     <div className='flex flex-col gap-6'>
       <section className='table-action'>
         <Search />
-        <Link href='/tournament/add'>
-          <button className="rounded-[8px] gap-[8px] px-5 py-3 bg-button-midnight-black flex flex-row items-center text-nowrap">
-            <AddCircle className='text-white' />
-            <Typography variant='paragraph-l-bold' className='text-white'>
-              Add New Tournament
-            </Typography>
-          </button>
-        </Link>
+        {tournamentPermission?.add && (
+          <Link href='/tournament/add'>
+            <button className="rounded-[8px] gap-[8px] px-5 py-3 bg-button-midnight-black flex flex-row items-center text-nowrap">
+              <AddCircle className='text-white' />
+              <Typography variant='paragraph-l-bold' className='text-white'>
+                Add New Tournament
+              </Typography>
+            </button>
+          </Link>
+        )}
         <button className="rounded-[8px] gap-[8px] px-5 py-3 border-gray-300 border flex flex-row items-center text-nowrap" onClick={() => setIsOpenFilter(true)}>
           <Setting4 />
           <Typography variant='paragraph-l-bold'>

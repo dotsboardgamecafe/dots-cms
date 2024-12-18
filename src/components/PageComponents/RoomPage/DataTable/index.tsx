@@ -5,7 +5,7 @@ import dayjsFormats from 'dayjs/plugin/advancedFormat';
 import { AddCircle, Edit, Eye, Setting4, Trash } from 'iconsax-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -19,6 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
 
+import { usePermissions } from '@/helper/context/permissionsContext';
 import { formatTimeHourMinutes } from '@/helper/datetime';
 import { snakeCaseToString } from '@/helper/string';
 
@@ -34,183 +35,198 @@ type Props = {
 };
 
 const RoomTable = ({ data, pagination }: Props) => {
+  const roomPermission = usePermissions().room
+
   const [statusConfirmationModalOpen, setStatusConfirmationModalOpen] = useState<boolean>(false);
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<RoomType>();
   const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false)
 
-  const getRoomStatus = (roomData: RoomType): string => {
+  const getRoomStatus = useCallback((roomData: RoomType): string => {
     if (roomData.status !== 'active') return roomData.status
     const isAlreadyPast = checkIsPastDate(dayjs(`${roomData.end_date} ${roomData.end_time}`))
     if (isAlreadyPast) return 'inactive'
     return roomData.status
-  }
+  }, [])
 
   function checkIsPastDate(date: dayjs.Dayjs): boolean {
     return dayjs(date).isBefore(dayjs())
   }
 
-  const columns: ColumnDef<RoomType>[] = useMemo(() => [
-    {
-      accessorKey: 'type',
-      header: 'Room Type',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular' className='capitalize'>
-            {snakeCaseToString(row.original.room_type)}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'gameName',
-      header: 'Game Name',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular' className='capitalize'>
-            {row.original.name}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'date',
-      header: 'Date',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {dayjs(row.original.start_date).format('ddd, DD MMM YYYY')}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'time',
-      header: 'Time',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {formatTimeHourMinutes(row.original.start_time)} - {formatTimeHourMinutes(row.original.end_time)}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'location',
-      header: 'Location',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {row.original.cafe_name}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'level',
-      header: 'Level',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular' className='capitalize'>
-            {row.original.difficulty}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'slot',
-      header: 'Updated Slot',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {row.original.current_used_slot} / {row.original.maximum_participant}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'gameMaster',
-      header: 'Game Master',
-      cell: ({ row }) => {
-        return (
-          <div className='flex flex-row items-center gap-[10px]'>
-            <Image width={36} height={36} src={row.original.game_master_image_url || '/images/avatar-not-found.png'} alt='profile image' className='rounded-full' />
-            <Typography variant='paragraph-l-regular'>
-              {row.original.game_master_name}
+  const columns: ColumnDef<RoomType>[] = useMemo(() => {
+    const result: ColumnDef<RoomType>[] = [
+      {
+        accessorKey: 'type',
+        header: 'Room Type',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular' className='capitalize'>
+              {snakeCaseToString(row.original.room_type)}
             </Typography>
-          </div>
-        );
-      }
-    },
-    {
-      accessorKey: 'status',
-      accessorFn: (row) => row.status,
-      header: 'Status',
-      cell: ({ row }) => {
-        return (
-          <Select value={getRoomStatus(row.original)}
-            disabled={
-              row.original.status === 'closed' ||
-              (row.original.status === 'active' && row.original.current_used_slot > 0) ||
-              checkIsPastDate(dayjs(`${row.original.end_date} ${row.original.end_time}`))
-            }
-            onValueChange={() => {
-              setStatusConfirmationModalOpen(true);
-              setSelectedRow(row.original);
-            }}
-          >
-            <SelectTrigger variant='badge' className={cn(
-              {
-                'bg-error-50': getRoomStatus(row.original) === 'inactive',
-                'bg-blue-50': getRoomStatus(row.original) === 'active'
+          );
+        }
+      },
+      {
+        accessorKey: 'gameName',
+        header: 'Game Name',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular' className='capitalize'>
+              {row.original.name}
+            </Typography>
+          )
+        }
+      },
+      {
+        accessorKey: 'date',
+        header: 'Date',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {dayjs(row.original.start_date).format('ddd, DD MMM YYYY')}
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'time',
+        header: 'Time',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {formatTimeHourMinutes(row.original.start_time)} - {formatTimeHourMinutes(row.original.end_time)}
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'location',
+        header: 'Location',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original.cafe_name}
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'level',
+        header: 'Level',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular' className='capitalize'>
+              {row.original.difficulty}
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'slot',
+        header: 'Updated Slot',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original.current_used_slot} / {row.original.maximum_participant}
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'gameMaster',
+        header: 'Game Master',
+        cell: ({ row }) => {
+          return (
+            <div className='flex flex-row items-center gap-[10px]'>
+              <Image width={36} height={36} src={row.original.game_master_image_url || '/images/avatar-not-found.png'} alt='profile image' className='rounded-full' />
+              <Typography variant='paragraph-l-regular'>
+                {row.original.game_master_name}
+              </Typography>
+            </div>
+          );
+        }
+      },
+      {
+        accessorKey: 'status',
+        accessorFn: (row) => row.status,
+        header: 'Status',
+        cell: ({ row }) => {
+          return (
+            <Select value={getRoomStatus(row.original)}
+              disabled={
+                !roomPermission?.status ||
+                row.original.status === 'closed' ||
+                (row.original.status === 'active' && row.original.current_used_slot > 0) ||
+                checkIsPastDate(dayjs(`${row.original.end_date} ${row.original.end_time}`))
               }
-            )}>
-              <SelectValue aria-label={getRoomStatus(row.original)}>
-                <Typography variant='text-body-l-medium' className={cn(
-                  'capitalize',
-                  {
-                    'text-error-700': getRoomStatus(row.original) === 'inactive',
-                    'text-blue-700': getRoomStatus(row.original) === 'active'
-                  }
-                )}>
-                  {getRoomStatus(row.original)}
-                </Typography>
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent >
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="inactive">Close Registration</SelectItem>
-            </SelectContent>
-          </Select>
-        );
-      }
-    },
-    {
-      id: 'action',
-      header: 'Action',
-      cell: ({ row }) => {
-        return (
-          <div className='flex flex-row items-center gap-4'>
-            <Link href={`/room/view/${row.original.room_code}`} >
-              <Eye className='cursor-pointer' />
-            </Link>
-            <Link href={`/room/edit/${row.original.room_code}`} >
-              <Edit className='cursor-pointer' />
-            </Link>
-            {(getRoomStatus(row.original) !== 'closed' && !(row.original.status === 'active' && row.original.current_used_slot > 0)) && (
-              <Button className='p-0' variant='link' onClick={() => {
-                setDeleteConfirmationModalOpen(true);
+              onValueChange={() => {
+                setStatusConfirmationModalOpen(true);
                 setSelectedRow(row.original);
-              }}>
-                <Trash className='cursor-pointer' />
-              </Button>
-            )}
-          </div>
-        );
-      }
+              }}
+            >
+              <SelectTrigger variant='badge' className={cn(
+                {
+                  'bg-error-50': getRoomStatus(row.original) === 'inactive',
+                  'bg-blue-50': getRoomStatus(row.original) === 'active'
+                }
+              )}>
+                <SelectValue aria-label={getRoomStatus(row.original)}>
+                  <Typography variant='text-body-l-medium' className={cn(
+                    'capitalize',
+                    {
+                      'text-error-700': getRoomStatus(row.original) === 'inactive',
+                      'text-blue-700': getRoomStatus(row.original) === 'active'
+                    }
+                  )}>
+                    {getRoomStatus(row.original)}
+                  </Typography>
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent >
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="inactive">Close Registration</SelectItem>
+              </SelectContent>
+            </Select>
+          );
+        }
+      },
+    ]
+
+    if (roomPermission?.detail || roomPermission?.delete || roomPermission?.update) {
+      result.push({
+        id: 'action',
+        header: 'Action',
+        cell: ({ row }) => {
+          return (
+            <div className='flex flex-row items-center gap-4'>
+              {roomPermission.detail && (
+                <Link href={`/room/view/${row.original.room_code}`} >
+                  <Eye className='cursor-pointer' />
+                </Link>
+              )}
+              {roomPermission.update && (
+                <Link href={`/room/edit/${row.original.room_code}`} >
+                  <Edit className='cursor-pointer' />
+                </Link>
+              )}
+              {roomPermission.delete && (
+                (getRoomStatus(row.original) !== 'closed' && !(row.original.status === 'active' && row.original.current_used_slot > 0)) && (
+                  <Button className='p-0' variant='link' onClick={() => {
+                    setDeleteConfirmationModalOpen(true);
+                    setSelectedRow(row.original);
+                  }}>
+                    <Trash className='cursor-pointer' />
+                  </Button>
+                )
+              )}
+            </div>
+          );
+        }
+      })
     }
-  ]
-    , []);
+
+    return result
+  }, [roomPermission?.delete, roomPermission?.detail, roomPermission?.update, roomPermission?.status, getRoomStatus]);
 
   const table = useReactTable({
     data: data,
@@ -231,14 +247,16 @@ const RoomTable = ({ data, pagination }: Props) => {
     <div className='flex flex-col gap-6'>
       <section className='table-action'>
         <Search />
-        <Link href='/room/add'>
-          <button className="rounded-[8px] gap-[8px] px-5 py-3 bg-button-midnight-black flex flex-row items-center text-nowrap">
-            <AddCircle className='text-white' />
-            <Typography variant='paragraph-l-bold' className='text-white'>
-              Add New Room
-            </Typography>
-          </button>
-        </Link>
+        {roomPermission?.add && (
+          <Link href='/room/add'>
+            <button className="rounded-[8px] gap-[8px] px-5 py-3 bg-button-midnight-black flex flex-row items-center text-nowrap">
+              <AddCircle className='text-white' />
+              <Typography variant='paragraph-l-bold' className='text-white'>
+                Add New Room
+              </Typography>
+            </button>
+          </Link>
+        )}
         <button className="rounded-[8px] gap-[8px] px-5 py-3 border-gray-300 border flex flex-row items-center text-nowrap" onClick={() => setIsOpenFilter(true)}>
           <Setting4 />
           <Typography variant='paragraph-l-bold'>

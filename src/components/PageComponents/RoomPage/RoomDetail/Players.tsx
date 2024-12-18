@@ -16,6 +16,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useToast } from '@/components/ui/Toast/use-toast';
 import Typography from '@/components/ui/Typography';
 
+import { usePermissions } from '@/helper/context/permissionsContext';
+
 import { JoinedPlayersSchema } from '@/types/game';
 import { RoomParticipant, SetRoomWinnerPayload } from '@/types/room';
 
@@ -24,6 +26,8 @@ type Props = {
 };
 
 const PlayersTab = ({ players }: Props) => {
+  const roomPermission = usePermissions().room
+
   const [isOpenConfirmation, setIsOpenConfirmation] = useState<boolean>(false)
   const [selectedPlayer, setSelectedPlayer] = useState<RoomParticipant | null>(null)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
@@ -105,13 +109,15 @@ const PlayersTab = ({ players }: Props) => {
                         <Typography variant='paragraph-l-regular' className='text-gray-900 capitalize'>
                           {player.additional_info || '-'}
                         </Typography>
-                        {!shouldDisableOption(1) && (
-                          <Button variant="default" className='absolute hidden top-[50%] translate-y-[-50%] right-2 gap-4' onClick={(event) => { event.preventDefault(); setIsOpenConfirmation(true); setSelectedIndex(index); setSelectedPlayer(player) }}>
-                            <MedalStar />
-                            <Typography variant='text-body-l-medium'>
-                              Set as a winner
-                            </Typography>
-                          </Button>
+                        {roomPermission?.setWinner && (
+                          !shouldDisableOption(1) && (
+                            <Button variant="default" className='absolute hidden top-[50%] translate-y-[-50%] right-2 gap-4' onClick={(event) => { event.preventDefault(); setIsOpenConfirmation(true); setSelectedIndex(index); setSelectedPlayer(player) }}>
+                              <MedalStar />
+                              <Typography variant='text-body-l-medium'>
+                                Set as a winner
+                              </Typography>
+                            </Button>
+                          )
                         )}
                       </div>
                     </TableCell>

@@ -123,7 +123,7 @@ export const EditAdminForm = ({ onClose, adminData }: Props) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Text placeholder='Enter username for the admin' value={field.value} onChange={field.onChange} />
+                <Text maxLength={15} placeholder='Enter username for the admin' value={field.value} onChange={field.onChange} />
               </FormControl>
               <FormMessage />
             </FormItem>

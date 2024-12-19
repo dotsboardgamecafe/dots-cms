@@ -46,6 +46,7 @@ export const AddAdminForm = ({ onClose }: Props) => {
 
     try {
       const res = await createAdmin(data)
+
       if (res.stat_code?.includes('ERR')) throw new Error(res.stat_msg)
       toast({
         title: 'Admin successfully added!',
@@ -111,7 +112,7 @@ export const AddAdminForm = ({ onClose }: Props) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Text placeholder='Enter username for the admin' value={field.value} onChange={field.onChange} />
+                <Text maxLength={15} placeholder='Enter username for the admin' value={field.value} onChange={field.onChange} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -20,6 +20,7 @@ import { Separator } from '@/components/ui/Separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
 
+import { usePermissions } from '@/helper/context/permissionsContext';
 import { formatDate } from '@/helper/datetime';
 
 import { Pagination as PaginationType } from '@/types/network';
@@ -34,6 +35,8 @@ type Props = {
 
 
 const RewardTable = ({ data, pagination, tiers }: Props) => {
+  const rewardPermission = usePermissions().rewards
+
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [detailModalOpen, setDetailModalOpen] = useState(false);
@@ -42,120 +45,128 @@ const RewardTable = ({ data, pagination, tiers }: Props) => {
 
   const [selectedRow, setSelectedRow] = useState<RewardType | null>(null);
 
-  const columns: ColumnDef<RewardType>[] = useMemo(() => [
-    {
-      accessorKey: 'name',
-      header: 'Voucher Reward',
-      cell: ({ row }) => {
-        return (
-          <div className='flex flex-row gap-2'>
-            {row.original.image_url && <Image src={row.original.image_url} width={73} height={36} alt='Voucher Image' />}
-            <Typography variant='paragraph-l-regular'>
-              {row.original.name}
-            </Typography>
-          </div>
-        );
-      }
-    },
-    {
-      accessorKey: 'category_type',
-      header: 'Category Voucher',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular' className='capitalize'>
-            {row.original.category_type}
-          </Typography>
-        );
-      }
-    },
-    {
-      header: 'Tier',
-      cell: ({ row }) => {
-        return (
-          <>
-            <div className='flex flex-row gap-2 flex-wrap'>
-              <div className='bg-gray-100 rounded-xl px-4'>
-                <Typography variant='paragraph-l-regular' >
-                  {row.original.Tier.name}
-                </Typography>
-              </div>
+  const columns: ColumnDef<RewardType>[] = useMemo(() => {
+    const result: ColumnDef<RewardType>[] = [
+      {
+        accessorKey: 'name',
+        header: 'Voucher Reward',
+        cell: ({ row }) => {
+          return (
+            <div className='flex flex-row gap-2'>
+              {row.original.image_url && <Image src={row.original.image_url} width={73} height={36} alt='Voucher Image' />}
+              <Typography variant='paragraph-l-regular'>
+                {row.original.name}
+              </Typography>
             </div>
-          </>
-        );
-      }
-    },
-    {
-      accessorKey: 'voucher_code',
-      header: 'Manual Code',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {row.original.voucher_code || '-'}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'expired_date',
-      header: 'Expire Date',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {formatDate(row.original.expired_date)}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'status',
-      header: 'Status',
-      cell: ({ row }) => {
-        return (
-          <Select value={row.original.status}
-            onValueChange={() => {
-              setSelectedRow(row.original)
-              setConfirmationModalOpen(true)
-            }}
-          >
-            <SelectTrigger variant='badge' className={cn(
-              {
-                'bg-error-50': row.original.status === 'inactive',
-                'bg-blue-50': row.original.status === 'active'
-              }
-            )}>
-              <SelectValue aria-label={row.original.status}>
-                <Typography variant='text-body-l-medium' className={cn(
-                  {
-                    'text-error-700': row.original.status === 'inactive',
-                    'text-blue-700': row.original.status === 'active'
-                  }, 'capitalize'
-                )}>
-                  {row.original.status}
-                </Typography>
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent >
-              <SelectItem value="Active">Active</SelectItem>
-              <SelectItem value="Closed">In-active</SelectItem>
-            </SelectContent>
-          </Select>
+          );
+        }
+      },
+      {
+        accessorKey: 'category_type',
+        header: 'Category Voucher',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular' className='capitalize'>
+              {row.original.category_type}
+            </Typography>
+          );
+        }
+      },
+      {
+        header: 'Tier',
+        cell: ({ row }) => {
+          return (
+            <>
+              <div className='flex flex-row gap-2 flex-wrap'>
+                <div className='bg-gray-100 rounded-xl px-4'>
+                  <Typography variant='paragraph-l-regular' >
+                    {row.original.Tier.name}
+                  </Typography>
+                </div>
+              </div>
+            </>
+          );
+        }
+      },
+      {
+        accessorKey: 'voucher_code',
+        header: 'Manual Code',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original.voucher_code || '-'}
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'expired_date',
+        header: 'Expire Date',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {formatDate(row.original.expired_date)}
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'status',
+        header: 'Status',
+        cell: ({ row }) => {
+          return (
+            <Select value={row.original.status}
+              disabled={!rewardPermission?.update}
+              onValueChange={() => {
+                setSelectedRow(row.original)
+                setConfirmationModalOpen(true)
+              }}
+            >
+              <SelectTrigger variant='badge' className={cn(
+                {
+                  'bg-error-50': row.original.status === 'inactive',
+                  'bg-blue-50': row.original.status === 'active'
+                }
+              )}>
+                <SelectValue aria-label={row.original.status}>
+                  <Typography variant='text-body-l-medium' className={cn(
+                    {
+                      'text-error-700': row.original.status === 'inactive',
+                      'text-blue-700': row.original.status === 'active'
+                    }, 'capitalize'
+                  )}>
+                    {row.original.status}
+                  </Typography>
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent >
+                <SelectItem value="Active">Active</SelectItem>
+                <SelectItem value="Closed">In-active</SelectItem>
+              </SelectContent>
+            </Select>
 
-        );
-      }
-    },
-    {
-      id: 'action',
-      header: 'Action',
-      cell: ({ row }) => {
-        return (
-          <div className='flex flex-row items-center gap-4'>
-            <Eye className='cursor-pointer' onClick={() => onViewDetail(row.original)} />
-            <Edit className='cursor-pointer' onClick={() => onEdit(row.original)} />
-          </div>
-        );
-      }
+          );
+        }
+      },
+    ]
+
+    if (rewardPermission?.update || rewardPermission?.detail) {
+      result.push({
+        id: 'action',
+        header: 'Action',
+        cell: ({ row }) => {
+          return (
+            <div className='flex flex-row items-center gap-4'>
+              {rewardPermission.detail && <Eye className='cursor-pointer' onClick={() => onViewDetail(row.original)} />}
+              {rewardPermission.update && <Edit className='cursor-pointer' onClick={() => onEdit(row.original)} />}
+            </div>
+          );
+        }
+      })
     }
-  ], []);
+
+    return result
+  }, [rewardPermission?.update, rewardPermission?.detail]);
 
   const onViewDetail = (data: RewardType) => {
     setSelectedRow(data);
@@ -185,13 +196,14 @@ const RewardTable = ({ data, pagination, tiers }: Props) => {
     <div className='flex flex-col gap-6'>
       <section className='table-action'>
         <Search />
-
-        <Button variant="default" size="lg" className='gap-2' onClick={() => setAddModalOpen(true)}>
-          <AddCircle className='text-white' />
-          <Typography variant='paragraph-l-bold' className='text-white'>
-            Add New Voucher
-          </Typography>
-        </Button>
+        {rewardPermission?.add && (
+          <Button variant="default" size="lg" className='gap-2' onClick={() => setAddModalOpen(true)}>
+            <AddCircle className='text-white' />
+            <Typography variant='paragraph-l-bold' className='text-white'>
+              Add New Voucher
+            </Typography>
+          </Button>
+        )}
         <Button variant="secondary" size="lg" className='w-[160px]' onClick={() => setFilterOpen(true)}>
           <Setting4 />
           <Typography variant='paragraph-l-bold'>

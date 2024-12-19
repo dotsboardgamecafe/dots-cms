@@ -9,6 +9,8 @@ import { Modal, ModalContent, ModalHeader } from '@/components/ui/Modal';
 import { Separator } from '@/components/ui/Separator';
 import Typography from '@/components/ui/Typography';
 
+import { usePermissions } from '@/helper/context/permissionsContext';
+
 import { TournamentBadgeType } from '@/types/badge';
 
 type Props = PropsWithRef<{
@@ -20,6 +22,7 @@ type Props = PropsWithRef<{
 
 const ViewTournamentBadgeDetailModal = ({ open, onOpenChange, badgeCode = '', onEdit }: Props) => {
   const { data: badgeDataList } = useTournamentBadgeDetail(open ? badgeCode : '')
+  const badgePermission = usePermissions().badge
 
   const badgeDataFirst = badgeDataList?.find((badge) => badge.badge_rules[0].value.position === 1)
   const badgeDataSecond = badgeDataList?.find((badge) => badge.badge_rules[0].value.position === 2)
@@ -103,13 +106,15 @@ const ViewTournamentBadgeDetailModal = ({ open, onOpenChange, badgeCode = '', on
               <Separator className='mt-1' />
             </section>
           </div>
-          <section>
-            <Button variant='link' className='p-0' onClick={onEdit}>
-              <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
-                Click here to Edit
-              </Typography>
-            </Button>
-          </section>
+          {badgePermission?.update_tournament_badge && (
+            <section>
+              <Button variant='link' className='p-0' onClick={onEdit}>
+                <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
+                  Click here to Edit
+                </Typography>
+              </Button>
+            </section>
+          )}
         </div>
       </ModalContent>
     </Modal>

@@ -8,6 +8,8 @@ import { Separator } from '@/components/ui/Separator';
 import TextLabel from '@/components/ui/TextLabel';
 import Typography from '@/components/ui/Typography';
 
+import { usePermissions } from '@/helper/context/permissionsContext';
+
 import { AdminType } from '@/types/admin';
 
 type Props = PropsWithRef<{
@@ -18,6 +20,8 @@ type Props = PropsWithRef<{
 }>;
 
 const AdminDetailModal = ({ open, onOpenChange, adminData, onEdit }: Props) => {
+  const adminPermission = usePermissions().admin
+
   return (
     <Modal open={open} onOpenChange={onOpenChange} >
       <ModalContent hideCloseIcon className='max-h-[90%] overflow-hidden flex flex-col'>
@@ -36,11 +40,13 @@ const AdminDetailModal = ({ open, onOpenChange, adminData, onEdit }: Props) => {
             <TextLabel title='Phone Number' value={adminData?.phone_number || '-'} />
             <TextLabel title='Status' value={adminData?.status} className='capitalize' />
             <Separator />
-            <Button variant='link' className='p-0 justify-start' onClick={onEdit}>
-              <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
-                Click here to Edit
-              </Typography>
-            </Button>
+            {adminPermission?.update && (
+              <Button variant='link' className='p-0 justify-start' onClick={onEdit}>
+                <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
+                  Click here to Edit
+                </Typography>
+              </Button>
+            )}
           </section>
         </div>
       </ModalContent>

@@ -41,7 +41,7 @@ const ShowQrModal = ({ open, onOpenChange, gameTitle, gameId }: Props) => {
           {(data && !isLoading && (
             <div className='flex flex-col gap-3 items-center'>
               <Image alt={`${gameId}-qr-code`} src={data} width="360" height="360" />
-              <a className='py-2 px-6 border-2 hover:bg-slate-200' href={data} download={`[QR Code] ${gameTitle}.jpeg`}>Download QR Code</a>
+              <a className='py-2 px-6 border-2 hover:bg-slate-200' href={data} download={`${gameTitle}.jpeg`}>Download QR Code</a>
             </div>
           ))}
         </section>

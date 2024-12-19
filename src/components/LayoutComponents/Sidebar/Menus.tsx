@@ -22,7 +22,7 @@ const Menus = () => {
   }, [pathName])
 
   const hasPermission = (permission: string[]) => {
-    return permission.some((permissionRequirement) => Boolean(userPermissions[permissionRequirement]))
+    return permission.some((permissionRequirement) => Boolean(userPermissions[permissionRequirement]?.view))
   };
   return (
     <ul className='sidebar-menu-container'>

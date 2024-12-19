@@ -5,6 +5,7 @@ import React from "react";
 import { cookiesHelper } from "@/helper";
 
 interface IBasePermissions {
+  view?: boolean
   add?: boolean
   update?: boolean
   delete?: boolean
@@ -49,8 +50,10 @@ export const PermissionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
   React.useEffect(() => {
     const getPermissionsObject = async () => {
       const permissionList = await cookiesHelper.getUserPermission()
+
       const permissionObject: IPermissionsContextValue = {
         admin: {
+          view: permissionList.includes('admin-get-list'),
           add: permissionList.includes('admin-add'),
           update: permissionList.includes('admin-update'),
           status: permissionList.includes('admin-update-status'),
@@ -58,6 +61,7 @@ export const PermissionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
         },
         badge: {
           add: permissionList.includes('badge-add'),
+          view: permissionList.includes('badge-get-list'),
           detail: permissionList.includes('badge-get-detail'),
           update: permissionList.includes('badge-update'),
           add_tournament_badge: permissionList.includes('add-tournament-badges'),
@@ -66,33 +70,39 @@ export const PermissionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
         },
         banner: {
           add: permissionList.includes('banner-add'),
+          view: permissionList.includes('banner-get-list'),
           detail: permissionList.includes('banner-get-detail'),
           update: permissionList.includes('banner-update'),
           delete: permissionList.includes('banner-delete'),
         },
         cafeManagement: {
+          view: permissionList.includes('cafe-get-list'),
           add: permissionList.includes('cafe-add'),
           detail: permissionList.includes('cafe-get-detail'),
           update: permissionList.includes('cafe-update')
         },
         mechanics: {
+          view: permissionList.includes('get-game-mechanics'),
           add: permissionList.includes('add-game-mechanics'),
           detail: permissionList.includes('get-detail-game-mechanics'),
           update: permissionList.includes('update-game-mechanics'),
           delete: permissionList.includes('delete-game-mechanics')
         },
         games: {
+          view: permissionList.includes('game-get-list'),
           detail: permissionList.includes('game-get-detail'),
           add: permissionList.includes('game-add'),
           update: permissionList.includes('game-update'),
           delete: permissionList.includes('game-delete')
         },
         rewards: {
+          view: permissionList.includes('reward-get-list'),
           detail: permissionList.includes('reward-get-detail'),
           add: permissionList.includes('reward-add'),
           update: permissionList.includes('reward-update')
         },
         room: {
+          view: permissionList.includes('rooms-get-list'),
           detail: permissionList.includes('rooms-get-detail'),
           add: permissionList.includes('rooms-add'),
           update: permissionList.includes('rooms-update'),
@@ -101,9 +111,11 @@ export const PermissionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
           delete: permissionList.includes('rooms-delete')
         },
         tier: {
+          view: permissionList.includes('tier-get-list'),
           detail: permissionList.includes('tier-get-detail')
         },
         tournament: {
+          view: permissionList.includes('tournament-get-list'),
           detail: permissionList.includes('tournament-get-detail'),
           add: permissionList.includes('tournament-add'),
           update: permissionList.includes('tournament-update'),
@@ -112,6 +124,7 @@ export const PermissionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
           delete: permissionList.includes('tournament-delete')
         },
         member: {
+          view: permissionList.includes('member-get-list'),
           detail: permissionList.includes('member-get-detail'),
           status: permissionList.includes('member-update-status'),
           delete: permissionList.includes('member-delete-account'),

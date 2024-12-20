@@ -115,7 +115,18 @@ export const badgePostPayloadSchema = z.object({
           })
         })
       )
-  }).array().min(1, 'You need to atleast select 1 badge criteria')
+  }).array()
+}).superRefine((formValue, ctx) => {
+  if (formValue.badge_category !== 'manual-gift' && !formValue.badge_rule.length) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.too_small,
+      type: 'array',
+      minimum: 1,
+      inclusive: true,
+      message: 'You need to atleast select 1 badge criteria',
+      path: ['badge_rule']
+    })
+  }
 })
 
 export type BadgePostPayloadType = z.infer<typeof badgePostPayloadSchema>

@@ -87,6 +87,13 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
     control: form.control,
   })
 
+  const badgeCategoryValue = form.watch('badge_category')
+  const shouldDisableCriteriaField: boolean = useMemo(() => badgeCategoryValue === 'manual-gift', [badgeCategoryValue])
+  const criteriaFieldPlaceholderDisplay: string = useMemo(() => {
+    if (!badgeCategoryValue) return 'Please select the category badge first'
+    return shouldDisableCriteriaField ? 'Required Admin to Submit' : 'Select criteria...'
+  }, [badgeCategoryValue, shouldDisableCriteriaField])
+
   const handleFormSubmit = (data: Partial<BadgePostPayloadType>) => {
     setIsSubmitting(true);
     onSubmit(data as BadgePostPayloadType)
@@ -172,6 +179,14 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
     criteriaFields.append(defaultData)
   }
 
+  function handleCategoryChanges(value: string) {
+    form.setValue('badge_category', value)
+    if (value !== 'manual-gift') return
+
+    setCriteriaMultiSelectValue([])
+    form.setValue('badge_rule', [])
+  }
+
   return (
     <Form {...form}>
       <div className='flex-grow overflow-auto'>
@@ -222,7 +237,7 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
+                    <Select value={field.value} onValueChange={handleCategoryChanges}>
                       <SelectTrigger id={field.name}>
                         <SelectValue aria-label={field.value} placeholder='Select Badge Category'>
                           <Typography variant='text-body-l-medium' className="capitalize" >
@@ -233,6 +248,7 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
                       <SelectContent>
                         <SelectItem value="play">Play</SelectItem>
                         <SelectItem value="spent">Spent</SelectItem>
+                        <SelectItem value="manual-gift">Manual/Gift</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -269,6 +285,7 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
                   </FormLabel>
                   <FormControl disableChildErrorWarning>
                     <SelectMultiple
+                      isDisabled={!badgeCategoryValue || shouldDisableCriteriaField}
                       id={field.name}
                       closeMenuOnSelect={false}
                       hideSelectedOptions={false}
@@ -279,6 +296,7 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
                       options={criteriaOptions}
                       value={criteriaMultiSelectValue}
                       onChange={handleCriteriaChanges}
+                      placeholder={criteriaFieldPlaceholderDisplay}
                     />
                   </FormControl>
                   <FormMessage disableChildErrorWarning />

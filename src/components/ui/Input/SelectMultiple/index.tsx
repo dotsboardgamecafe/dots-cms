@@ -23,7 +23,7 @@ const SelectMultiple = React.forwardRef<
       setIsClient(true)
     }, [])
     return (
-      <InputWrapper >
+      <InputWrapper className={cn('select', props.isDisabled && 'disabled')}>
         <Select<SelectOptionType, true> {...props}
           ref={ref}
           isMulti
@@ -60,7 +60,8 @@ const SelectMultiple = React.forwardRef<
               border: 'none',
               minHeight: '0px',
               borderColor: 'transparent',
-              boxShadow: 'none'
+              boxShadow: 'none',
+              cursor: 'pointer',
             }),
             valueContainer: (base) => ({
               ...base,
@@ -71,9 +72,10 @@ const SelectMultiple = React.forwardRef<
               padding: '0px',
               margin: '0px'
             }),
-            dropdownIndicator: (base) => ({
+            dropdownIndicator: (base, props) => ({
               ...base,
               padding: '0px',
+              display: props.isDisabled ? 'none' : 'flex',
             }),
             menu: (base) => ({
               ...base,

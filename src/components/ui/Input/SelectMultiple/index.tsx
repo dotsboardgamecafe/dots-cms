@@ -1,5 +1,5 @@
 'use client';
-import React, { memo, PropsWithChildren, ReactNode, useCallback, useRef } from 'react';
+import React, { memo, PropsWithChildren, ReactElement, ReactNode, useCallback, useRef } from 'react';
 import Select, { components, OptionProps, Options, ValueContainerProps } from 'react-select';
 
 import { cn } from '@/lib/utils';
@@ -99,7 +99,7 @@ const SelectMultiple = React.forwardRef<
     )
   });
 
-const DisplaySelectedValueNotMemoize = <T extends boolean = true>(props: PropsWithChildren<ValueContainerProps<SelectOptionType, T>>): ReactNode => {
+const DisplaySelectedValueNotMemoize = <T extends boolean = true>(props: PropsWithChildren<ValueContainerProps<SelectOptionType, T>>): ReactElement => {
   const renderValue = (selectedOptions: Options<unknown>) => {
     const isSelectedMore = selectedOptions.length > 1
     const selectedMoreDisplay = ` +${selectedOptions.length - 1}`
@@ -124,7 +124,7 @@ export function SelectOptionCheckBox<OptionType = SelectOptionType, isMulti exte
   )
 }
 
-export const SelectValueContainer = memo(<T extends boolean = true>({ children, renderValue, ...props }: PropsWithChildren<ValueContainerProps<any, T> & { renderValue: (options: Options<unknown>) => ReactNode }>): ReactNode => {
+export const SelectValueContainer = memo(<T extends boolean = true>({ children, renderValue, ...props }: PropsWithChildren<ValueContainerProps<any, T> & { renderValue: (options: Options<unknown>) => ReactNode }>): ReactElement => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { getValue, hasValue } = props
   const childrenLength = React.Children.count(children)

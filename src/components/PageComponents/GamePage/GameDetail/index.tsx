@@ -10,6 +10,8 @@ import NextImage from '@/components/ui/Image';
 import TextLabel from '@/components/ui/TextLabel';
 import Typography from '@/components/ui/Typography';
 
+import { usePermissions } from '@/helper/context/permissionsContext';
+
 import { GameType } from '@/types/game';
 
 type Props = {
@@ -18,6 +20,7 @@ type Props = {
 
 const GameDetail = ({ gameDetail }: Props) => {
   const [isShowQR, setIsShowQR] = useState<boolean>(false)
+  const gamePermission = usePermissions().games
 
   return (
     <div className='flex flex-row gap-6 flex-wrap'>
@@ -59,11 +62,13 @@ const GameDetail = ({ gameDetail }: Props) => {
           </section>
           <section className='flex items-center gap-4 col-span-2'>
             <Button variant='default' onClick={() => setIsShowQR(true)}>Show QR-Code</Button>
-            <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
-              <Link href={`/game/edit/${gameDetail.game_code}`}>
-                Click here to Edit
-              </Link>
-            </Typography>
+            {gamePermission?.update && (
+              <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
+                <Link href={`/game/edit/${gameDetail.game_code}`}>
+                  Click here to Edit
+                </Link>
+              </Typography>
+            )}
           </section>
         </div>
       </div>

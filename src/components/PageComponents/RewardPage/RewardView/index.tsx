@@ -3,12 +3,14 @@ import Image from 'next/image';
 import { Separator } from '@/components/ui/Separator';
 import Typography from '@/components/ui/Typography';
 
+import { usePermissions } from '@/helper/context/permissionsContext';
 import { formatDate } from '@/helper/datetime';
 
 import { RewardType } from '@/types/rewards';
 
 
 const RewardView = ({ data, onEdit }: { data: RewardType | null; onEdit: () => void; }) => {
+  const rewardPermission = usePermissions().rewards
 
   return (
     <>
@@ -43,13 +45,15 @@ const RewardView = ({ data, onEdit }: { data: RewardType | null; onEdit: () => v
           </Typography>
           <Separator className='mt-1' />
         </section>
-        <section className='flex flex-col  gap-1'>
-          <button onClick={onEdit} className='flex flex-col'>
-            <Typography variant='paragraph-l-regular' className='text-brand-blue-electric cursor-pointer'>
-              Click here to edit
-            </Typography>
-          </button>
-        </section>
+        {rewardPermission?.update && (
+          <section className='flex flex-col  gap-1'>
+            <button onClick={onEdit} className='flex flex-col'>
+              <Typography variant='paragraph-l-regular' className='text-brand-blue-electric cursor-pointer'>
+                Click here to edit
+              </Typography>
+            </button>
+          </section>
+        )}
       </div>
     </>
   );

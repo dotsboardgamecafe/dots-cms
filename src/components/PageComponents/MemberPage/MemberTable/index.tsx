@@ -3,7 +3,7 @@ import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReact
 import { Eye, ReceiptItem, Setting4, Trash } from 'iconsax-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { PropsWithRef, useEffect, useState } from 'react';
+import { PropsWithRef, useEffect, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -18,6 +18,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
 
+import { usePermissions } from '@/helper/context/permissionsContext';
+
 import { MemberType } from '@/types/member';
 import { Pagination as PaginationRes } from '@/types/network';
 
@@ -27,140 +29,155 @@ type Props = PropsWithRef<{
 }>;
 
 const MemberTable = ({ data, pagination }: Props) => {
+  const memberPermissions = usePermissions().member
+
   const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState<boolean>(false);
   const [changeStatusConfirmationModalOpen, setChangeStatusConfirmationModalOpen] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<MemberType>();
-  const columns: ColumnDef<MemberType>[] = [
-    {
-      accessorKey: 'username',
-      header: 'User Name',
-      cell: ({ row }) => {
-        return (
-          <section className='flex flex-row items-center gap-[10px]'>
-            <Image
-              src={row.original.image_url || '/images/avatar-not-found.png'}
-              alt={row.original.username + '-img-pic'}
-              width={32}
-              height={32}
-            />
+  const columns: ColumnDef<MemberType>[] = useMemo(() => {
+    const result: ColumnDef<MemberType>[] = [
+      {
+        accessorKey: 'username',
+        header: 'User Name',
+        cell: ({ row }) => {
+          return (
+            <section className='flex flex-row items-center gap-[10px]'>
+              <Image
+                src={row.original.image_url || '/images/avatar-not-found.png'}
+                alt={row.original.username + '-img-pic'}
+                width={32}
+                height={32}
+              />
+              <Typography variant='paragraph-l-regular'>
+                {row.original.username || '-'}
+              </Typography>
+            </section>
+          );
+        }
+      },
+      {
+        accessorKey: 'email',
+        header: 'Email',
+        cell: ({ row }) => {
+          return (
             <Typography variant='paragraph-l-regular'>
-              {row.original.username || '-'}
+              {row.original.email || '-'}
             </Typography>
-          </section>
-        );
-      }
-    },
-    {
-      accessorKey: 'email',
-      header: 'Email',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {row.original.email || '-'}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'phone_number',
-      header: 'Phone Number',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {row.original.phone_number || '-'}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'latest_tier',
-      header: 'Tier Level',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {row.original.latest_tier || '-'}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'total_spent',
-      header: 'Total Spent',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            Rp {row.original.total_spent || '0'}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'status',
-      header: 'Status',
-      cell: ({ row }) => {
-        return (
-          <Select
-            value={row.original.status}
-            disabled={row.original.status === 'deleted'}
-            onValueChange={() => {
-              setChangeStatusConfirmationModalOpen(true)
-              setSelectedRow(row.original)
-            }}
-          >
-            <SelectTrigger variant='badge' className={cn(
-              {
-                'bg-error-50': row.original.status === 'inactive',
-                'bg-blue-50': row.original.status === 'active'
-              }
-            )}>
-              <SelectValue aria-label={row.original.status} >
-                <Typography variant='text-body-l-medium' className={cn(
-                  'capitalize',
-                  {
-                    'text-error-700': row.original.status === 'inactive',
-                    'text-blue-700': row.original.status === 'active'
-                  }
-                )}>
-                  {row.original.status}
-                </Typography>
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="active" className='capitalize'>Active</SelectItem>
-              <SelectItem value="inactive" className='capitalize'>In-Active</SelectItem>
-            </SelectContent>
-          </Select>
+          );
+        }
+      },
+      {
+        accessorKey: 'phone_number',
+        header: 'Phone Number',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original.phone_number || '-'}
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'latest_tier',
+        header: 'Tier Level',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original.latest_tier || '-'}
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'total_spent',
+        header: 'Total Spent',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              Rp {row.original.total_spent || '0'}
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'status',
+        header: 'Status',
+        cell: ({ row }) => {
+          return (
+            <Select
+              value={row.original.status}
+              disabled={(row.original.status === 'deleted') || !memberPermissions?.status}
+              onValueChange={() => {
+                setChangeStatusConfirmationModalOpen(true)
+                setSelectedRow(row.original)
+              }}
+            >
+              <SelectTrigger variant='badge' className={cn(
+                {
+                  'bg-error-50': row.original.status === 'inactive',
+                  'bg-blue-50': row.original.status === 'active'
+                }
+              )}>
+                <SelectValue aria-label={row.original.status} >
+                  <Typography variant='text-body-l-medium' className={cn(
+                    'capitalize',
+                    {
+                      'text-error-700': row.original.status === 'inactive',
+                      'text-blue-700': row.original.status === 'active'
+                    }
+                  )}>
+                    {row.original.status}
+                  </Typography>
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="active" className='capitalize'>Active</SelectItem>
+                <SelectItem value="inactive" className='capitalize'>In-Active</SelectItem>
+              </SelectContent>
+            </Select>
 
-        );
-      }
-    },
-    {
-      id: 'action',
-      header: 'Action',
-      cell: ({ row }) => {
-        return (
-          <div className='flex flex-row items-center gap-4' >
-            <Link className='p-0' href={`/member/invoices/${row.original.user_code}`}>
-              <ReceiptItem />
-            </Link>
-            <Button className='p-0' variant='link' onClick={() => {
-              onClickDetail(row.original);
-            }}>
-              <Eye />
-            </Button>
-            <Button className='p-0' variant='link' onClick={() => {
-              setDeleteConfirmationModalOpen(true);
-              setSelectedRow(row.original);
-            }}>
-              <Trash className='cursor-pointer' />
-            </Button>
-          </div>
-        );
-      }
+          );
+        }
+      },
+    ]
+
+    if (memberPermissions?.detail || memberPermissions?.viewInvoice || memberPermissions?.delete) {
+      result.push({
+        id: 'action',
+        header: 'Action',
+        cell: ({ row }) => {
+          return (
+            <div className='flex flex-row items-center gap-4' >
+              {memberPermissions.viewInvoice && (
+                <Link className='p-0' href={`/member/invoices/${row.original.user_code}`}>
+                  <ReceiptItem />
+                </Link>
+              )}
+              {memberPermissions.detail && (
+                <Button className='p-0' variant='link' onClick={() => {
+                  onClickDetail(row.original);
+                }}>
+                  <Eye />
+                </Button>
+              )}
+              {memberPermissions.delete && (
+                <Button className='p-0' variant='link' onClick={() => {
+                  setDeleteConfirmationModalOpen(true);
+                  setSelectedRow(row.original);
+                }}>
+                  <Trash className='cursor-pointer' />
+                </Button>
+              )}
+            </div>
+          );
+        }
+      })
     }
-  ];
+
+    return result
+  }, [memberPermissions?.delete, memberPermissions?.detail, memberPermissions?.viewInvoice, memberPermissions?.status])
 
   const table = useReactTable({
     data: data,

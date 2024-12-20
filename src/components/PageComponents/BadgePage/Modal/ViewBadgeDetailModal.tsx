@@ -10,6 +10,8 @@ import { Modal, ModalContent, ModalHeader } from '@/components/ui/Modal';
 import { Separator } from '@/components/ui/Separator';
 import Typography from '@/components/ui/Typography';
 
+import { usePermissions } from '@/helper/context/permissionsContext';
+
 import { BadgeType } from '@/types/badge';
 
 type Props = PropsWithRef<{
@@ -21,6 +23,7 @@ type Props = PropsWithRef<{
 
 const ViewBadgeDetailModal = ({ open, onOpenChange, badgeCode = '', onEdit }: Props) => {
   const { data: badgeData } = useBadgeDetail(open ? badgeCode : '')
+  const badgePermission = usePermissions().badge
 
   if (!badgeData) return null
 
@@ -75,13 +78,15 @@ const ViewBadgeDetailModal = ({ open, onOpenChange, badgeCode = '', onEdit }: Pr
           <div className='grid grid-cols-2 gap-6'>
             {badgeData.badge_rules?.map((criteria) => <CriteriaCard key={criteria.badge_rule_code} criteria={criteria} />)}
           </div>
-          <section>
-            <Button variant='link' className='p-0' onClick={onEdit}>
-              <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
-                Click here to Edit
-              </Typography>
-            </Button>
-          </section>
+          {badgePermission?.update && (
+            <section>
+              <Button variant='link' className='p-0' onClick={onEdit}>
+                <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
+                  Click here to Edit
+                </Typography>
+              </Button>
+            </section>
+          )}
         </div>
       </ModalContent>
     </Modal>

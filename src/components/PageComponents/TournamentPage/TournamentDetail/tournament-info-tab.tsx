@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/Buttons';
 import TextLabel from '@/components/ui/TextLabel';
 import Typography from '@/components/ui/Typography';
 
+import { usePermissions } from '@/helper/context/permissionsContext';
 import { formatTournamentDate } from '@/helper/datetime';
 import { currencyFormat } from '@/helper/string';
 
@@ -24,6 +25,7 @@ type Props = {
 
 const TournamentInfo = ({ tournamentDetail }: Props) => {
   const router = useRouter()
+  const tournamentPermission = usePermissions().tournament
 
   const tournamentDate = useMemo(() => formatTournamentDate(tournamentDetail.start_date, tournamentDetail.end_date), [tournamentDetail.start_date, tournamentDetail.end_date])
 
@@ -51,13 +53,15 @@ const TournamentInfo = ({ tournamentDetail }: Props) => {
       <section className='grid col-span-2'>
         <TextLabel title='Tournament Rules' value={tournamentDetail.tournament_rules} className='border-b border-gray-200 capitalize' />
       </section>
-      <section className='grid col-span-2'>
-        <Button variant='link' className='text-brand-blue-electric p-0 justify-start' onClick={() => router.push(`/tournament/edit/${tournamentDetail.tournament_code}`)}>
-          <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
-            Click here to Edit
-          </Typography>
-        </Button>
-      </section>
+      {tournamentPermission?.update && (
+        <section className='grid col-span-2'>
+          <Button variant='link' className='text-brand-blue-electric p-0 justify-start' onClick={() => router.push(`/tournament/edit/${tournamentDetail.tournament_code}`)}>
+            <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
+              Click here to Edit
+            </Typography>
+          </Button>
+        </section>
+      )}
     </div>
   );
 };

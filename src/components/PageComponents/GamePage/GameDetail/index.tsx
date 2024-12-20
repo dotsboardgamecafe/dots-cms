@@ -7,6 +7,8 @@ import NextImage from '@/components/ui/Image';
 import TextLabel from '@/components/ui/TextLabel';
 import Typography from '@/components/ui/Typography';
 
+import { usePermissions } from '@/helper/context/permissionsContext';
+
 import { GameType } from '@/types/game';
 
 type Props = {
@@ -14,6 +16,8 @@ type Props = {
 };
 
 const GameDetail = ({ gameDetail }: Props) => {
+  const gamePermission = usePermissions().games
+
   return (
     <div className='flex flex-row gap-6 flex-wrap'>
       <Image src={gameDetail.image_url || '/images/broken-image.png'} alt='room-banner' width={375} height={215} className='rounded-xl h-[215px] w-auto' />
@@ -52,13 +56,15 @@ const GameDetail = ({ gameDetail }: Props) => {
               </div>
             )} className='border-b border-gray-200 capitalize gap-2' />
           </section>
-          <section className='grid col-span-2'>
-            <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
-              <Link href={`/game/edit/${gameDetail.game_code}`}>
-                Click here to Edit
-              </Link>
-            </Typography>
-          </section>
+          {gamePermission?.update && (
+            <section className='grid col-span-2'>
+              <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
+                <Link href={`/game/edit/${gameDetail.game_code}`}>
+                  Click here to Edit
+                </Link>
+              </Typography>
+            </section>
+          )}
         </div>
       </div>
     </div>

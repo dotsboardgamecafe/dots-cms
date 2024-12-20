@@ -1,20 +1,21 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { AddCircle, Edit, Trash } from 'iconsax-react';
-import { PropsWithRef, useEffect, useState } from 'react';
+import { PropsWithRef, useEffect, useMemo, useState } from 'react';
+
+import { cn } from '@/lib/utils';
 
 import AddGameMechanicModal from '@/components/PageComponents/GameMechanicsPage/AddGameMechanicsModal';
 import DeleteMechanicConfirmationModal from '@/components/PageComponents/GameMechanicsPage/DeleteConfirmationModal';
 import EditGameMechanicModal from '@/components/PageComponents/GameMechanicsPage/EditGameMechanicModal';
 import { Button } from '@/components/ui/Buttons';
-import Search from '@/components/ui/Input/Search';
-import Pagination from '@/components/ui/Pagination/pagination';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
 
+import { usePermissions } from '@/helper/context/permissionsContext';
+
 import { MechanicType } from '@/types/mechanics';
 import { Pagination as PaginationRes } from '@/types/network';
-import { cn } from '@/lib/utils';
 
 type Props = PropsWithRef<{
   data: MechanicType[];
@@ -25,43 +26,58 @@ type Props = PropsWithRef<{
 
 
 const MechanicTable = ({ data, pagination }: Props) => {
+  const mechanicPermission = usePermissions().mechanics
+
   const [confirmationModalOpen, setConfirmationModalOpen] = useState<boolean>(false);
   const [addModalOpen, setAddModalOpen] = useState<boolean>(false);
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false)
   const [selectedRow, setSelectedRow] = useState<MechanicType>();
-  const columns: ColumnDef<MechanicType>[] = [
-    {
-      accessorKey: 'name',
-      header: 'Game Mechanic Name',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {row.original.name || '-'}
-          </Typography>
-        );
-      }
-    },
-    {
-      id: 'action',
-      header: 'Action',
-      cell: ({ row }) => {
-        return (
-          <div className='flex flex-row items-center gap-4 cursor-pointer' >
-            <Edit onClick={() => {
-              setSelectedRow(row.original)
-              setEditModalOpen(true)
-            }} />
-            <Button className='p-0' variant='link' onClick={() => {
-              setConfirmationModalOpen(true);
-              setSelectedRow(row.original);
-            }}>
-              <Trash className='cursor-pointer' />
-            </Button>
-          </div>
-        );
-      }
+
+  const columns: ColumnDef<MechanicType>[] = useMemo(() => {
+    const result: ColumnDef<MechanicType>[] = [
+      {
+        accessorKey: 'name',
+        header: 'Game Mechanic Name',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original.name || '-'}
+            </Typography>
+          );
+        }
+      },
+
+    ]
+
+    if (mechanicPermission?.update || mechanicPermission?.delete) {
+      result.push({
+        id: 'action',
+        header: 'Action',
+        cell: ({ row }) => {
+          return (
+            <div className='flex flex-row items-center gap-4 cursor-pointer' >
+              {mechanicPermission.update && (
+                <Edit onClick={() => {
+                  setSelectedRow(row.original)
+                  setEditModalOpen(true)
+                }} />
+              )}
+              {mechanicPermission.delete && (
+                <Button className='p-0' variant='link' onClick={() => {
+                  setConfirmationModalOpen(true);
+                  setSelectedRow(row.original);
+                }}>
+                  <Trash className='cursor-pointer' />
+                </Button>
+              )}
+            </div>
+          );
+        }
+      })
     }
-  ];
+
+    return result
+  }, [mechanicPermission?.update, mechanicPermission?.delete])
 
   const table = useReactTable({
     data: data,
@@ -81,12 +97,14 @@ const MechanicTable = ({ data, pagination }: Props) => {
     <div className='flex flex-col gap-6'>
       <section className={cn('table-action', '!justify-end')}>
         <div className='flex flex-row gap-6'>
-          <Button variant="default" size="lg" onClick={() => setAddModalOpen(true)} className="gap-2">
-            <AddCircle size={20} />
-            <Typography variant='paragraph-l-bold'>
-              Add New Game Mechanic
-            </Typography>
-          </Button>
+          {mechanicPermission?.add && (
+            <Button variant="default" size="lg" onClick={() => setAddModalOpen(true)} className="gap-2">
+              <AddCircle size={20} />
+              <Typography variant='paragraph-l-bold'>
+                Add New Game Mechanic
+              </Typography>
+            </Button>
+          )}
         </div>
       </section >
       <Table>

@@ -1,11 +1,11 @@
 'use client'
 
-import { memo, PropsWithChildren, useState } from "react"
-import { MultiValue, Options, ValueContainerProps } from "react-select"
+import { useState } from "react"
+import { MultiValue } from "react-select"
 
 import { getGameMechanics } from "@/lib/api/settings"
 
-import { SelectOptionCheckBox, SelectOptionType, SelectValueContainer } from "@/components/ui/Input/SelectMultiple"
+import { DisplaySelectedValue, SelectOptionCheckBox, SelectOptionType } from "@/components/ui/Input/SelectMultiple"
 import SelectAsync from "@/components/ui/Input/SelectMultiple/async"
 
 import { Pagination } from "@/types/network"
@@ -21,19 +21,6 @@ type SelectGameMechanicsProps = {
   defaultValue?: GameMechanicsOption[]
   id?: string
 }
-
-const DisplaySelectedValue: React.FC<PropsWithChildren<ValueContainerProps<SelectOptionType, true>>> = memo(
-  (props) => {
-    const renderValue = (selectedOptions: Options<unknown>) => {
-      const isSelectedMore = selectedOptions.length > 1
-      const selectedMoreDisplay = ` +${selectedOptions.length - 1}`
-      const firstSelected = selectedOptions[0] as GameMechanicsOption
-
-      return `${firstSelected.label}${isSelectedMore ? selectedMoreDisplay : ''}`
-    }
-    return <SelectValueContainer renderValue={renderValue} {...props} />
-  }
-)
 
 const SelectGameMechanics: React.FC<SelectGameMechanicsProps> = ({ onChange, defaultValue, id }) => {
   const [selectedOption, setSelectedOption] = useState<MultiValue<GameMechanicsOption> | undefined>(defaultValue)

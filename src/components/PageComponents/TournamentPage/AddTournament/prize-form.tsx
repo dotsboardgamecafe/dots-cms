@@ -41,7 +41,7 @@ const PrizeForm: React.FC<{ tournamentBadges?: TournamentDetailType['tournament_
 
         return {
           value: badgeGroupKey,
-          label: generalBadgeData.name,
+          label: generalBadgeData.name.replace(/(Gold|Silver|Bronze) /, ''),
           data: badgeGroupData
         }
       }) as unknown

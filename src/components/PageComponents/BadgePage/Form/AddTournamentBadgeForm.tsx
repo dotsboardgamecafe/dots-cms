@@ -33,7 +33,7 @@ export const AddTournamentBadgeForm = ({ onClose, defaultData, onSubmit }: Props
       image_url1: defaultData?.firstPlace.image_url || '',
       image_url2: defaultData?.secondPlace.image_url || '',
       image_url3: defaultData?.thirdPlace.image_url || '',
-      name: defaultData?.firstPlace.name || '',
+      name: defaultData?.firstPlace.name.replace(/Gold /, '') || '',
       vp_point1: defaultData?.firstPlace.vp_point || 0,
       vp_point2: defaultData?.secondPlace.vp_point || 0,
       vp_point3: defaultData?.thirdPlace.vp_point || 0,
@@ -50,7 +50,7 @@ export const AddTournamentBadgeForm = ({ onClose, defaultData, onSubmit }: Props
         {
           ...defaultData?.firstPlace,
           badge_category: data.badge_category,
-          name: data.name,
+          name: `Gold ${data.name}`,
           image_url: data.image_url1,
           status: data.status,
           vp_point: data.vp_point1,
@@ -67,7 +67,7 @@ export const AddTournamentBadgeForm = ({ onClose, defaultData, onSubmit }: Props
         {
           ...defaultData?.secondPlace,
           badge_category: data.badge_category,
-          name: data.name,
+          name: `Silver ${data.name}`,
           image_url: data.image_url2,
           status: data.status,
           vp_point: data.vp_point2,
@@ -84,7 +84,7 @@ export const AddTournamentBadgeForm = ({ onClose, defaultData, onSubmit }: Props
         {
           ...defaultData?.thirdPlace,
           badge_category: data.badge_category,
-          name: data.name,
+          name: `Bronze ${data.name}`,
           image_url: data.image_url3,
           status: data.status,
           vp_point: data.vp_point3,

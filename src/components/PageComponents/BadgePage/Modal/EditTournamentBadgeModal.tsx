@@ -32,7 +32,7 @@ const EditTournamentBadgeModal = ({ open, onOpenChange, badgeCode = '' }: Props)
       <ModalContent hideCloseIcon className='max-w-3xl max-h-[90%] overflow-hidden flex flex-col'>
         <ModalHeader className='h-fit'>
           <ModalTitle>
-            Add New Tournament Badge
+            Edit Tournament Badge
           </ModalTitle>
         </ModalHeader>
         <Separator />

@@ -33,14 +33,18 @@ const GameDetail = ({ gameDetail }: Props) => {
             )} className='border-b border-gray-200 capitalize gap-2' />
           </section>
           <section className='grid col-span-2'>
-            <TextLabel title='Game Master' value={(
-              <div className='flex flex-row flex-wrap gap-2 pb-4 items-center'>
-                <NextImage enableViewer alt='game_master' src={gameDetail.game_masters?.image_url || '/images/avatar-not-found.png'} height={32} width={32} className='w-8 h-8 rounded-full overflow-hidden' classNames={{ image: 'w-full h-full object-center object-cover' }} />
-                <Typography variant='paragraph-xl-regular'>
-                  {gameDetail.game_masters?.name}
-                </Typography>
+            <TextLabel title='Game Masters' className='border-b border-gray-200 capitalize gap-2'>
+              <div className='flex gap-6'>
+                {gameDetail.game_masters?.map((gm) => (
+                  <div key={gm.admin_code} className='flex flex-row flex-wrap gap-2 pb-4 items-center'>
+                    <NextImage enableViewer alt='game_master' src={gm?.image_url || '/images/avatar-not-found.png'} height={32} width={32} className='w-8 h-8 rounded-full overflow-hidden' classNames={{ image: 'w-full h-full object-center object-cover' }} />
+                    <Typography variant='paragraph-xl-regular'>
+                      {gm?.name}
+                    </Typography>
+                  </div>
+                ))}
               </div>
-            )} className='border-b border-gray-200 capitalize gap-2' />
+            </TextLabel>
           </section>
           <section className='grid col-span-2'>
             <TextLabel title='Description' value={gameDetail.description} className='border-b border-gray-200 capitalize' />

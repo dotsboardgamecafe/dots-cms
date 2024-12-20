@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { AdminType } from '@/types/admin';
 import { RoomParticipantSchema } from '@/types/room';
 
 export type QRType = string
@@ -23,15 +24,7 @@ export type GameType = {
   game_categories?: GameCategory[];
   game_related?: string,
   game_rooms?: string,
-  game_masters?: {
-    admin_code: string,
-    email: string,
-    name: string,
-    user_name: string,
-    status: string,
-    image_url: string,
-    phone_number: string
-  }[];
+  game_masters?: AdminType[];
 };
 
 export type GameCategory = {

@@ -52,7 +52,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd dots-cms
+            cd dots-cms-image
             sed -i~ "/^CMS_IMAGE=/s/=.*/=mdzk14\/dots-app:cms-build-prod-${{github.run_number}}/g" .env
             cat .env
             docker compose up -d

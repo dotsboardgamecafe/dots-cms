@@ -1,7 +1,7 @@
 
 import fetcher, { ApiOptions } from '@/lib/api/utils/fetcher';
 
-import { CityType, GameCategoryType, GameMechanicType, ProvinceType } from '@/types/settings';
+import { CityType, GameCategoryType, ProvinceType } from '@/types/settings';
 
 export const getCity = async (options?: ApiOptions) => {
   return await fetcher<CityType[]>('getSettings', {
@@ -52,17 +52,3 @@ export const getGameCategories = async (options?: ApiOptions) => {
   });
 };
 
-export const getGameMechanics = async (options?: ApiOptions) => {
-  return await fetcher<GameMechanicType[]>('getSettings', {
-    ...options,
-    query: {
-      status: 'active',
-      set_group: 'game_mechanic',
-    },
-    requestOpt: {
-      next: {
-        tags: ['getGameMechanics']
-      }
-    }
-  });
-};

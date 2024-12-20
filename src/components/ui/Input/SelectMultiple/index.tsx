@@ -99,6 +99,19 @@ const SelectMultiple = React.forwardRef<
     )
   });
 
+const DisplaySelectedValueNotMemoize = <T extends boolean = true>(props: PropsWithChildren<ValueContainerProps<SelectOptionType, T>>): ReactNode => {
+  const renderValue = (selectedOptions: Options<unknown>) => {
+    const isSelectedMore = selectedOptions.length > 1
+    const selectedMoreDisplay = ` +${selectedOptions.length - 1}`
+    const firstSelected = selectedOptions[0] as SelectOptionType
+
+    return `${firstSelected.label}${isSelectedMore ? selectedMoreDisplay : ''}`
+  }
+  return <SelectValueContainer renderValue={renderValue} {...props} />
+}
+
+export const DisplaySelectedValue = memo(DisplaySelectedValueNotMemoize) as typeof DisplaySelectedValueNotMemoize
+
 export function SelectOptionCheckBox<OptionType = SelectOptionType, isMulti extends boolean = true>
   ({ className, ...props }: OptionProps<OptionType, isMulti>) {
   return (
@@ -111,7 +124,7 @@ export function SelectOptionCheckBox<OptionType = SelectOptionType, isMulti exte
   )
 }
 
-export const SelectValueContainer: React.FC<PropsWithChildren<ValueContainerProps<any, true> & { renderValue: (options: Options<unknown>) => ReactNode }>> = memo(({ children, renderValue, ...props }) => {
+export const SelectValueContainer = memo(<T extends boolean = true>({ children, renderValue, ...props }: PropsWithChildren<ValueContainerProps<any, T> & { renderValue: (options: Options<unknown>) => ReactNode }>): ReactNode => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { getValue, hasValue } = props
   const childrenLength = React.Children.count(children)

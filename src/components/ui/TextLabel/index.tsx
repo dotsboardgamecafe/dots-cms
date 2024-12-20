@@ -6,19 +6,22 @@ import Typography from '@/components/ui/Typography';
 
 type Props = PropsWithRef<PropsWithChildren<{
   title: string,
-  value: React.ReactNode;
+  value?: React.ReactNode;
   className?: string;
 }>>;
-const TextLabel = ( { title, value, className }: Props ) => {
+const TextLabel = ({ title, value, className, children }: Props) => {
 
   return (
-    <div className={ cn( [ 'flex flex-col', className ] ) }>
+    <div className={cn(['flex flex-col', className])}>
       <Typography variant='paragraph-l-regular' className='text-gray-500'>
-        { title }
+        {title}
       </Typography>
-      <Typography variant='paragraph-xl-regular'>
-        { value }
-      </Typography>
+      {value && (
+        <Typography variant='paragraph-xl-regular'>
+          {value}
+        </Typography>
+      )}
+      {children}
     </div>
   );
 };

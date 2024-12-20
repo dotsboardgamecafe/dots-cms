@@ -9,7 +9,8 @@ export const AddAdminSchema = z.object({
   email: z.string({ required_error: 'Email is required' }).min(1, 'Email is required').refine((value) => isValidEmailFormat(value), 'Email format is not valid'),
   phone_number: z.string().optional().refine((value) => !value || (value.length > 6), 'Invalid phone number'),
   image_url: z.string({ required_error: 'Image is required' }).min(1, 'Image is required'),
-  status: z.enum(['active', 'inactive'], { required_error: 'Status is required' }).default('active')
+  status: z.enum(['active', 'inactive'], { required_error: 'Status is required' }).default('active'),
+  role: z.enum(['admin', 'cashier'], { required_error: 'Role is required' }).default('admin')
 });
 
 export const EditAdminSchema = z.object({
@@ -19,7 +20,8 @@ export const EditAdminSchema = z.object({
   email: z.string({ required_error: 'Email is required' }).min(1, 'Email is required').refine((value) => isValidEmailFormat(value), 'Email format is not valid'),
   phone_number: z.string().optional().refine((value) => !value || value.length > 6, 'Invalid phone number'),
   image_url: z.string({ required_error: 'Image is required' }).min(1, 'Image is required'),
-  status: z.enum(['active', 'inactive'], { required_error: 'Status is required' }).default('active')
+  status: z.enum(['active', 'inactive'], { required_error: 'Status is required' }).default('active'),
+  role: z.enum(['admin', 'cashier'], { required_error: 'Role is required' }).default('admin')
 });
 
 export type AdminType = {
@@ -31,6 +33,7 @@ export type AdminType = {
   phone_number?: string;
   password?: string;
   user_name: string;
+  role: 'admin' | 'cashier';
 };
 
 export type AddAdminPayload = {
@@ -38,7 +41,8 @@ export type AddAdminPayload = {
   email: string,
   phone_number?: string,
   image_url: string,
-  status: string
+  status: string,
+  role: 'admin' | 'cashier',
 }
 
 export type EditAdminPayload = {
@@ -46,5 +50,6 @@ export type EditAdminPayload = {
   email: string,
   phone_number?: string,
   image_url: string,
-  status: string
+  status: string,
+  role: 'admin' | 'cashier',
 }

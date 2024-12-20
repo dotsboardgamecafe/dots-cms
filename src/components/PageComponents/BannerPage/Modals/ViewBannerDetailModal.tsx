@@ -7,6 +7,8 @@ import { Modal, ModalContent } from '@/components/ui/Modal';
 import TextLabel from '@/components/ui/TextLabel';
 import Typography from '@/components/ui/Typography';
 
+import { usePermissions } from '@/helper/context/permissionsContext';
+
 import { TBannerData } from '@/types/banner';
 
 type Props = PropsWithRef<{
@@ -17,6 +19,8 @@ type Props = PropsWithRef<{
 }>;
 
 const ViewBannerDetailModal = ({ open, onOpenChange, bannerData, onEdit }: Props) => {
+  const bannerPermission = usePermissions().banner
+
   return (
     <Modal open={open} onOpenChange={onOpenChange} >
       <ModalContent hideCloseIcon className='max-h-[90%] overflow-hidden flex flex-col'>
@@ -31,11 +35,13 @@ const ViewBannerDetailModal = ({ open, onOpenChange, bannerData, onEdit }: Props
             <TextLabel title='Category' value={bannerData?.banner_type || ''} />
             <TextLabel title='Description' value={bannerData?.description || '-'} />
             <TextLabel title='Status' value={bannerData?.status} />
-            <Button variant='link' className='p-0 justify-start' onClick={onEdit}>
-              <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
-                Click here to Edit
-              </Typography>
-            </Button>
+            {bannerPermission?.update && (
+              <Button variant='link' className='p-0 justify-start' onClick={onEdit}>
+                <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
+                  Click here to Edit
+                </Typography>
+              </Button>
+            )}
           </section>
         </div>
       </ModalContent>

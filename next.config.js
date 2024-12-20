@@ -3,7 +3,7 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
- 
+
   eslint: {
     dirs: ['src'],
   },
@@ -42,8 +42,8 @@ const nextConfig = {
 
     return config;
   },
-  images:{
-    remotePatterns:[
+  images: {
+    remotePatterns: [
       {
         protocol: 'https',
         hostname: 'i.pravatar.cc',
@@ -62,7 +62,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'dots-production.s3.ap-southeast-1.amazonaws.com/dots/uploads'
+        hostname: 'dots-production.s3.ap-southeast-1.amazonaws.com'
       }
     ]
   }

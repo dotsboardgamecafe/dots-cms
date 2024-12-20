@@ -42,7 +42,7 @@ const LoginForm = () => {
       setLoading(true);
       const res = await login(data);
       if (res.stat_code === ResponseCode.ERROR) throw "Wrong Email/Password";
-      router.push('/room');
+      router.push('/');
     } catch (error: any) {
       form.setError('root', { message: error || 'Something went wrong' });
       setLoading(false);

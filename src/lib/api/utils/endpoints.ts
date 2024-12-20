@@ -18,6 +18,7 @@ const endpointData = {
 	getTournamentBadgeDetails: { path: '/tournament-badges', method: 'GET', prefix: '' },
 	getUserInvoices: { path: '/invoices', method: 'GET', prefix: 'history' },
 	getGameMechanics: { path: '/game-mechanics', method: 'GET', prefix: '' },
+	getGameQR: { path: '/games', method: 'GET', prefix: 'qrcode' },
 
 	// POST
 	auth: { path: '/auths/login', method: 'POST', prefix: '' },
@@ -79,4 +80,3 @@ export type EndpointDefs = EndpointDefinition<EndpointKey>;
 const endpoints = endpointData;
 
 export default endpoints;
-

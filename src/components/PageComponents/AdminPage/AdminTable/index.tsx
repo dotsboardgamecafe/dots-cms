@@ -2,7 +2,7 @@
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { AddCircle, Edit, Eye, Setting4 } from 'iconsax-react';
 import Image from 'next/image';
-import { PropsWithRef, useEffect, useState } from 'react';
+import { PropsWithRef, useEffect, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -18,7 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
 
-import { EnhancedPermissionType } from '@/helper/hooks/usePermissions';
+import { usePermissions } from '@/helper/context/permissionsContext';
 
 import { AdminType } from '@/types/admin';
 import { Pagination as PaginationRes } from '@/types/network';
@@ -26,118 +26,137 @@ import { Pagination as PaginationRes } from '@/types/network';
 type Props = PropsWithRef<{
   data: AdminType[];
   pagination: PaginationRes;
-  adminPermissions: EnhancedPermissionType
 }>;
 
 
+const AdminTable = ({ data, pagination }: Props) => {
+  const adminPermissions = usePermissions().admin
 
-
-const AdminTable = ({ data, pagination, adminPermissions }: Props) => {
   const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
   const [confirmationModalOpen, setConfirmationModalOpen] = useState<boolean>(false);
   const [addModalOpen, setAddModalOpen] = useState<boolean>(false);
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false)
   const [selectedRow, setSelectedRow] = useState<AdminType>();
-  const columns: ColumnDef<AdminType>[] = [
-    {
-      accessorKey: 'name',
-      header: 'Admin Name',
-      cell: ({ row }) => {
-        return (
-          <section className='flex flex-row items-center gap-[10px]'>
-            <Image
-              src={row.original.image_url || '/images/avatar-not-found.png'}
-              alt={row.original.name + '-img-pic'}
-              width={32}
-              height={32}
-              className='rounded-full object-cover object-center h-8 w-8'
-            />
+  const columns: ColumnDef<AdminType>[] = useMemo(() => {
+    const result: ColumnDef<AdminType>[] = [
+      {
+        accessorKey: 'name',
+        header: 'Admin Name',
+        cell: ({ row }) => {
+          return (
+            <section className='flex flex-row items-center gap-[10px]'>
+              <Image
+                src={row.original.image_url || '/images/avatar-not-found.png'}
+                alt={row.original.name + '-img-pic'}
+                width={32}
+                height={32}
+                className='rounded-full object-cover object-center h-8 w-8'
+              />
+              <Typography variant='paragraph-l-regular'>
+                {row.original.name || '-'}
+              </Typography>
+            </section>
+          );
+        }
+      },
+      {
+        accessorKey: 'email',
+        header: 'Email',
+        cell: ({ row }) => {
+          return (
             <Typography variant='paragraph-l-regular'>
-              {row.original.name || '-'}
+              {row.original.email || '-'}
             </Typography>
-          </section>
-        );
-      }
-    },
-    {
-      accessorKey: 'email',
-      header: 'Email',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {row.original.email || '-'}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'phone_number',
-      header: 'Phone Number',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {row.original?.phone_number || '-'}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'status',
-      header: 'Status',
-      cell: ({ row }) => {
-        return (
-          <Select value={row.original.status} onValueChange={() => {
-            setConfirmationModalOpen(true);
-            setSelectedRow(row.original);
-          }}>
-            <SelectTrigger variant='badge' className={cn(
-              {
-                'bg-error-50': row.original.status === 'inactive',
-                'bg-blue-50': row.original.status === 'active'
-              }
-            )}>
-              <SelectValue aria-label={row.original.status} >
-                <Typography variant='text-body-l-medium' className={cn(
-                  'capitalize',
-                  {
-                    'text-error-700': row.original.status === 'inactive',
-                    'text-blue-700': row.original.status === 'active'
-                  }
-                )}>
-                  {row.original.status}
-                </Typography>
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="active" className='capitalize'>Active</SelectItem>
-              <SelectItem value="inactive" className='capitalize'>In-Active</SelectItem>
-            </SelectContent>
-          </Select>
+          );
+        }
+      },
+      {
+        accessorKey: 'role',
+        header: 'Role',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original.role || '-'}
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'phone_number',
+        header: 'Phone Number',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original?.phone_number || '-'}
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'status',
+        header: 'Status',
+        cell: ({ row }) => {
+          return (
+            <Select value={row.original.status} disabled={!adminPermissions?.status} onValueChange={() => {
+              setConfirmationModalOpen(true);
+              setSelectedRow(row.original);
+            }}>
+              <SelectTrigger variant='badge' className={cn(
+                {
+                  'bg-error-50': row.original.status === 'inactive',
+                  'bg-blue-50': row.original.status === 'active'
+                }
+              )}>
+                <SelectValue aria-label={row.original.status} >
+                  <Typography variant='text-body-l-medium' className={cn(
+                    'capitalize',
+                    {
+                      'text-error-700': row.original.status === 'inactive',
+                      'text-blue-700': row.original.status === 'active'
+                    }
+                  )}>
+                    {row.original.status}
+                  </Typography>
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="active" className='capitalize'>Active</SelectItem>
+                <SelectItem value="inactive" className='capitalize'>In-Active</SelectItem>
+              </SelectContent>
+            </Select>
 
-        );
-      }
-    },
-    {
-      id: 'action',
-      header: 'Action',
-      cell: ({ row }) => {
-        return (
-          <div className='flex flex-row items-center gap-4 cursor-pointer' >
-            <Eye onClick={() => {
-              onClickDetail(row.original);
-            }} />
-            {adminPermissions['admin-update'] && (
-              <Edit onClick={() => {
-                setSelectedRow(row.original)
-                setEditModalOpen(true)
-              }} />
-            )}
-          </div>
-        );
-      }
+          );
+        }
+      },
+    ];
+
+    if (adminPermissions?.detail || adminPermissions?.update) {
+      result.push({
+        id: 'action',
+        header: 'Action',
+        cell: ({ row }) => {
+          return (
+            <div className='flex flex-row items-center gap-4 cursor-pointer' >
+              {adminPermissions?.detail && (
+                <Eye onClick={() => {
+                  onClickDetail(row.original);
+                }} />
+              )}
+              {adminPermissions?.update && (
+                <Edit onClick={() => {
+                  setSelectedRow(row.original)
+                  setEditModalOpen(true)
+                }} />
+              )}
+            </div>
+          );
+        }
+      })
     }
-  ];
+
+    return result
+  }, [adminPermissions?.detail, adminPermissions?.update, adminPermissions?.status])
 
   const table = useReactTable({
     data: data,
@@ -163,7 +182,7 @@ const AdminTable = ({ data, pagination, adminPermissions }: Props) => {
       <section className='table-action'>
         <Search />
         <div className='flex flex-row gap-6'>
-          {adminPermissions['admin-add'] && (
+          {adminPermissions?.add && (
             <Button variant="default" size="lg" onClick={() => setAddModalOpen(true)} className="gap-2">
               <AddCircle size={20} />
               <Typography variant='paragraph-l-bold'>

@@ -6,6 +6,8 @@ import { Modal, ModalContent, ModalHeader, ModalTitle } from '@/components/ui/Mo
 import { Separator } from '@/components/ui/Separator';
 import Typography from '@/components/ui/Typography';
 
+import { usePermissions } from '@/helper/context/permissionsContext';
+
 import { CafeType } from '@/types/cafes';
 
 type Props = PropsWithRef<{
@@ -16,6 +18,8 @@ type Props = PropsWithRef<{
 }>;
 
 const ViewCafeDetailModal = ({ open, onOpenChange, cafeData, onEdit }: Props) => {
+  const cafePermission = usePermissions().cafeManagement
+
   return (
     <Modal open={open} onOpenChange={onOpenChange} >
       <ModalContent hideCloseIcon className='max-h-[90%] overflow-hidden flex flex-col'>
@@ -52,13 +56,15 @@ const ViewCafeDetailModal = ({ open, onOpenChange, cafeData, onEdit }: Props) =>
             </Typography>
             <Separator className='mt-1' />
           </section>
-          <section>
-            <Button variant='link' className='p-0' onClick={onEdit}>
-              <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
-                Click here to Edit
-              </Typography>
-            </Button>
-          </section>
+          {cafePermission?.update && (
+            <section>
+              <Button variant='link' className='p-0' onClick={onEdit}>
+                <Typography variant='text-body-l-regular' className='text-brand-blue-electric'>
+                  Click here to Edit
+                </Typography>
+              </Button>
+            </section>
+          )}
         </div>
       </ModalContent>
     </Modal>

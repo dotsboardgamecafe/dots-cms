@@ -8,9 +8,6 @@ import Header from '@/components/LayoutComponents/Header';
 import PageContainer from '@/components/LayoutComponents/PageContainer';
 import AdminTable from '@/components/PageComponents/AdminPage/AdminTable';
 
-import { cookiesHelper } from '@/helper';
-import { EnhancedPermissionType } from '@/helper/hooks/usePermissions';
-
 import { Pagination } from '@/types/network';
 type Props = {
   searchParams: Pagination & {
@@ -25,14 +22,6 @@ const AdminPage = async ({ searchParams }: Props) => {
   if (isFilterByAllStatus) delete query.status
 
   const admins = await getAdmins({ query });
-  const permissions: string[] = await cookiesHelper.getUserPermission()
-  const adminPermissions: EnhancedPermissionType = permissions.reduce((result, permission) => {
-    if (!permission.includes('admin')) return result
-    return ({
-      ...result,
-      [permission]: true
-    })
-  }, {});
 
   return (
     <div>
@@ -42,7 +31,7 @@ const AdminPage = async ({ searchParams }: Props) => {
       }]} />
       <PageContainer>
         <Suspense>
-          <AdminTable data={admins.data} pagination={admins.pagination} adminPermissions={adminPermissions || {}} />
+          <AdminTable data={admins.data} pagination={admins.pagination} />
         </Suspense>
       </PageContainer>
     </div>

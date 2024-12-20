@@ -12,6 +12,7 @@ import Password from '@/components/ui/Input/Password';
 import PhoneNumber from '@/components/ui/Input/PhoneNumber';
 import Text from '@/components/ui/Input/Text';
 import Upload from '@/components/ui/Input/Upload';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import { Separator } from '@/components/ui/Separator';
 import Switch from '@/components/ui/Switch';
 import { useToast } from '@/components/ui/Toast/use-toast';
@@ -37,7 +38,8 @@ export const EditAdminForm = ({ onClose, adminData }: Props) => {
       name: adminData.name,
       phone_number: adminData.phone_number || '',
       status: adminData.status as z.infer<typeof EditAdminSchema>['status'],
-      username: adminData.user_name || ''
+      username: adminData.user_name || '',
+      role: adminData.role || 'admin',
     },
     resolver: zodResolver(EditAdminSchema)
   }));
@@ -121,7 +123,7 @@ export const EditAdminForm = ({ onClose, adminData }: Props) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Text placeholder='Enter username for the admin' value={field.value} onChange={field.onChange} />
+                <Text maxLength={15} placeholder='Enter username for the admin' value={field.value} onChange={field.onChange} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -139,6 +141,35 @@ export const EditAdminForm = ({ onClose, adminData }: Props) => {
               </FormLabel>
               <FormControl>
                 <Text placeholder='Enter Email Address' value={field.value} onChange={field.onChange} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="role"
+          render={({ field }) => (
+            <FormItem className='space-y-3'>
+              <FormLabel htmlFor={field.name} className='mb-2 block'>
+                <Typography variant='paragraph-l-medium'>
+                  Role
+                </Typography>
+              </FormLabel>
+              <FormControl>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger id={field.name}>
+                    <SelectValue aria-label={field.value} placeholder='Select Admin Role'>
+                      <Typography variant='text-body-l-medium' className="capitalize" >
+                        {field.value}
+                      </Typography>
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="cashier">Cashier</SelectItem>
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -3,17 +3,17 @@
 import { useState } from "react"
 import { MultiValue } from "react-select"
 
-import { getGameMechanics } from "@/lib/api/settings"
+import { getMechanics } from "@/lib/api/mechanic"
 
 import { DisplaySelectedValue, SelectOptionCheckBox, SelectOptionType } from "@/components/ui/Input/SelectMultiple"
 import SelectAsync from "@/components/ui/Input/SelectMultiple/async"
 
+import { MechanicType } from "@/types/mechanics"
 import { Pagination } from "@/types/network"
-import { GameMechanicType } from "@/types/settings"
 
 
 export type GameMechanicsOption = SelectOptionType & {
-  data?: GameMechanicType
+  data?: MechanicType
 }
 
 type SelectGameMechanicsProps = {
@@ -30,18 +30,19 @@ const SelectGameMechanics: React.FC<SelectGameMechanicsProps> = ({ onChange, def
     if (search) payload.keyword = search
 
     try {
-      const response = await getGameMechanics({ pagination: { ...payload } })
-      const newOptions = response.data.map((category) => ({ value: category.content_value, label: category.content_value, data: category }))
+      const response = await getMechanics({ pagination: { ...payload } })
+      const newOptions = response.data.map((mechanic) => ({ value: mechanic.name, label: mechanic.name, data: mechanic }))
+      const maxPage: number = Math.ceil((response.pagination.count || 0) / (response.pagination.limit || 0))
 
       return {
         options: newOptions,
-        hasMore: (response.pagination.total_page || 1) < (response.pagination.page || 1),
+        hasMore: (maxPage) > (response.pagination.page || 1),
         additional: { ...response.pagination, page: (response.pagination.page || 0) + 1 }
       }
     } catch (error) {
       return {
         options: [],
-        hasMore: (pagination?.total_page || 1) < (pagination?.page || 1),
+        hasMore: (Math.ceil((pagination?.count || 0) / (pagination?.limit || 0))) > (pagination?.page || 1),
         additional: pagination
       }
     }

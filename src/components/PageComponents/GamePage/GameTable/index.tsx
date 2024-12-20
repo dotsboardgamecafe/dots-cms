@@ -2,7 +2,7 @@
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { AddCircle, Edit, Eye, Setting4, Trash } from 'iconsax-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -16,6 +16,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import Typography from '@/components/ui/Typography';
 
+import { usePermissions } from '@/helper/context/permissionsContext';
+
 import { GameType } from '@/types/game';
 import { Pagination as PaginationType } from '@/types/network';
 import { GameCategoryType } from '@/types/settings';
@@ -28,144 +30,159 @@ type Props = {
 
 
 const GameTable = ({ data, pagination, gameTypes }: Props) => {
+  const gamePermission = usePermissions().games
+
   const [isOpenDeleteConfimationModal, setIsOpenDeleteConfirmationModal] = useState<boolean>(false);
   const [isOpenChangeStatus, setIsOpenChangeStatus] = useState<boolean>(false);
   const [selectedGame, setSelectedGame] = useState<GameType | undefined>();
   const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false);
 
-  const columns: ColumnDef<GameType>[] = [
-    {
-      accessorKey: 'name',
-      header: 'Game Name',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {row.original.name}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'game_type',
-      header: 'Type',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular' className='capitalize'>
-            {row.original.game_type}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'game_categories',
-      header: 'Mechanics',
-      cell: ({ row }) => {
-        const isHaveMoreTHanOneMechanics = (row.original.game_categories?.length || 0) > 1
-        const moreMechanicsDisplay = isHaveMoreTHanOneMechanics && `+${row.original.game_categories?.length}`
-        const firstCategory = row.original.game_categories?.[0]
+  const columns: ColumnDef<GameType>[] = useMemo(() => {
+    const result: ColumnDef<GameType>[] = [
+      {
+        accessorKey: 'name',
+        header: 'Game Name',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original.name}
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'game_type',
+        header: 'Type',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular' className='capitalize'>
+              {row.original.game_type}
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'game_categories',
+        header: 'Mechanics',
+        cell: ({ row }) => {
+          const isHaveMoreTHanOneMechanics = (row.original.game_categories?.length || 0) > 1
+          const moreMechanicsDisplay = isHaveMoreTHanOneMechanics && `+${row.original.game_categories?.length}`
+          const firstCategory = row.original.game_categories?.[0]
 
-        return (
-          <>
-            <div className='flex flex-row gap-2 flex-wrap'>
-              {firstCategory && (
-                <div className='bg-gray-100 rounded-xl px-4'>
-                  <Typography variant='paragraph-l-regular' >
-                    {firstCategory.category_name}
+          return (
+            <>
+              <div className='flex flex-row gap-2 flex-wrap'>
+                {firstCategory && (
+                  <div className='bg-gray-100 rounded-xl px-4'>
+                    <Typography variant='paragraph-l-regular' >
+                      {firstCategory.category_name}
+                    </Typography>
+                  </div>
+                )}
+                {(firstCategory && moreMechanicsDisplay) && (
+                  <div className='bg-gray-100 rounded-xl px-4'>
+                    <Typography variant='paragraph-l-regular' >
+                      {moreMechanicsDisplay}
+                    </Typography>
+                  </div>
+                )}
+              </div>
+            </>
+          );
+        }
+      },
+      {
+        accessorKey: 'duration',
+        header: 'Duration',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original.duration} Min
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'cafe_name',
+        header: 'Location',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original.cafe_name}
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'status',
+        header: 'Status',
+        cell: ({ row }) => {
+          return (
+            <Select value={row.original.status} disabled={!gamePermission?.update} onValueChange={() => {
+              setIsOpenChangeStatus(true)
+              setSelectedGame(row.original)
+            }} >
+              <SelectTrigger variant='badge' className={cn(
+                {
+                  'bg-error-50': row.original.status === 'inactive',
+                  'bg-blue-50': row.original.status === 'active'
+                }
+              )}>
+                <SelectValue aria-label={row.original.status}>
+                  <Typography variant='text-body-l-medium' className={cn(
+                    'capitalize',
+                    {
+                      'text-error-700': row.original.status === 'inactive',
+                      'text-blue-700': row.original.status === 'active'
+                    }
+                  )}>
+                    {row.original.status}
                   </Typography>
-                </div>
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent >
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="inactive">Inactive</SelectItem>
+              </SelectContent>
+            </Select>
+          );
+        }
+      },
+    ]
+
+    if (gamePermission?.detail || gamePermission?.update || gamePermission?.delete) {
+      result.push({
+        id: 'action',
+        header: 'Action',
+        cell: ({ row }) => {
+          return (
+            <div className='flex flex-row items-center gap-4'>
+              {gamePermission.detail && (
+                <Link href={`/game/view/${row.original.game_code}`} >
+                  <Eye className='cursor-pointer' />
+                </Link>
               )}
-              {(firstCategory && moreMechanicsDisplay) && (
-                <div className='bg-gray-100 rounded-xl px-4'>
-                  <Typography variant='paragraph-l-regular' >
-                    {moreMechanicsDisplay}
-                  </Typography>
-                </div>
+              {gamePermission.update && (
+                <Link href={`/game/edit/${row.original.game_code}`} >
+                  <Edit className='cursor-pointer' />
+                </Link>
+              )}
+              {gamePermission.delete && (
+                <Button className='p-0' variant='link' onClick={() => {
+                  setIsOpenDeleteConfirmationModal(true);
+                  setSelectedGame(row.original);
+                }}>
+                  <Trash className='cursor-pointer' />
+                </Button>
               )}
             </div>
-          </>
-        );
-      }
-    },
-    {
-      accessorKey: 'duration',
-      header: 'Duration',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {row.original.duration} Min
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'cafe_name',
-      header: 'Location',
-      cell: ({ row }) => {
-        return (
-          <Typography variant='paragraph-l-regular'>
-            {row.original.cafe_name}
-          </Typography>
-        );
-      }
-    },
-    {
-      accessorKey: 'status',
-      header: 'Status',
-      cell: ({ row }) => {
-        return (
-          <Select value={row.original.status} onValueChange={() => {
-            setIsOpenChangeStatus(true)
-            setSelectedGame(row.original)
-          }} >
-            <SelectTrigger variant='badge' className={cn(
-              {
-                'bg-error-50': row.original.status === 'inactive',
-                'bg-blue-50': row.original.status === 'active'
-              }
-            )}>
-              <SelectValue aria-label={row.original.status}>
-                <Typography variant='text-body-l-medium' className={cn(
-                  'capitalize',
-                  {
-                    'text-error-700': row.original.status === 'inactive',
-                    'text-blue-700': row.original.status === 'active'
-                  }
-                )}>
-                  {row.original.status}
-                </Typography>
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent >
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="inactive">Inactive</SelectItem>
-            </SelectContent>
-          </Select>
-        );
-      }
-    },
-    {
-      id: 'action',
-      header: 'Action',
-      cell: ({ row }) => {
-        return (
-          <div className='flex flex-row items-center gap-4'>
-            <Link href={`/game/view/${row.original.game_code}`} >
-              <Eye className='cursor-pointer' />
-            </Link>
-            <Link href={`/game/edit/${row.original.game_code}`} >
-              <Edit className='cursor-pointer' />
-            </Link>
-            <Button className='p-0' variant='link' onClick={() => {
-              setIsOpenDeleteConfirmationModal(true);
-              setSelectedGame(row.original);
-            }}>
-              <Trash className='cursor-pointer' />
-            </Button>
-          </div>
-        );
-      }
+          );
+        }
+      })
     }
-  ];
+
+    return result
+  }, [gamePermission?.delete, gamePermission?.detail, gamePermission?.update])
 
   const table = useReactTable({
     data,
@@ -186,14 +203,16 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
       <section className='table-action'>
         <Search />
         <div className='flex flex-row flex-nowrap gap-4'>
-          <Link href='/game/add'>
-            <button className="rounded-[8px] gap-[8px] px-5 py-3 bg-button-midnight-black flex flex-row items-center text-nowrap">
-              <AddCircle className='text-white' />
-              <Typography variant='paragraph-l-bold' className='text-white'>
-                Add New Game
-              </Typography>
-            </button>
-          </Link>
+          {gamePermission?.add && (
+            <Link href='/game/add'>
+              <button className="rounded-[8px] gap-[8px] px-5 py-3 bg-button-midnight-black flex flex-row items-center text-nowrap">
+                <AddCircle className='text-white' />
+                <Typography variant='paragraph-l-bold' className='text-white'>
+                  Add New Game
+                </Typography>
+              </button>
+            </Link>
+          )}
           <Button variant='outline' size='lg' className='gap-4' onClick={() => setIsOpenFilter(true)}>
             <Setting4 />
             <Typography variant='paragraph-l-bold'>

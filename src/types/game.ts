@@ -3,6 +3,8 @@ import { z } from 'zod';
 import { AdminType } from '@/types/admin';
 import { RoomParticipantSchema } from '@/types/room';
 
+export type QRType = string
+
 export type GameType = {
   cafe_name: string,
   cafe_code: string,

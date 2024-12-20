@@ -24,8 +24,8 @@ jobs:
       - name: 'Create env file'
         run: |
           touch .env
-          echo NEXT_PUBLIC_BASE_URL_DEV=${{ secrets.NEXT_PUBLIC_BASE_URL }} >> .env
-          echo NEXT_PUBLIC_STAGE=prod >> .env
+          echo NEXT_PUBLIC_BASE_URL_PRODUCTION=${{ secrets.NEXT_PUBLIC_BASE_URL_PRODUCTION }} >> .env
+          echo NEXT_PUBLIC_STAGE=production >> .env
           cat .env
 
       -

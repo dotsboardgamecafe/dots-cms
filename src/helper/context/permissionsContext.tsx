@@ -126,7 +126,7 @@ export const PermissionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
         },
         member: {
           view: permissionList.includes('member-get-list'),
-          giftBadge: true,
+          giftBadge: permissionList.includes('badge-gift-to-user'),
           detail: permissionList.includes('member-get-detail'),
           status: permissionList.includes('member-update-status'),
           delete: permissionList.includes('member-delete-account'),

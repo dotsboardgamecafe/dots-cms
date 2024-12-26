@@ -19,6 +19,7 @@ const endpointData = {
 	getUserInvoices: { path: '/invoices', method: 'GET', prefix: 'history' },
 	getGameMechanics: { path: '/game-mechanics', method: 'GET', prefix: '' },
 	getGameQR: { path: '/games', method: 'GET', prefix: 'qrcode' },
+	getAvailableUserBadges: { path: '/badges/unowned', method: 'GET', prefix: '' },
 
 	// POST
 	auth: { path: '/auths/login', method: 'POST', prefix: '' },
@@ -35,6 +36,7 @@ const endpointData = {
 	claimInvoice: { path: '/invoices', method: 'POST', prefix: 'claim' },
 	createAdmin: { path: '/admins', method: 'POST', prefix: '' },
 	addGameMechanics: { path: '/game-mechanics', method: 'POST', prefix: '' },
+	giftUserBadge: { path: '/badges', method: 'POST', prefix: 'gift' },
 
 	// PUT
 	changeStatusMember: { path: '/users', method: 'PUT', prefix: 'status' },

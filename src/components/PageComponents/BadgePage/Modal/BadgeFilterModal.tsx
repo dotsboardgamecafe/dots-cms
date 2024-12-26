@@ -16,8 +16,8 @@ const BadgeFilterModal = ({ open, onOpenChange }: Props) => {
   const filterControl = useRef<null | BadgeFilterControlType>(null)
 
   return (
-    <Modal open={open} onOpenChange={onOpenChange} >
-      <ModalContent hideCloseIcon>
+    <Modal open={open} onOpenChange={onOpenChange}>
+      <ModalContent hideCloseIcon className='w-full max-w-[100%] min-[480px]:w-[85%] md:w-fit md:min-w-max'>
         <ModalHeader className='flex-row align-top justify-between'>
           <ModalTitle>
             Filter

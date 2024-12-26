@@ -7,9 +7,9 @@ import { cn } from '@/lib/utils';
 import Checkbox from '@/components/ui/Input/Checkbox';
 import InputWrapper from '@/components/ui/Input/InputWrapper';
 
-export type SelectOptionType<T = object> = {
+export type SelectOptionType<T extends object = object> = {
   label: string,
-  value: string
+  value: string,
   data?: T
 }
 
@@ -102,11 +102,11 @@ const SelectMultiple = React.forwardRef<
     )
   });
 
-const DisplaySelectedValueNotMemoize = <T extends boolean = true>(props: PropsWithChildren<ValueContainerProps<SelectOptionType, T>>): ReactElement => {
+const DisplaySelectedValueNotMemoize = <OptionType extends object, T extends boolean = true>(props: PropsWithChildren<ValueContainerProps<SelectOptionType<OptionType>, T>>): ReactElement => {
   const renderValue = (selectedOptions: Options<unknown>) => {
     const isSelectedMore = selectedOptions.length > 1
     const selectedMoreDisplay = ` +${selectedOptions.length - 1}`
-    const firstSelected = selectedOptions[0] as SelectOptionType
+    const firstSelected = selectedOptions[0] as SelectOptionType<OptionType>
 
     return `${firstSelected.label}${isSelectedMore ? selectedMoreDisplay : ''}`
   }

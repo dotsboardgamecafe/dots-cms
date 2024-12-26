@@ -163,3 +163,10 @@ export type TournamentBadgePayloadType = {
     }
   }[],
 }
+
+export const GiftBadgeSchema = z.object({
+  user_code: z.string(),
+  badge_code: z.string({ required_error: "Badge can't be empty" }).min(1, "Badge can't be empty")
+})
+
+export type GiftBadgePayloadType = z.infer<typeof GiftBadgeSchema>

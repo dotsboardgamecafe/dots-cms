@@ -29,6 +29,7 @@ export interface IPermissionsContextValue {
   member?: IBasePermissions & {
     viewInvoice?: boolean
     claimInvoice?: boolean
+    giftBadge?: boolean
   }
   mechanics?: IBasePermissions
   banner?: IBasePermissions
@@ -125,6 +126,7 @@ export const PermissionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
         },
         member: {
           view: permissionList.includes('member-get-list'),
+          giftBadge: true,
           detail: permissionList.includes('member-get-detail'),
           status: permissionList.includes('member-update-status'),
           delete: permissionList.includes('member-delete-account'),

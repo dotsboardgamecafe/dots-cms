@@ -7,9 +7,10 @@ import { cn } from '@/lib/utils';
 import Checkbox from '@/components/ui/Input/Checkbox';
 import InputWrapper from '@/components/ui/Input/InputWrapper';
 
-export type SelectOptionType = {
+export type SelectOptionType<T = object> = {
   label: string,
   value: string
+  data?: T
 }
 
 const SelectMultiple = React.forwardRef<

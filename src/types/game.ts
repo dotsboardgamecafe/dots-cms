@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { AdminType } from '@/types/admin';
 import { RoomParticipantSchema } from '@/types/room';
 
 export type QRType = string
@@ -23,15 +24,7 @@ export type GameType = {
   game_categories?: GameCategory[];
   game_related?: string,
   game_rooms?: string,
-  game_masters?: {
-    admin_code: string,
-    email: string,
-    name: string,
-    user_name: string,
-    status: string,
-    image_url: string,
-    phone_number: string
-  };
+  game_masters?: AdminType[];
 };
 
 export type GameCategory = {
@@ -39,7 +32,7 @@ export type GameCategory = {
 };
 
 export const AddGameSchema = z.object({
-  admin_code: z.string({ required_error: 'Game master is required' }).min(1, 'Game master is required'),
+  admin_codes: z.array(z.string()).min(1, 'Game master is required'),
   cafe_code: z.string({ required_error: 'Cafe code is required' }).min(1, 'Cafe code is required'),
   name: z.string({ required_error: 'Game name is required' }).min(1, 'Game name is required'),
   image_url: z.string({ required_error: 'Game image is required' }),
@@ -71,6 +64,6 @@ export type AddGamePayload = {
   level?: number,
   minimal_participant: number,
   maximum_participant: number,
-  admin_code: string,
+  admin_codes: string[],
   duration: number
 };

@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/Buttons';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
 import MultiUpload from '@/components/ui/Input/MultiUpload';
 import InputNumber from '@/components/ui/Input/Number';
+import SelectGameMasters from "@/components/ui/Input/SelectMultiple/SelectGameMasters";
 import SliderRange from "@/components/ui/Input/Slider";
 import Text from '@/components/ui/Input/Text';
 import Textarea from '@/components/ui/Input/TextArea';
@@ -39,7 +40,7 @@ const AddGameForm = ({ cafes, admins }: Props) => {
   const form = useForm<z.infer<typeof AddGameSchema>>({
     defaultValues: {
       level: 0,
-      admin_code: '',
+      admin_codes: [],
       cafe_code: '',
       name: '',
       image_url: '',
@@ -76,7 +77,7 @@ const AddGameForm = ({ cafes, admins }: Props) => {
       game_categories: data.game_categories.map((category) => ({ category_name: category })),
       game_type: data.game_type,
       collection_url: data.image_url_collection,
-      admin_code: data.admin_code,
+      admin_codes: data.admin_codes,
       level: data.level,
       duration: Number(data.duration)
     };
@@ -101,7 +102,7 @@ const AddGameForm = ({ cafes, admins }: Props) => {
   };
 
   async function checkFieldGameInformationValidation() {
-    const result: boolean = await form.trigger(['name', 'game_type', 'game_categories', 'description', 'cafe_code', 'minimal_participant', 'maximum_participant', 'duration', 'level', 'admin_code'])
+    const result: boolean = await form.trigger(['name', 'game_type', 'game_categories', 'description', 'cafe_code', 'minimal_participant', 'maximum_participant', 'duration', 'level', 'admin_codes'])
     return result
   }
 
@@ -296,7 +297,7 @@ const AddGameForm = ({ cafes, admins }: Props) => {
                 />
                 <FormField
                   control={form.control}
-                  name="admin_code"
+                  name="admin_codes"
                   render={({ field }) => (
                     <FormItem className="space-y-3">
                       <FormLabel>
@@ -305,22 +306,13 @@ const AddGameForm = ({ cafes, admins }: Props) => {
                         </Typography>
                       </FormLabel>
                       <FormControl>
-                        <Select value={field.value} onValueChange={field.onChange}>
-                          <SelectTrigger>
-                            <SelectValue aria-label={field.value} placeholder='Select Game master'>
-                              <Typography variant='text-body-l-medium' className='capitalize'>
-                                {admins.find((admin) => admin.admin_code === field.value)?.name || ''}
-                              </Typography>
-                            </SelectValue>
-                          </SelectTrigger>
-                          <SelectContent>
-                            {
-                              admins.map((admin) => (
-                                <SelectItem key={admin.admin_code} value={admin.admin_code}>{admin.name}</SelectItem>
-                              ))
-                            }
-                          </SelectContent>
-                        </Select>
+                        <SelectGameMasters<'multi'>
+                          onChange={(gameMaster) => {
+                            const mappedValue = gameMaster.map((gameMasterOption) => gameMasterOption.value)
+                            field.onChange(mappedValue)
+                          }}
+                          isMulti
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

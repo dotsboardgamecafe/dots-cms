@@ -117,7 +117,7 @@ export const badgePostPayloadSchema = z.object({
       )
   }).array()
 }).superRefine((formValue, ctx) => {
-  if (formValue.badge_category !== 'manual-gift' && !formValue.badge_rule.length) {
+  if (formValue.badge_category !== 'gift' && !formValue.badge_rule.length) {
     ctx.addIssue({
       code: z.ZodIssueCode.too_small,
       type: 'array',

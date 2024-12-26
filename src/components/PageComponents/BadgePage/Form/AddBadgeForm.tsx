@@ -88,7 +88,7 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
   })
 
   const badgeCategoryValue = form.watch('badge_category')
-  const shouldDisableCriteriaField: boolean = useMemo(() => badgeCategoryValue === 'manual-gift', [badgeCategoryValue])
+  const shouldDisableCriteriaField: boolean = useMemo(() => badgeCategoryValue === 'gift', [badgeCategoryValue])
   const criteriaFieldPlaceholderDisplay: string = useMemo(() => {
     if (!badgeCategoryValue) return 'Please select the category badge first'
     return shouldDisableCriteriaField ? 'Required Admin to Submit' : 'Select criteria...'
@@ -181,7 +181,7 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
 
   function handleCategoryChanges(value: string) {
     form.setValue('badge_category', value)
-    if (value !== 'manual-gift') return
+    if (value !== 'gift') return
 
     setCriteriaMultiSelectValue([])
     form.setValue('badge_rule', [])
@@ -248,7 +248,7 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
                       <SelectContent>
                         <SelectItem value="play">Play</SelectItem>
                         <SelectItem value="spent">Spent</SelectItem>
-                        <SelectItem value="manual-gift">Manual/Gift</SelectItem>
+                        <SelectItem value="gift">Gift</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>

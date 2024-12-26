@@ -39,7 +39,7 @@ const StatusConfirmationModal = ({ open, onOpenChange, gameData }: Props) => {
       maximum_participant: gameData.maximum_participant,
       minimal_participant: gameData.minimal_participant,
       name: gameData.name,
-      admin_code: gameData.game_masters?.admin_code || '',
+      admin_codes: gameData.game_masters?.map((gm) => gm.admin_code) || [],
       duration: gameData.duration,
       level: gameData.level,
       status: isActive ? 'inactive' : 'active'

@@ -1,9 +1,10 @@
+import { cn } from "@/lib/utils";
 
 
-const Spiner = () => {
+const Spiner: React.FC<{ className?: string }> = ({ className }) => {
 
   return (
-    <span className="loader"></span>
+    <span className={cn('loader', className)}></span>
   );
 };
 

@@ -1,5 +1,5 @@
 'use client';
-import React, { memo, PropsWithChildren, ReactNode, useCallback, useRef } from 'react';
+import React, { memo, PropsWithChildren, ReactElement, ReactNode, useCallback, useRef } from 'react';
 import Select, { components, OptionProps, Options, ValueContainerProps } from 'react-select';
 
 import { cn } from '@/lib/utils';
@@ -7,9 +7,9 @@ import { cn } from '@/lib/utils';
 import Checkbox from '@/components/ui/Input/Checkbox';
 import InputWrapper from '@/components/ui/Input/InputWrapper';
 
-export type SelectOptionType<T = object> = {
+export type SelectOptionType<T extends object = object> = {
   label: string,
-  value: string
+  value: string,
   data?: T
 }
 
@@ -102,6 +102,19 @@ const SelectMultiple = React.forwardRef<
     )
   });
 
+const DisplaySelectedValueNotMemoize = <OptionType extends object, T extends boolean = true>(props: PropsWithChildren<ValueContainerProps<SelectOptionType<OptionType>, T>>): ReactElement => {
+  const renderValue = (selectedOptions: Options<unknown>) => {
+    const isSelectedMore = selectedOptions.length > 1
+    const selectedMoreDisplay = ` +${selectedOptions.length - 1}`
+    const firstSelected = selectedOptions[0] as SelectOptionType<OptionType>
+
+    return `${firstSelected.label}${isSelectedMore ? selectedMoreDisplay : ''}`
+  }
+  return <SelectValueContainer renderValue={renderValue} {...props} />
+}
+
+export const DisplaySelectedValue = memo(DisplaySelectedValueNotMemoize) as typeof DisplaySelectedValueNotMemoize
+
 export function SelectOptionCheckBox<OptionType = SelectOptionType, isMulti extends boolean = true>
   ({ className, ...props }: OptionProps<OptionType, isMulti>) {
   return (
@@ -114,7 +127,7 @@ export function SelectOptionCheckBox<OptionType = SelectOptionType, isMulti exte
   )
 }
 
-export const SelectValueContainer: React.FC<PropsWithChildren<ValueContainerProps<any, true> & { renderValue: (options: Options<unknown>) => ReactNode }>> = memo(({ children, renderValue, ...props }) => {
+export const SelectValueContainer = memo(<T extends boolean = true>({ children, renderValue, ...props }: PropsWithChildren<ValueContainerProps<any, T> & { renderValue: (options: Options<unknown>) => ReactNode }>): ReactElement => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { getValue, hasValue } = props
   const childrenLength = React.Children.count(children)

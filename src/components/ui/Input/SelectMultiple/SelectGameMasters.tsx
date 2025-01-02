@@ -3,7 +3,7 @@ import { MultiValue, SingleValue } from "react-select"
 
 import { getAdmins } from "@/lib/api/admin"
 
-import { SelectOptionType } from "@/components/ui/Input/SelectMultiple"
+import { DisplaySelectedValue, SelectOptionCheckBox, SelectOptionType } from "@/components/ui/Input/SelectMultiple"
 import SelectAsync from "@/components/ui/Input/SelectMultiple/async"
 
 import { AdminType } from "@/types/admin"
@@ -51,6 +51,15 @@ function SelectGameMasters<T>({ onChange, defaultData, isMulti }: Props<T>) {
     setSelectedGameMasters(newValue)
   }
 
+  const multiProps = isMulti ? {
+    components: {
+      Option: SelectOptionCheckBox,
+      ValueContainer: DisplaySelectedValue
+    },
+    hideSelectedOptions: false,
+    closeMenuOnSelect: false
+  } : {}
+
   return (
     <SelectAsync<T extends 'multi' ? true : false, GameMastersOptionType>
       loadOptions={loadOptions}
@@ -59,6 +68,7 @@ function SelectGameMasters<T>({ onChange, defaultData, isMulti }: Props<T>) {
       onChange={(newValue) => handleGameMasterChange(newValue as T extends 'multi' ? MultiValue<GameMastersOptionType> : SingleValue<GameMastersOptionType>)}
       isSearchable
       isMulti={isMulti as T extends 'multi' ? true : false}
+      {...multiProps}
     />
   )
 

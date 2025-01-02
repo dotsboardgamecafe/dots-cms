@@ -1,6 +1,7 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { ArrowCircleDown2, Eye, HambergerMenu, ReceiptItem, Setting4, Trash } from 'iconsax-react';
+import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PropsWithRef, useEffect, useMemo, useState } from 'react';
@@ -57,6 +58,28 @@ const MemberTable = ({ data, pagination }: Props) => {
                 {row.original.username || '-'}
               </Typography>
             </section>
+          );
+        }
+      },
+      {
+        accessorKey: 'gender',
+        header: 'Gender',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular' className={row.original.gender && 'capitalize'}>
+              {row.original.gender || 'n/a'}
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'date_of_birth',
+        header: 'Date of Birth',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original.date_of_birth ? dayjs(row.original.date_of_birth).format('DD MMM, YYYY') : 'n/a'}
+            </Typography>
           );
         }
       },

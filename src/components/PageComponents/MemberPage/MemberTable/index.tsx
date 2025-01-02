@@ -1,6 +1,6 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import { ArrowCircleDown2, Eye, HambergerMenu, ReceiptItem, Setting4, Trash } from 'iconsax-react';
+import { ArrowCircleDown2, Gift, Eye, HambergerMenu, ReceiptItem, Setting4, Trash } from 'iconsax-react';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,6 +13,7 @@ import StatusConfirmationModal from '@/components/PageComponents/MemberPage/Conf
 import MemberDetailModal from '@/components/PageComponents/MemberPage/DetailModal';
 import MemberFilterModal from '@/components/PageComponents/MemberPage/FilterModal';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/ButtonDropdown';
+import GiftBadgeModal from '@/components/PageComponents/MemberPage/GiftBadgeModal';
 import { Button } from '@/components/ui/Buttons';
 import Search from '@/components/ui/Input/Search';
 import { useProcessDispatch } from '@/components/ui/Modal/processContext';
@@ -35,6 +36,7 @@ const MemberTable = ({ data, pagination }: Props) => {
   const memberPermissions = usePermissions().member
   const dispatchProcess = useProcessDispatch()
 
+  const [modalGiftBadgeOpen, setModalGiftBadgeOpen] = useState<boolean>(false)
   const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState<boolean>(false);
@@ -169,24 +171,31 @@ const MemberTable = ({ data, pagination }: Props) => {
       },
     ]
 
-    if (memberPermissions?.detail || memberPermissions?.viewInvoice || memberPermissions?.delete) {
+    if (memberPermissions?.detail || memberPermissions?.viewInvoice || memberPermissions?.delete || memberPermissions?.giftBadge) {
       result.push({
         id: 'action',
         header: 'Action',
         cell: ({ row }) => {
           return (
             <div className='flex flex-row items-center gap-4' >
-              {memberPermissions.viewInvoice && (
-                <Link className='p-0' href={`/member/invoices/${row.original.user_code}`}>
-                  <ReceiptItem />
-                </Link>
-              )}
               {memberPermissions.detail && (
                 <Button className='p-0' variant='link' onClick={() => {
                   onClickDetail(row.original);
                 }}>
                   <Eye />
                 </Button>
+              )}
+              {memberPermissions.giftBadge && (
+                <Button className='p-0' variant='link' onClick={() => {
+                  openModalGiftBadge(row.original);
+                }}>
+                  <Gift />
+                </Button>
+              )}
+              {memberPermissions.viewInvoice && (
+                <Link className='p-0' href={`/member/invoices/${row.original.user_code}`}>
+                  <ReceiptItem />
+                </Link>
               )}
               {memberPermissions.delete && (
                 <Button className='p-0' variant='link' onClick={() => {
@@ -203,7 +212,7 @@ const MemberTable = ({ data, pagination }: Props) => {
     }
 
     return result
-  }, [memberPermissions?.delete, memberPermissions?.detail, memberPermissions?.viewInvoice, memberPermissions?.status])
+  }, [memberPermissions?.delete, memberPermissions?.detail, memberPermissions?.viewInvoice, memberPermissions?.status, memberPermissions?.giftBadge])
 
   const table = useReactTable({
     data: data,
@@ -212,10 +221,15 @@ const MemberTable = ({ data, pagination }: Props) => {
     columns,
   });
 
-  const onClickDetail = (row: MemberType) => {
+  function onClickDetail(row: MemberType) {
     setDetailModalOpen(true);
     setSelectedRow(row);
   };
+
+  function openModalGiftBadge(row: MemberType) {
+    setModalGiftBadgeOpen(true)
+    setSelectedRow(row)
+  }
 
   useEffect(() => {
     if (!pagination.limit) return
@@ -304,6 +318,11 @@ const MemberTable = ({ data, pagination }: Props) => {
         open={deleteConfirmationModalOpen}
         onOpenChange={(value) => setDeleteConfirmationModalOpen(value)}
         memberData={selectedRow}
+      />
+      <GiftBadgeModal
+        onOpenChange={(isOpen) => setModalGiftBadgeOpen(isOpen)}
+        open={modalGiftBadgeOpen}
+        member={selectedRow}
       />
     </div>
   );

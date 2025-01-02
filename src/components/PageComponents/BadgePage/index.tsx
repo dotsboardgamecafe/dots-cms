@@ -168,7 +168,7 @@ const BadgePageContent = ({ data, pagination }: Props) => {
     const criteria: string = snakeCaseToString(listCriteria?.[0].name);
     const numberOfCriteria = listCriteria?.length || 0;
 
-    if (numberOfCriteria <= 1) return criteria || '-';
+    if (numberOfCriteria <= 1) return criteria || 'Required Admin to Gift';
 
     return `${criteria}, +${numberOfCriteria - 1}`;
   }

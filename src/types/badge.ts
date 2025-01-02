@@ -115,7 +115,18 @@ export const badgePostPayloadSchema = z.object({
           })
         })
       )
-  }).array().min(1, 'You need to atleast select 1 badge criteria')
+  }).array()
+}).superRefine((formValue, ctx) => {
+  if (formValue.badge_category !== 'gift' && !formValue.badge_rule.length) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.too_small,
+      type: 'array',
+      minimum: 1,
+      inclusive: true,
+      message: 'You need to atleast select 1 badge criteria',
+      path: ['badge_rule']
+    })
+  }
 })
 
 export type BadgePostPayloadType = z.infer<typeof badgePostPayloadSchema>
@@ -152,3 +163,10 @@ export type TournamentBadgePayloadType = {
     }
   }[],
 }
+
+export const GiftBadgeSchema = z.object({
+  user_code: z.string(),
+  badge_code: z.string({ required_error: "Badge can't be empty" }).min(1, "Badge can't be empty")
+})
+
+export type GiftBadgePayloadType = z.infer<typeof GiftBadgeSchema>

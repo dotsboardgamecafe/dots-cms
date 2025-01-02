@@ -39,7 +39,7 @@ export const BadgeFilterForm = ({ onClose, control }: Props) => {
   }));
 
   const handleFormSubmit = (data: BadgeFilterType) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString())
     params.delete('status')
     params.delete('badge_category')
     params.delete('sort')
@@ -84,7 +84,7 @@ export const BadgeFilterForm = ({ onClose, control }: Props) => {
                 <RadioGroup
                   onValueChange={field.onChange}
                   value={field.value}
-                  className="flex flex-row "
+                  className="flex flex-row flex-wrap gap-4"
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
@@ -98,7 +98,7 @@ export const BadgeFilterForm = ({ onClose, control }: Props) => {
                   </FormItem>
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="Play" />
+                      <RadioGroupItem value="play" />
                     </FormControl>
                     <FormLabel className="font-normal">
                       <Typography variant='text-body-l-regular'>
@@ -108,21 +108,21 @@ export const BadgeFilterForm = ({ onClose, control }: Props) => {
                   </FormItem>
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="Retail" />
+                      <RadioGroupItem value="spent" />
                     </FormControl>
                     <FormLabel className="font-normal">
                       <Typography variant='text-body-l-regular'>
-                        Retail
+                        FnB
                       </Typography>
                     </FormLabel>
                   </FormItem>
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="Spent" />
+                      <RadioGroupItem value="gift" />
                     </FormControl>
                     <FormLabel className="font-normal">
                       <Typography variant='text-body-l-regular'>
-                        FnB
+                        Gift
                       </Typography>
                     </FormLabel>
                   </FormItem>
@@ -156,7 +156,7 @@ export const BadgeFilterForm = ({ onClose, control }: Props) => {
                 <RadioGroup
                   onValueChange={field.onChange}
                   value={field.value}
-                  className="flex flex-row "
+                  className="flex flex-row flex-wrap gap-4"
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
@@ -208,7 +208,7 @@ export const BadgeFilterForm = ({ onClose, control }: Props) => {
                 <RadioGroup
                   onValueChange={field.onChange}
                   value={field.value || ''}
-                  className="flex flex-row "
+                  className="flex flex-row flex-wrap gap-4"
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>

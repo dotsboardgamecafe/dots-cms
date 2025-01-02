@@ -229,7 +229,7 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
             <DropdownMenuContent className='bg-white border p-0 pr-4'>
               <Button variant='secondary' size='md' onClick={() => dispatchProcess('export_game')}>
                 <ArrowCircleDown2 />
-                <Typography className='grow text-left' variant='paragraph-l-bold'>Export Game Data to CSV</Typography>
+                <Typography className='grow text-left' variant='paragraph-l-regular'>Export Game Data to CSV</Typography>
               </Button>
             </DropdownMenuContent>
           </DropdownMenu>

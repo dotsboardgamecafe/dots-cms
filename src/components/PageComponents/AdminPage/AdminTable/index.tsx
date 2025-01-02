@@ -206,7 +206,7 @@ const AdminTable = ({ data, pagination }: Props) => {
             <DropdownMenuContent className='bg-white border p-0 pr-4'>
               <Button variant='secondary' size='md' onClick={() => dispatchProcess('export_admin')}>
                 <ArrowCircleDown2 />
-                <Typography className='grow text-left' variant='paragraph-l-bold'>Export Admin Data to CSV</Typography>
+                <Typography className='grow text-left' variant='paragraph-l-regular'>Export Admin Data to CSV</Typography>
               </Button>
             </DropdownMenuContent>
           </DropdownMenu>

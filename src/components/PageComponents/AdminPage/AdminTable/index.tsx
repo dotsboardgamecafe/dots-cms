@@ -1,6 +1,6 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import { AddCircle, Edit, Eye, Setting4 } from 'iconsax-react';
+import { AddCircle, ArrowCircleDown2, Edit, Eye, HambergerMenu, Setting4 } from 'iconsax-react';
 import Image from 'next/image';
 import { PropsWithRef, useEffect, useMemo, useState } from 'react';
 
@@ -11,8 +11,10 @@ import AdminDetailModal from '@/components/PageComponents/AdminPage/DetailModal'
 import EditAdminModal from '@/components/PageComponents/AdminPage/EditAdminModal';
 import AdminFilterModal from '@/components/PageComponents/AdminPage/FilterModal';
 import StatusConfirmationModal from '@/components/PageComponents/AdminPage/StatusConfirmationModal';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/ButtonDropdown';
 import { Button } from '@/components/ui/Buttons';
 import Search from '@/components/ui/Input/Search';
+import { useProcessDispatch } from '@/components/ui/Modal/processContext';
 import Pagination from '@/components/ui/Pagination/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
@@ -31,6 +33,7 @@ type Props = PropsWithRef<{
 
 const AdminTable = ({ data, pagination }: Props) => {
   const adminPermissions = usePermissions().admin
+  const dispatchProcess = useProcessDispatch()
 
   const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
@@ -196,6 +199,17 @@ const AdminTable = ({ data, pagination }: Props) => {
               Filter
             </Typography>
           </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger variant='default' size='lg' className='gap-4 bg-transparent text-black !p-0'>
+              <HambergerMenu />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className='bg-white border p-0 pr-4'>
+              <Button variant='secondary' size='md' onClick={() => dispatchProcess('export_admin')}>
+                <ArrowCircleDown2 />
+                <Typography className='grow text-left' variant='paragraph-l-regular'>Export Admin Data to CSV</Typography>
+              </Button>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </section >
       <Table>

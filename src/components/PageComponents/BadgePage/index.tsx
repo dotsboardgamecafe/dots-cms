@@ -1,6 +1,6 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { AddCircle, Edit, Eye, Setting4 } from 'iconsax-react';
+import { AddCircle, ArrowCircleDown2, Edit, Eye, HambergerMenu, Setting4 } from 'iconsax-react';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 
@@ -26,6 +26,7 @@ import { snakeCaseToString } from '@/helper/string';
 
 import { BadgeRuleType, BadgeType } from '@/types/badge';
 import { Pagination as PaginationType } from '@/types/network';
+import { useProcessDispatch } from '@/components/ui/Modal/processContext';
 
 type Props = {
   data: BadgeType[];
@@ -34,6 +35,7 @@ type Props = {
 
 const BadgePageContent = ({ data, pagination }: Props) => {
   const badgePermission = usePermissions().badge
+  const dispatchProcess = useProcessDispatch()
 
   const [statusConfirmationModalOpen, setStatusConfirmationModalOpen] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<BadgeType>();
@@ -166,7 +168,7 @@ const BadgePageContent = ({ data, pagination }: Props) => {
     const criteria: string = snakeCaseToString(listCriteria?.[0].name);
     const numberOfCriteria = listCriteria?.length || 0;
 
-    if (numberOfCriteria <= 1) return criteria || '-';
+    if (numberOfCriteria <= 1) return criteria || 'Required Admin to Gift';
 
     return `${criteria}, +${numberOfCriteria - 1}`;
   }
@@ -207,6 +209,17 @@ const BadgePageContent = ({ data, pagination }: Props) => {
               Filter
             </Typography>
           </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger variant='default' size='lg' className='gap-4 bg-transparent text-black !p-0'>
+              <HambergerMenu />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className='bg-white border p-0 pr-4'>
+              <Button variant='secondary' size='md' onClick={() => dispatchProcess('export_badges')}>
+                <ArrowCircleDown2 />
+                <Typography className='grow text-left' variant='paragraph-l-regular'>Export Badges Data to CSV</Typography>
+              </Button>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </section>
       <BadgeListTable data={data} pagination={pagination} columnConfig={columns} />

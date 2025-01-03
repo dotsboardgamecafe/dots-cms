@@ -98,6 +98,15 @@ textarea:focus{
   @apply gap-[8px] border-gray-300 rounded-xl border-[1px] px-[14px] py-[10px] w-full flex items-center;
 }
 
+.input-wrapper.select {
+  cursor: pointer;
+}
+
+.input-wrapper.disabled {
+  cursor: not-allowed;
+  background-color: hsl(0, 0%, 95%);
+}
+
 .form-3-cols{
   @apply grid grid-cols-3 gap-8;
 }
@@ -156,7 +165,8 @@ textarea:focus{
   height: 24px;
   border-radius: 50%;
   position: relative;
-  animation: rotate 1s linear infinite
+  animation: rotate 1s linear infinite;
+  color: #FFF;
 }
 .loader::before {
   content: "";
@@ -164,7 +174,7 @@ textarea:focus{
   position: absolute;
   inset: 0px;
   border-radius: 50%;
-  border: 3px solid #FFF;
+  border: 3px solid currentColor;
   animation: prixClipFix 3s linear infinite ;
 }
 

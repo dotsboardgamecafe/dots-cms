@@ -16,6 +16,29 @@ export const getBadges = async (options?: ApiOptions) => {
   });
 };
 
+export const getAvailableUserBadges = async (userId: string, options?: ApiOptions) => {
+  const res = await fetcher<BadgeType[]>('getAvailableUserBadges', {
+    ...options,
+    param: userId,
+    requestOpt: {
+      next: { tags: ['get-available-user-badges', userId] }
+    }
+  })
+
+  return res
+}
+
+export const giftUserBadge = async (userId: string, badgeCode: string) => {
+  const res = await fetcher('giftUserBadge', {
+    param: badgeCode,
+    body: {
+      user_code: userId
+    }
+  })
+
+  return res
+}
+
 export const addBadges = async (options?: ApiOptions<BadgePostPayloadType>) => {
   const res = await fetcher('addBadges', options);
   revalidateTag('getBadges');

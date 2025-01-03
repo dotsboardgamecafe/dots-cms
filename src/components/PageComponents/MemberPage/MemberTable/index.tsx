@@ -1,6 +1,7 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import { Eye, ReceiptItem, Setting4, Trash } from 'iconsax-react';
+import { ArrowCircleDown2, Gift, Eye, HambergerMenu, ReceiptItem, Setting4, Trash } from 'iconsax-react';
+import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PropsWithRef, useEffect, useMemo, useState } from 'react';
@@ -11,8 +12,11 @@ import DeleteConfirmationModal from '@/components/PageComponents/MemberPage/Conf
 import StatusConfirmationModal from '@/components/PageComponents/MemberPage/ConfirmationModal/StatusConfirmationModal';
 import MemberDetailModal from '@/components/PageComponents/MemberPage/DetailModal';
 import MemberFilterModal from '@/components/PageComponents/MemberPage/FilterModal';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/ButtonDropdown';
+import GiftBadgeModal from '@/components/PageComponents/MemberPage/GiftBadgeModal';
 import { Button } from '@/components/ui/Buttons';
 import Search from '@/components/ui/Input/Search';
+import { useProcessDispatch } from '@/components/ui/Modal/processContext';
 import Pagination from '@/components/ui/Pagination/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
@@ -30,7 +34,9 @@ type Props = PropsWithRef<{
 
 const MemberTable = ({ data, pagination }: Props) => {
   const memberPermissions = usePermissions().member
+  const dispatchProcess = useProcessDispatch()
 
+  const [modalGiftBadgeOpen, setModalGiftBadgeOpen] = useState<boolean>(false)
   const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState<boolean>(false);
@@ -54,6 +60,28 @@ const MemberTable = ({ data, pagination }: Props) => {
                 {row.original.username || '-'}
               </Typography>
             </section>
+          );
+        }
+      },
+      {
+        accessorKey: 'gender',
+        header: 'Gender',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular' className={row.original.gender && 'capitalize'}>
+              {row.original.gender || 'n/a'}
+            </Typography>
+          );
+        }
+      },
+      {
+        accessorKey: 'date_of_birth',
+        header: 'Date of Birth',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original.date_of_birth ? dayjs(row.original.date_of_birth).format('DD MMM, YYYY') : 'n/a'}
+            </Typography>
           );
         }
       },
@@ -143,24 +171,31 @@ const MemberTable = ({ data, pagination }: Props) => {
       },
     ]
 
-    if (memberPermissions?.detail || memberPermissions?.viewInvoice || memberPermissions?.delete) {
+    if (memberPermissions?.detail || memberPermissions?.viewInvoice || memberPermissions?.delete || memberPermissions?.giftBadge) {
       result.push({
         id: 'action',
         header: 'Action',
         cell: ({ row }) => {
           return (
             <div className='flex flex-row items-center gap-4' >
-              {memberPermissions.viewInvoice && (
-                <Link className='p-0' href={`/member/invoices/${row.original.user_code}`}>
-                  <ReceiptItem />
-                </Link>
-              )}
               {memberPermissions.detail && (
                 <Button className='p-0' variant='link' onClick={() => {
                   onClickDetail(row.original);
                 }}>
                   <Eye />
                 </Button>
+              )}
+              {memberPermissions.giftBadge && (
+                <Button className='p-0' variant='link' onClick={() => {
+                  openModalGiftBadge(row.original);
+                }}>
+                  <Gift />
+                </Button>
+              )}
+              {memberPermissions.viewInvoice && (
+                <Link className='p-0' href={`/member/invoices/${row.original.user_code}`}>
+                  <ReceiptItem />
+                </Link>
               )}
               {memberPermissions.delete && (
                 <Button className='p-0' variant='link' onClick={() => {
@@ -177,7 +212,7 @@ const MemberTable = ({ data, pagination }: Props) => {
     }
 
     return result
-  }, [memberPermissions?.delete, memberPermissions?.detail, memberPermissions?.viewInvoice, memberPermissions?.status])
+  }, [memberPermissions?.delete, memberPermissions?.detail, memberPermissions?.viewInvoice, memberPermissions?.status, memberPermissions?.giftBadge])
 
   const table = useReactTable({
     data: data,
@@ -186,10 +221,15 @@ const MemberTable = ({ data, pagination }: Props) => {
     columns,
   });
 
-  const onClickDetail = (row: MemberType) => {
+  function onClickDetail(row: MemberType) {
     setDetailModalOpen(true);
     setSelectedRow(row);
   };
+
+  function openModalGiftBadge(row: MemberType) {
+    setModalGiftBadgeOpen(true)
+    setSelectedRow(row)
+  }
 
   useEffect(() => {
     if (!pagination.limit) return
@@ -208,6 +248,17 @@ const MemberTable = ({ data, pagination }: Props) => {
             Filter
           </Typography>
         </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger variant='default' size='lg' className='gap-4 bg-transparent text-black !p-0'>
+            <HambergerMenu />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className='bg-white border p-0 pr-4'>
+            <Button variant='secondary' size='md' onClick={() => dispatchProcess('export_member')}>
+              <ArrowCircleDown2 />
+              <Typography className='grow text-left' variant='paragraph-l-regular'>Export Member Data to CSV</Typography>
+            </Button>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </section>
       <Table>
         <TableHeader>
@@ -266,6 +317,11 @@ const MemberTable = ({ data, pagination }: Props) => {
         open={deleteConfirmationModalOpen}
         onOpenChange={(value) => setDeleteConfirmationModalOpen(value)}
         memberData={selectedRow}
+      />
+      <GiftBadgeModal
+        onOpenChange={(isOpen) => setModalGiftBadgeOpen(isOpen)}
+        open={modalGiftBadgeOpen}
+        member={selectedRow}
       />
     </div>
   );

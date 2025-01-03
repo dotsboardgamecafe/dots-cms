@@ -61,7 +61,7 @@ const ViewBadgeDetailModal = ({ open, onOpenChange, badgeCode = '', onEdit }: Pr
                 Required Criteria
               </Typography>
               <Typography variant='paragraph-xl-regular' className='capitalize'>
-                {badgeData.badge_rules?.length ? `Selected ${badgeData.badge_rules.length} criteria` : 'No criteria'}
+                {badgeData.badge_rules?.length ? `Selected ${badgeData.badge_rules.length} criteria` : 'Required admin to gift'}
               </Typography>
               <Separator className='mt-1' />
             </section>

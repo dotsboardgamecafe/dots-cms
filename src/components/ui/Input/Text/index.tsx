@@ -9,33 +9,33 @@ import { InputProps } from '@/types/Inputs';
 
 type Props = React.InputHTMLAttributes<HTMLInputElement> & InputProps;
 
-const Text = React.forwardRef<HTMLInputElement, Props>( ( { prefixIcon, suffixIcon, label, className, ...props }, ref ) => {
+const Text = React.forwardRef<HTMLInputElement, Props>(({ prefixIcon, suffixIcon, label, className, ...props }, ref) => {
 
   return (
     <div className='w-full flex flex-col gap-2'>
       {
         label &&
         <Typography variant='paragraph-l-medium' color='neutral-ink'>
-          { label }
+          {label}
         </Typography>
       }
-      <InputWrapper className={ className } >
-        { prefixIcon }
+      <InputWrapper className={className} >
+        {prefixIcon}
         <input
-          { ...props }
+          {...props}
           type='text'
           className={
-            cn( [
-              'w-full',
-            ] )
+            cn([
+              'w-full', 'bg-inherit'
+            ])
           }
-          onChange={ props.onChange }
-          value={ props.value }
-          ref={ ref } />
-        { suffixIcon }
+          onChange={props.onChange}
+          value={props.value}
+          ref={ref} />
+        {suffixIcon}
       </InputWrapper>
     </div>
   );
-} );
+});
 
 export default Text;

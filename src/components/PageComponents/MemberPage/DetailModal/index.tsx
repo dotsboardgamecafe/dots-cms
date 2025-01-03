@@ -1,4 +1,5 @@
 'use client';
+import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PropsWithRef } from 'react';
@@ -28,6 +29,8 @@ const MemberDetailModal = ({ open, onOpenChange, memberData }: Props) => {
           </section>
           <section className='flex flex-col gap-6 flex-grow overflow-y-auto'>
             <TextLabel title='Username' value={memberData?.username} />
+            <TextLabel title='Gender' value={memberData?.gender} className='capitalize' />
+            <TextLabel title='Date of Birth' value={memberData?.date_of_birth ? dayjs(memberData?.date_of_birth).format('DD MMMM, YYYY') : 'n/a'} />
             <TextLabel title='Email Address' value={memberData?.email} />
             <TextLabel title='Phone Number' value={memberData?.phone_number} />
             <TextLabel title='Tier Level' value={memberData?.latest_tier} />

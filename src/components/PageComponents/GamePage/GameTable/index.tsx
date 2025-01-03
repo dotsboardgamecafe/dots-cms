@@ -1,6 +1,6 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import { AddCircle, Edit, Eye, Setting4, Trash } from 'iconsax-react';
+import { AddCircle, ArrowCircleDown2, Edit, Eye, HambergerMenu, Setting4, Trash } from 'iconsax-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -9,8 +9,10 @@ import { cn } from '@/lib/utils';
 import DeleteConfirmationModal from '@/components/PageComponents/GamePage/GameTable/DeleteConfirmationModal';
 import GameFilterModal from '@/components/PageComponents/GamePage/GameTable/GameFilterModal';
 import StatusConfirmationModal from '@/components/PageComponents/GamePage/GameTable/StatusConfirmationModal';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/ButtonDropdown';
 import { Button } from '@/components/ui/Buttons';
 import Search from '@/components/ui/Input/Search';
+import { useProcessDispatch } from '@/components/ui/Modal/processContext';
 import Pagination from '@/components/ui/Pagination/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
@@ -31,6 +33,7 @@ type Props = {
 
 const GameTable = ({ data, pagination, gameTypes }: Props) => {
   const gamePermission = usePermissions().games
+  const dispatchProcess = useProcessDispatch()
 
   const [isOpenDeleteConfimationModal, setIsOpenDeleteConfirmationModal] = useState<boolean>(false);
   const [isOpenChangeStatus, setIsOpenChangeStatus] = useState<boolean>(false);
@@ -219,6 +222,17 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
               Filter
             </Typography>
           </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger variant='default' size='lg' className='gap-4 bg-transparent text-black !p-0'>
+              <HambergerMenu />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className='bg-white border p-0 pr-4'>
+              <Button variant='secondary' size='md' onClick={() => dispatchProcess('export_game')}>
+                <ArrowCircleDown2 />
+                <Typography className='grow text-left' variant='paragraph-l-regular'>Export Game Data to CSV</Typography>
+              </Button>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </section>
       <Table>

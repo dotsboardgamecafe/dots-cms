@@ -1,0 +1,23 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "V9BD9383F2.com.connectthedots.dots",
+        "paths": [
+          "*"
+        ]
+      }
+    ]
+  },
+  "activitycontinuation": {
+    "apps": [
+      "V9BD9383F2.com.connectthedots.dots"
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "V9BD9383F2.com.connectthedots.dots"
+    ]
+  }
+}

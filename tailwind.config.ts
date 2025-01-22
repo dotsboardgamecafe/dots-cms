@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config = {
-  darkMode: [ "class" ],
+  darkMode: ["class"],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
@@ -15,7 +15,7 @@ const config = {
       padding: "165px",
     },
     fontFamily: {
-      'sans': [ 'Futura PT', 'sans-serif' ],
+      'sans': ['Futura PT', 'sans-serif'],
     },
     extend: {
       boxShadow: {
@@ -111,7 +111,7 @@ const config = {
       },
     },
   },
-  plugins: [ require( "tailwindcss-animate" ) ],
+  plugins: [require("tailwindcss-animate"), require('@tailwindcss/typography')],
 } satisfies Config;
 
 export default config;

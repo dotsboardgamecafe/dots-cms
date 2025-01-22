@@ -1,13 +1,14 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 
 /** @type {import('next').NextConfig} */
+import createMDX from '@next/mdx'
 
 const nextConfig = {
 
   eslint: {
     dirs: ['src'],
   },
-
+  pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
   reactStrictMode: true,
   swcMinify: true,
   output: 'standalone',
@@ -42,6 +43,14 @@ const nextConfig = {
 
     return config;
   },
+  headers() {
+    return [
+      {
+        source: "/.well-known/apple-app-site-association",
+        headers: [{ key: "content-type", value: "application/json" }]
+      }
+    ];
+  },
   images: {
     remotePatterns: [
       {
@@ -68,4 +77,8 @@ const nextConfig = {
   }
 };
 
-module.exports = nextConfig;
+const withMDX = createMDX({
+  // Add markdown plugins here, as desired
+})
+
+export default withMDX(nextConfig);

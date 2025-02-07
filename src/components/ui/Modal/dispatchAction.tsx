@@ -4,10 +4,12 @@ import { getAdmins } from "@/lib/api/admin";
 import { getBadges } from "@/lib/api/badge";
 import { getGameList } from "@/lib/api/games";
 import { getMembers } from "@/lib/api/member";
-import { ObjectToCSV } from "@/lib/csv-processor";
+
+import { CSVReader, ObjectToCSV } from "@/helper";
 
 import { AdminType } from "@/types/admin";
 import { BadgeType } from "@/types/badge";
+import { NestedKeyOf } from "@/types/common";
 import { GameType } from "@/types/game";
 import { MemberType } from "@/types/member";
 
@@ -41,9 +43,9 @@ export async function exportAdmin() {
 }
 
 export async function exportGameCatalog() {
-  const exportedColumns: (keyof GameType)[] = ['game_code', "name", 'game_type', 'duration', 'cafe_name', 'level', 'minimal_participant', "maximum_participant", "status", 'description']
+  const exportedColumns: (NestedKeyOf<GameType>)[] = ['game_code', "name", 'game_type', 'duration', 'cafe_name', 'level', 'minimal_participant', "maximum_participant", "status", 'description', 'game_masters.admin_code', 'game_masters.name']
   const games = await getGameList({ pagination: { limit: 99999999999999 } })
-  const csvFile = await ObjectToCSV(games.data, exportedColumns)
+  const csvFile = await ObjectToCSV<GameType>(games.data, exportedColumns)
 
   const dateStamp = dayjs(new Date()).format('DD-MMM-YYYY')
   const link = URL.createObjectURL(csvFile)
@@ -68,10 +70,19 @@ export async function exportBadges() {
   URL.revokeObjectURL(link)
 }
 
-
+export async function importGameCatalog() {
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.onchange = (event: any) => {
+    const file = event.target?.files[0]
+    CSVReader(file).then((data) => console.log(data)).catch((err) => console.log(err))
+  }
+  input.click()
+}
 export const actionProcessList = {
   export_member: exportMember,
   export_admin: exportAdmin,
   export_game: exportGameCatalog,
   export_badges: exportBadges,
+  import_game: importGameCatalog,
 }

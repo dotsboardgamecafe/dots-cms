@@ -42,7 +42,7 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
   ]), [])
 
   const defaultMultiSelectCriteria: SelectOptionType[] | undefined = useMemo(() => (
-    defaultData?.badge_rules.reduce((result: SelectOptionType[], criteria) => {
+    defaultData?.badge_rules?.reduce((result: SelectOptionType[], criteria) => {
       const optVal = criteriaOptions.find(option => option.value === criteria.name)
       if (!optVal) return result
       return [...result, optVal]
@@ -50,7 +50,7 @@ export const AddBadgeForm = ({ onClose, defaultData, onSubmit }: Props) => {
   ), [defaultData?.badge_rules, criteriaOptions])
 
   const defaultBadgeRulesValue: BadgePostPayloadType['badge_rule'] | undefined = useMemo(() => {
-    return defaultData?.badge_rules.reduce((result: BadgePostPayloadType['badge_rule'], badgeRule) => {
+    return defaultData?.badge_rules?.reduce((result: BadgePostPayloadType['badge_rule'], badgeRule) => {
       const populatedValue = getDefaultRulesObject(badgeRule.name)
       if (!populatedValue) return result
 

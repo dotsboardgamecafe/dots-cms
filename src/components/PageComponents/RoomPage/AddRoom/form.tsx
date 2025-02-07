@@ -311,7 +311,7 @@ const AddRoomForm = () => {
                     </Typography>
                   </FormLabel>
                   <FormControl>
-                    <InputNumber placeholder='Set Price' onChange={(e) => field.onChange(Number(e.target.value))} value={field.value} />
+                    <InputNumber prefixIcon="Rp. " placeholder='Set Price' onChange={(e) => field.onChange(Number(e.target.value))} value={field.value} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

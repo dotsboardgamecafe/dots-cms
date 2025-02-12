@@ -34,7 +34,7 @@ const ClaimInvoiceConfirmationModal = ({ open, onOpenChange, memberData, invoice
         variant: 'default',
       });
 
-      if (res.stat_code === "ERR:FORBIDDEN") throw new Error("ERR:FORBIDDEN")
+      if (res.stat_code?.includes('ERR')) throw new Error("ERR: CAN'T CLAIM INVOICE")
 
     } catch (error) {
       toast({

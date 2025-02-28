@@ -1,6 +1,6 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import { AddCircle, ArrowCircleDown2, Edit, Eye, HambergerMenu, Setting4, Trash } from 'iconsax-react';
+import { AddCircle, ArrowCircleDown2, DocumentUpload, Edit, Eye, HambergerMenu, Setting4, Trash } from 'iconsax-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 import DeleteConfirmationModal from '@/components/PageComponents/GamePage/GameTable/DeleteConfirmationModal';
 import GameFilterModal from '@/components/PageComponents/GamePage/GameTable/GameFilterModal';
 import StatusConfirmationModal from '@/components/PageComponents/GamePage/GameTable/StatusConfirmationModal';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/ButtonDropdown';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/ButtonDropdown';
 import { Button } from '@/components/ui/Buttons';
 import Search from '@/components/ui/Input/Search';
 import { useProcessDispatch } from '@/components/ui/Modal/processContext';
@@ -33,7 +33,7 @@ type Props = {
 
 const GameTable = ({ data, pagination, gameTypes }: Props) => {
   const gamePermission = usePermissions().games
-  const dispatchProcess = useProcessDispatch()
+  const { dispatchAction: dispatchProcess } = useProcessDispatch()
 
   const [isOpenDeleteConfimationModal, setIsOpenDeleteConfirmationModal] = useState<boolean>(false);
   const [isOpenChangeStatus, setIsOpenChangeStatus] = useState<boolean>(false);
@@ -227,10 +227,14 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
               <HambergerMenu />
             </DropdownMenuTrigger>
             <DropdownMenuContent className='bg-white border p-0 pr-4'>
-              <Button variant='secondary' size='md' onClick={() => dispatchProcess('export_game')}>
+              <DropdownMenuItem onClick={() => dispatchProcess('export_game')}>
                 <ArrowCircleDown2 />
                 <Typography className='grow text-left' variant='paragraph-l-regular'>Export Game Data to CSV</Typography>
-              </Button>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => dispatchProcess('import_game', { title: 'Importing game data (update)', disableAutoClose: true })}>
+                <DocumentUpload />
+                <Typography className='grow text-left' variant='paragraph-l-regular'>Import Game Data from CSV (update)</Typography>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

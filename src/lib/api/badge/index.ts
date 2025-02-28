@@ -72,3 +72,9 @@ export const getBadgeDetail = (badgeCode: string, options?: ApiOptions) => {
 export const getTournamentBadgeDetail = (badgeCode: string, options?: ApiOptions) => {
   return fetcher<TournamentBadgeType[]>('getTournamentBadgeDetails', { ...options, param: badgeCode, requestOpt: { next: { tags: [`get-tournament-badge-${badgeCode}`] } } })
 }
+
+export const importBadges = async (file: FormData) => {
+  const res = await fetcher<unknown>('importBadges', { body: file, isUpload: true });
+  revalidateTag('getBadges');
+  return res
+}

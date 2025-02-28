@@ -1,7 +1,7 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import { ArrowCircleDown2, Gift, Eye, HambergerMenu, ReceiptItem, Setting4, Trash } from 'iconsax-react';
 import dayjs from 'dayjs';
+import { ArrowCircleDown2, Eye, Gift, HambergerMenu, ReceiptItem, Setting4, Trash } from 'iconsax-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PropsWithRef, useEffect, useMemo, useState } from 'react';
@@ -12,8 +12,8 @@ import DeleteConfirmationModal from '@/components/PageComponents/MemberPage/Conf
 import StatusConfirmationModal from '@/components/PageComponents/MemberPage/ConfirmationModal/StatusConfirmationModal';
 import MemberDetailModal from '@/components/PageComponents/MemberPage/DetailModal';
 import MemberFilterModal from '@/components/PageComponents/MemberPage/FilterModal';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/ButtonDropdown';
 import GiftBadgeModal from '@/components/PageComponents/MemberPage/GiftBadgeModal';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/ButtonDropdown';
 import { Button } from '@/components/ui/Buttons';
 import Search from '@/components/ui/Input/Search';
 import { useProcessDispatch } from '@/components/ui/Modal/processContext';
@@ -34,7 +34,7 @@ type Props = PropsWithRef<{
 
 const MemberTable = ({ data, pagination }: Props) => {
   const memberPermissions = usePermissions().member
-  const dispatchProcess = useProcessDispatch()
+  const { dispatchAction: dispatchProcess } = useProcessDispatch()
 
   const [modalGiftBadgeOpen, setModalGiftBadgeOpen] = useState<boolean>(false)
   const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
@@ -253,10 +253,10 @@ const MemberTable = ({ data, pagination }: Props) => {
             <HambergerMenu />
           </DropdownMenuTrigger>
           <DropdownMenuContent className='bg-white border p-0 pr-4'>
-            <Button variant='secondary' size='md' onClick={() => dispatchProcess('export_member')}>
+            <DropdownMenuItem onClick={() => dispatchProcess('export_member')}>
               <ArrowCircleDown2 />
               <Typography className='grow text-left' variant='paragraph-l-regular'>Export Member Data to CSV</Typography>
-            </Button>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </section>

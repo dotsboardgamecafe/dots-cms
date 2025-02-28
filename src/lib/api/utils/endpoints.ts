@@ -37,6 +37,8 @@ const endpointData = {
 	createAdmin: { path: '/admins', method: 'POST', prefix: '' },
 	addGameMechanics: { path: '/game-mechanics', method: 'POST', prefix: '' },
 	giftUserBadge: { path: '/badges', method: 'POST', prefix: 'gift' },
+	importGames: { path: '/games/import', method: 'POST', prefix: '' },
+	importBadges: { path: '/badges/import', method: 'POST', prefix: '' },
 
 	// PUT
 	changeStatusMember: { path: '/users', method: 'PUT', prefix: 'status' },

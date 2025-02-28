@@ -5,7 +5,7 @@ import React from 'react';
 
 import { cn } from '@/lib/utils';
 
-import { ButtonProps, buttonVariants } from '@/components/ui/Buttons';
+import { Button, ButtonProps, buttonVariants } from '@/components/ui/Buttons';
 
 export const DropdownMenu = DropdownMenuPrimitive.Root;
 export const DropdownMenuTrigger = React.forwardRef<
@@ -48,7 +48,15 @@ export const DropdownMenuContent = React.forwardRef<
 );
 
 export const DropdownMenuLabel = DropdownMenuPrimitive.Label;
-export const DropdownMenuItem = DropdownMenuPrimitive.Item;
+export const DropdownMenuItem: React.ForwardRefExoticComponent<DropdownMenuPrimitive.DropdownMenuItemProps & React.RefAttributes<HTMLDivElement>> = React.forwardRef(({ children, ...props }, ref) => {
+  return (
+    <DropdownMenuPrimitive.Item ref={ref} {...props}>
+      <Button variant='secondary' size='md' className='w-full'>
+        {children}
+      </Button>
+    </DropdownMenuPrimitive.Item>
+  )
+});
 export const DropdownMenuGroup = DropdownMenuPrimitive.Group;
 
 export const DropdownMenuCheckboxItem = React.forwardRef<

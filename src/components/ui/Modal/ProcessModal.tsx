@@ -1,14 +1,16 @@
 'use client'
 
+import { CloseCircle } from "iconsax-react"
 import { useCallback, useEffect, useMemo } from "react"
 
 import { cn } from "@/lib/utils"
 
-import { ProcesType, useProcessData } from "@/components/ui/Modal/processContext"
+import { ProcesType, useProcessData, useProcessDispatch } from "@/components/ui/Modal/processContext"
 import Spiner from "@/components/ui/Spinner"
 import Typography from "@/components/ui/Typography"
 
 const ProcessItem: React.FC<ProcesType> = (process) => {
+  const { removeProcess } = useProcessDispatch()
   const textColor = useMemo(() => {
     switch (process.status) {
       case 'completed': return 'text-blue-700'
@@ -29,7 +31,12 @@ const ProcessItem: React.FC<ProcesType> = (process) => {
     <div key={process.title} className="flex flex-row items-center justify-between gap-5 w-full shadow-md border-slate-700 border py-2 px-6 bg-white">
       <Typography variant="paragraph-l-regular">{process.title}</Typography>
       {process.status === 'in-progress' && <Spiner className="!text-gray-400" />}
-      {process.status !== 'in-progress' && <Typography variant="paragraph-l-medium" className={cn('py-[2px] px-[10px] rounded-2xl', statusBackground, textColor)}>{process.status}</Typography>}
+      {process.status !== 'in-progress' && (
+        <>
+          <Typography variant="paragraph-l-medium" className={cn('py-[2px] px-[10px] rounded-2xl', statusBackground, textColor)}>{process.status}</Typography>
+          <CloseCircle onClick={() => removeProcess(process.id)} className='cursor-pointer' size={24} color="#555555" />
+        </>
+      )}
     </div>
   )
 }

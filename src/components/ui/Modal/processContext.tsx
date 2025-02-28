@@ -12,11 +12,19 @@ export type ProcesType = {
 
 type ActionName = keyof (typeof actionProcessList)
 
-export type ProcessDispatchActionType = (actionType: ActionName) => void
+export type ProcessDispatchActionType = {
+  dispatchAction: (actionType: ActionName, config?: { title?: string, disableAutoClose?: boolean }) => void
+  removeProcess: (processId: string) => void
+}
 
 const ProcessContext = createContext<ProcesType[]>([])
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-const ProcessDispatchContext = createContext<ProcessDispatchActionType>(() => { })
+const ProcessDispatchContext = createContext<ProcessDispatchActionType>({
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  dispatchAction: () => { },
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  removeProcess: () => { }
+})
 
 export const useProcessData = () => useContext(ProcessContext)
 export const useProcessDispatch = () => useContext(ProcessDispatchContext)
@@ -54,8 +62,8 @@ export const ProcessContextProvider: React.FC<React.PropsWithChildren> = ({ chil
     })
   }, [])
 
-  const dispatchAction = async (actionName: ActionName) => {
-    const id = addProcess({ status: 'in-progress', title: `Exporting data ${actionName.split('_')[1]}` })
+  const dispatchAction = async (actionName: ActionName, config?: { title?: string, disableAutoClose?: boolean }) => {
+    const id = addProcess({ status: 'in-progress', title: config?.title ?? `Exporting data ${actionName.split('_')[1]}` })
     try {
       await actionProcessList[actionName]()
       editProcess(id, (prevData) => ({ ...prevData, status: 'completed' }))
@@ -63,12 +71,13 @@ export const ProcessContextProvider: React.FC<React.PropsWithChildren> = ({ chil
       editProcess(id, (prevData) => ({ ...prevData, status: 'failed' }))
     }
 
+    if (config?.disableAutoClose) return
     setTimeout(() => removeProcess(id), 5000)
   }
 
   return (
     <ProcessContext.Provider value={processData}>
-      <ProcessDispatchContext.Provider value={dispatchAction}>
+      <ProcessDispatchContext.Provider value={{ dispatchAction, removeProcess }}>
         {children}
       </ProcessDispatchContext.Provider>
     </ProcessContext.Provider>

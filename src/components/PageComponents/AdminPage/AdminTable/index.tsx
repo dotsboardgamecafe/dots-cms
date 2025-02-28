@@ -11,7 +11,7 @@ import AdminDetailModal from '@/components/PageComponents/AdminPage/DetailModal'
 import EditAdminModal from '@/components/PageComponents/AdminPage/EditAdminModal';
 import AdminFilterModal from '@/components/PageComponents/AdminPage/FilterModal';
 import StatusConfirmationModal from '@/components/PageComponents/AdminPage/StatusConfirmationModal';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/ButtonDropdown';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/ButtonDropdown';
 import { Button } from '@/components/ui/Buttons';
 import Search from '@/components/ui/Input/Search';
 import { useProcessDispatch } from '@/components/ui/Modal/processContext';
@@ -33,7 +33,7 @@ type Props = PropsWithRef<{
 
 const AdminTable = ({ data, pagination }: Props) => {
   const adminPermissions = usePermissions().admin
-  const dispatchProcess = useProcessDispatch()
+  const { dispatchAction: dispatchProcess } = useProcessDispatch()
 
   const [filterModalOpen, setFilterModalOpen] = useState<boolean>(false);
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
@@ -204,10 +204,10 @@ const AdminTable = ({ data, pagination }: Props) => {
               <HambergerMenu />
             </DropdownMenuTrigger>
             <DropdownMenuContent className='bg-white border p-0 pr-4'>
-              <Button variant='secondary' size='md' onClick={() => dispatchProcess('export_admin')}>
+              <DropdownMenuItem onClick={() => dispatchProcess('export_admin')}>
                 <ArrowCircleDown2 />
                 <Typography className='grow text-left' variant='paragraph-l-regular'>Export Admin Data to CSV</Typography>
-              </Button>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

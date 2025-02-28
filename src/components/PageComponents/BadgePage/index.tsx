@@ -1,6 +1,6 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import { AddCircle, ArrowCircleDown2, Edit, Eye, HambergerMenu, Setting4 } from 'iconsax-react';
+import { AddCircle, ArrowCircleDown2, DocumentUpload, Edit, Eye, HambergerMenu, Setting4 } from 'iconsax-react';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 
@@ -15,9 +15,10 @@ import UpdateBadgeStatusConfirmation from '@/components/PageComponents/BadgePage
 import ViewBadgeDetail from '@/components/PageComponents/BadgePage/Modal/ViewBadgeDetailModal';
 import ViewTournamentBadgeDetailModal from '@/components/PageComponents/BadgePage/Modal/ViewTournamentBadgeDetailModal';
 import BadgeListTable from '@/components/PageComponents/BadgePage/Table/BadgeListTable';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/ButtonDropdown';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/ButtonDropdown';
 import { Button } from '@/components/ui/Buttons';
 import Search from '@/components/ui/Input/Search';
+import { useProcessDispatch } from '@/components/ui/Modal/processContext';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import Typography from '@/components/ui/Typography';
 
@@ -26,7 +27,6 @@ import { snakeCaseToString } from '@/helper/string';
 
 import { BadgeRuleType, BadgeType } from '@/types/badge';
 import { Pagination as PaginationType } from '@/types/network';
-import { useProcessDispatch } from '@/components/ui/Modal/processContext';
 
 type Props = {
   data: BadgeType[];
@@ -35,7 +35,7 @@ type Props = {
 
 const BadgePageContent = ({ data, pagination }: Props) => {
   const badgePermission = usePermissions().badge
-  const dispatchProcess = useProcessDispatch()
+  const { dispatchAction: dispatchProcess } = useProcessDispatch()
 
   const [statusConfirmationModalOpen, setStatusConfirmationModalOpen] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<BadgeType>();
@@ -214,10 +214,14 @@ const BadgePageContent = ({ data, pagination }: Props) => {
               <HambergerMenu />
             </DropdownMenuTrigger>
             <DropdownMenuContent className='bg-white border p-0 pr-4'>
-              <Button variant='secondary' size='md' onClick={() => dispatchProcess('export_badges')}>
+              <DropdownMenuItem onClick={() => dispatchProcess('export_badges')}>
                 <ArrowCircleDown2 />
                 <Typography className='grow text-left' variant='paragraph-l-regular'>Export Badges Data to CSV</Typography>
-              </Button>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => dispatchProcess('import_badges', { title: 'Importing badges data (update VP)', disableAutoClose: true })}>
+                <DocumentUpload />
+                <Typography className='grow text-left' variant='paragraph-l-regular'>Import Badges Data from CSV (update VP)</Typography>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

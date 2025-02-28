@@ -33,3 +33,9 @@ export const deleteGame = async (game_code: GameType['game_code']) => {
   revalidateTag('getGames')
   return res
 };
+
+export const importGame = async (file: FormData) => {
+  const res = await fetcher<unknown>('importGames', { body: file, isUpload: true });
+  revalidateTag('getGames')
+  return res
+};

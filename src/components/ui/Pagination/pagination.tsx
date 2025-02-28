@@ -64,10 +64,7 @@ const NavigationButton: React.FC<NavigationButtonProps> = ({ page, maxPage, onCl
         </form>
 
       </DropdownMenuContent>
-
-
     </DropdownMenu>
-
   )
 }
 

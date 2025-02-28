@@ -1,11 +1,11 @@
 import dayjs from "dayjs";
 
 import { getAdmins } from "@/lib/api/admin";
-import { getBadges } from "@/lib/api/badge";
-import { getGameList } from "@/lib/api/games";
+import { getBadges, importBadges } from "@/lib/api/badge";
+import { getGameList, importGame } from "@/lib/api/games";
 import { getMembers } from "@/lib/api/member";
 
-import { CSVReader, ObjectToCSV } from "@/helper";
+import { ObjectToCSV } from "@/helper";
 
 import { AdminType } from "@/types/admin";
 import { BadgeType } from "@/types/badge";
@@ -71,18 +71,57 @@ export async function exportBadges() {
 }
 
 export async function importGameCatalog() {
-  const input = document.createElement('input')
-  input.type = 'file'
-  input.onchange = (event: any) => {
-    const file = event.target?.files[0]
-    CSVReader(file).then((data) => console.log(data)).catch((err) => console.log(err))
-  }
-  input.click()
+  return new Promise((resolve, reject) => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.onchange = async (event: any) => {
+      const file = event.target?.files[0]
+      const partsOfFileName: string[] = file.name.split('.')
+      const fileExtention = partsOfFileName[partsOfFileName.length - 1]
+
+      if (fileExtention.toLowerCase() !== 'csv') return reject('Err: File type not supported!')
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const result = await importGame(formData)
+
+      if (result.stat_code?.includes('ERR')) return reject(`${result.stat_code} (${result.stat_msg})`)
+      resolve(result)
+    }
+    input.oncancel = () => reject('Err: file not selected!')
+    input.click()
+  })
 }
+
+export async function importBadgesUpdate() {
+  return new Promise((resolve, reject) => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.onchange = async (event: any) => {
+      const file = event.target?.files[0]
+      const partsOfFileName: string[] = file.name.split('.')
+      const fileExtention = partsOfFileName[partsOfFileName.length - 1]
+
+      if (fileExtention.toLowerCase() !== 'csv') return reject('Err: File type not supported!')
+
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const result = await importBadges(formData)
+      if (result.stat_code?.includes('ERR')) return reject(`${result.stat_code} (${result.stat_msg})`)
+
+      resolve(result)
+    }
+    input.oncancel = () => reject('Err: file not selected!')
+    input.click()
+  })
+}
+
 export const actionProcessList = {
   export_member: exportMember,
   export_admin: exportAdmin,
   export_game: exportGameCatalog,
   export_badges: exportBadges,
   import_game: importGameCatalog,
+  import_badges: importBadgesUpdate,
 }

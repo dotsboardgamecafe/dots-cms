@@ -21,7 +21,9 @@ export interface IPermissionsContextValue {
   tournament?: IBasePermissions & {
     setWinner?: boolean
   }
-  games?: IBasePermissions
+  games?: IBasePermissions & {
+    import?: boolean
+  }
   tier?: IBasePermissions
   cafeManagement?: IBasePermissions
   rewards?: IBasePermissions
@@ -30,6 +32,7 @@ export interface IPermissionsContextValue {
     viewInvoice?: boolean
     claimInvoice?: boolean
     giftBadge?: boolean
+    exportClaimedHistory?: boolean
   }
   mechanics?: IBasePermissions
   banner?: IBasePermissions
@@ -37,6 +40,7 @@ export interface IPermissionsContextValue {
     add_tournament_badge?: boolean
     update_tournament_badge?: boolean
     detail_tournament_badge?: boolean
+    import?: boolean
   }
 }
 
@@ -68,6 +72,7 @@ export const PermissionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
           add_tournament_badge: permissionList.includes('add-tournament-badges'),
           detail_tournament_badge: permissionList.includes('get-tournament-badges'),
           update_tournament_badge: permissionList.includes('update-tournament-badges'),
+          import: permissionList.includes('badge-import') || permissionList.includes('badge-update'),
         },
         banner: {
           add: permissionList.includes('banner-add'),
@@ -94,7 +99,8 @@ export const PermissionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
           detail: permissionList.includes('game-get-detail'),
           add: permissionList.includes('game-add'),
           update: permissionList.includes('game-update'),
-          delete: permissionList.includes('game-delete')
+          delete: permissionList.includes('game-delete'),
+          import: permissionList.includes('game-import') || permissionList.includes('game-update'),
         },
         rewards: {
           view: permissionList.includes('reward-get-list'),
@@ -131,7 +137,8 @@ export const PermissionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
           status: permissionList.includes('member-update-status'),
           delete: permissionList.includes('member-delete-account'),
           viewInvoice: permissionList.includes('invoice-history-cms') || permissionList.includes('member-claimed-invoice-history'),
-          claimInvoice: permissionList.includes('claim-invoice-cms') || permissionList.includes('member-claim-invoice')
+          claimInvoice: permissionList.includes('claim-invoice-cms') || permissionList.includes('member-claim-invoice'),
+          exportClaimedHistory: permissionList.includes('invoice-all-history-cms') || permissionList.includes('invoice-history-cms') || permissionList.includes('member-claimed-invoice-history')
         }
       }
 

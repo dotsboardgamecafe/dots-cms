@@ -4,7 +4,7 @@ import { revalidateTag } from 'next/cache';
 
 import fetcher, { ApiOptions } from '@/lib/api/utils/fetcher';
 
-import { ClaimInvoicePayload, InvoiceType, MemberType } from '@/types/member';
+import { ClaimInvoicePayload, InvoiceType, MemberType, ResponseClaimedInvoice } from '@/types/member';
 
 export const getMembers = async (options?: ApiOptions) => {
   return await fetcher<MemberType[]>('getMembers', { ...options, requestOpt: { next: { tags: ['get-members'] } } });
@@ -24,6 +24,11 @@ export const updateStatusMembers = async (options: ApiOptions) => {
 export const getMemberInvoices = async (options?: ApiOptions) => {
   const res = await fetcher<InvoiceType[]>('getUserInvoices', { ...options, requestOpt: { next: { tags: [`get-invoice-${options?.param}`] } } })
   return res
+}
+
+export const getAllClaimedInvoice = async (options?: ApiOptions) => {
+  const res = await fetcher<ResponseClaimedInvoice[]>('getAllClaimedInvoice', options)
+  return res.data
 }
 
 export const claimMemberInvoice = async (member_code: MemberType['user_code'], invoice_id: InvoiceType['invoice_code']) => {

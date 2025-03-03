@@ -84,7 +84,7 @@ export const AddTournamentSchema = z.object({
       end_time: z.string({ required_error: "End time is required." }).min(1, "End time is required."),
     }),
     player_slot: z.number({ required_error: "Player slot is required." }).min(1, "Player slot is required."),
-    booking_price: z.number({ required_error: "Booking price is required." }).min(1, "Booking price is required."),
+    booking_price: z.number({ required_error: "Booking price is required." }),
     status: z.string({ required_error: "Status is required." }),
     location: z.string({ required_error: "Location is required." }).min(1, "Location is required."),
   }),

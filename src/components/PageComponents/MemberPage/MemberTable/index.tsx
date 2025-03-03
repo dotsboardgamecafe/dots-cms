@@ -255,8 +255,14 @@ const MemberTable = ({ data, pagination }: Props) => {
           <DropdownMenuContent className='bg-white border p-0 pr-4'>
             <DropdownMenuItem onClick={() => dispatchProcess('export_member')}>
               <ArrowCircleDown2 />
-              <Typography className='grow text-left' variant='paragraph-l-regular'>Export Member Data to CSV</Typography>
+              <Typography className='grow text-left' variant='paragraph-l-regular'>Export member data to CSV</Typography>
             </DropdownMenuItem>
+            {memberPermissions?.exportClaimedHistory && (
+              <DropdownMenuItem onClick={() => dispatchProcess('export_all_claimed_history')}>
+                <ArrowCircleDown2 />
+                <Typography className='grow text-left' variant='paragraph-l-regular'>Export claimed invoice data to CSV</Typography>
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </section>

@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import { getAdmins } from "@/lib/api/admin";
 import { getBadges, importBadges } from "@/lib/api/badge";
 import { getGameList, importGame } from "@/lib/api/games";
-import { getMembers } from "@/lib/api/member";
+import { getAllClaimedInvoice, getMembers } from "@/lib/api/member";
 
 import { ObjectToCSV } from "@/helper";
 
@@ -11,7 +11,7 @@ import { AdminType } from "@/types/admin";
 import { BadgeType } from "@/types/badge";
 import { NestedKeyOf } from "@/types/common";
 import { GameType } from "@/types/game";
-import { MemberType } from "@/types/member";
+import { MemberType, ResponseClaimedInvoice } from "@/types/member";
 
 
 export async function exportMember() {
@@ -24,6 +24,21 @@ export async function exportMember() {
   const downloadTrigger = document.createElement('a')
   downloadTrigger.href = link
   downloadTrigger.download = `DOTS Member Data [Exported on ${dateStamp}]`
+  downloadTrigger.click()
+  URL.revokeObjectURL(link)
+}
+
+export async function exportClaimedHistory() {
+  const exportedColumns: (NestedKeyOf<ResponseClaimedInvoice>)[] = ['user_code', 'username', 'full_name', 'invoice_code', 'invoice_amount', 'invoice_items.name', 'claimed_date', 'claimed_time']
+  const claimedInvoice = await getAllClaimedInvoice({ pagination: { limit: 99999999999999 } })
+
+  const csvFile = await ObjectToCSV<ResponseClaimedInvoice>(claimedInvoice, exportedColumns)
+
+  const dateStamp = dayjs(new Date()).format('DD-MMM-YYYY')
+  const link = URL.createObjectURL(csvFile)
+  const downloadTrigger = document.createElement('a')
+  downloadTrigger.href = link
+  downloadTrigger.download = `DOTS Claimed Invoices Data [Exported on ${dateStamp}]`
   downloadTrigger.click()
   URL.revokeObjectURL(link)
 }
@@ -124,4 +139,5 @@ export const actionProcessList = {
   export_badges: exportBadges,
   import_game: importGameCatalog,
   import_badges: importBadgesUpdate,
+  export_all_claimed_history: exportClaimedHistory,
 }

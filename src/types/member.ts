@@ -33,7 +33,8 @@ export type InvoiceItemType = {
   product_id: number,
   sku: string,
   name: string,
-  category_name: string
+  category_name: string,
+  klasifikasi: string
 }
 
 export type InvoiceType = {
@@ -47,3 +48,5 @@ export type InvoiceType = {
 export type ClaimInvoicePayload = {
   invoice_code: string
 }
+
+export type ResponseClaimedInvoice = Pick<MemberType, 'user_code' | 'username'> & InvoiceType & { full_name: string }

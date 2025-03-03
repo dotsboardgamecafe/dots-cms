@@ -231,10 +231,12 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
                 <ArrowCircleDown2 />
                 <Typography className='grow text-left' variant='paragraph-l-regular'>Export Game Data to CSV</Typography>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => dispatchProcess('import_game', { title: 'Importing game data (update)', disableAutoClose: true })}>
-                <DocumentUpload />
-                <Typography className='grow text-left' variant='paragraph-l-regular'>Import Game Data from CSV (update)</Typography>
-              </DropdownMenuItem>
+              {gamePermission?.import && (
+                <DropdownMenuItem onClick={() => dispatchProcess('import_game', { title: 'Importing game data (update)', disableAutoClose: true })}>
+                  <DocumentUpload />
+                  <Typography className='grow text-left' variant='paragraph-l-regular'>Import Game Data from CSV (update)</Typography>
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

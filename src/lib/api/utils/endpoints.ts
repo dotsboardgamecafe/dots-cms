@@ -20,7 +20,7 @@ const endpointData = {
 	getGameMechanics: { path: '/game-mechanics', method: 'GET', prefix: '' },
 	getGameQR: { path: '/games', method: 'GET', prefix: 'qrcode' },
 	getAvailableUserBadges: { path: '/badges/unowned', method: 'GET', prefix: '' },
-	getAllClaimedInvoice: { path: '/invoices/history', method: 'GET', perfix: '' },
+	getAllClaimedInvoice: { path: '/invoices/history', method: 'GET', prefix: '' },
 
 	// POST
 	auth: { path: '/auths/login', method: 'POST', prefix: '' },

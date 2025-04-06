@@ -133,3 +133,7 @@ export type SetRoomWinnerPayload = {
     user_code: string;
   }[];
 };
+
+export type RemoveRoomParticipant = {
+  user_code: string;
+};

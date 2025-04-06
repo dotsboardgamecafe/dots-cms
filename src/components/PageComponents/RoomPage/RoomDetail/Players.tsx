@@ -1,13 +1,16 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { MedalStar } from 'iconsax-react';
+import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
+import { MedalStar, Trash } from 'iconsax-react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { setRoomWinner } from '@/lib/api/room';
+import { removeParticipant, setRoomWinner } from '@/lib/api/room';
 
 import ConfirmationModal from '@/components/PageComponents/RoomPage/RoomDetail/ConfirmationModal';
 import { Button } from '@/components/ui/Buttons';
@@ -21,14 +24,30 @@ import { usePermissions } from '@/helper/context/permissionsContext';
 import { JoinedPlayersSchema } from '@/types/game';
 import { RoomParticipant, SetRoomWinnerPayload } from '@/types/room';
 
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
 type Props = {
-  players: RoomParticipant[];
+  players: RoomParticipant[]
+  endDateTime: string
 };
 
-const PlayersTab = ({ players }: Props) => {
+const isRoomEnded = (dateTime: string) => {
+  dayjs.tz.setDefault('Asia/Jakarta')
+
+  const endDate = dayjs.tz(dateTime, 'Asia/Jakarta').unix()
+  const currentDate = dayjs().unix()
+
+  dayjs.tz.setDefault()
+
+  return currentDate > endDate
+}
+
+const PlayersTab = ({ players, endDateTime }: Props) => {
   const roomPermission = usePermissions().room
 
   const [isOpenConfirmation, setIsOpenConfirmation] = useState<boolean>(false)
+  const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] = useState<boolean>(false)
   const [selectedPlayer, setSelectedPlayer] = useState<RoomParticipant | null>(null)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
@@ -41,7 +60,32 @@ const PlayersTab = ({ players }: Props) => {
     resolver: zodResolver(JoinedPlayersSchema),
   });
 
-  const { fields, append, remove, update } = useFieldArray({ control: form.control, name: 'players' });
+  const { fields, remove, update } = useFieldArray({ control: form.control, name: 'players' });
+
+  const handleRemoveParticipants = async () => {
+    if (!selectedPlayer || !selectedIndex) return
+
+    remove(selectedIndex)
+
+    try {
+      const res = await removeParticipant({ body: { user_code: selectedPlayer.user_code } })
+      if (res.stat_code?.includes('ERR')) throw new Error(res.stat_code)
+      toast({
+        title: `Successfully removed ${selectedPlayer.user_name} from participants`,
+        variant: 'default',
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        toast({
+          title: 'Something went wrong',
+          description: `failed to remove ${selectedPlayer.user_name} from participants`,
+          variant: 'destructive',
+        });
+      }
+    }
+
+
+  }
 
   const onSubmit = async (data: z.infer<typeof JoinedPlayersSchema>) => {
     try {
@@ -53,7 +97,10 @@ const PlayersTab = ({ players }: Props) => {
           };
         })
       };
+
       const res = await setRoomWinner({ body, param: param.room_code as string });
+      if (res.stat_code?.includes('ERR')) throw new Error(res.stat_code)
+
       toast({
         title: 'Successfully set the winner',
         variant: 'default',
@@ -67,12 +114,13 @@ const PlayersTab = ({ players }: Props) => {
         });
       }
     }
-
   };
 
   const shouldDisableOption = (currentPosition: number) => {
     return form.getValues('players').some((player) => player.position > 0 && player.position === currentPosition);
   };
+
+  const canRemoveParticipants = Boolean(roomPermission?.removeParticipants && !isRoomEnded(endDateTime))
 
   return (
     <>
@@ -96,7 +144,7 @@ const PlayersTab = ({ players }: Props) => {
             <TableBody>
               {
                 fields.map((player, index) => (
-                  <TableRow key={player.user_code} className='relative [&>td>div>button]:hover:flex'>
+                  <TableRow key={player.user_code} className='relative [&>td>div>div]:hover:flex'>
                     <TableCell className='py-[10px] flex flex-row items-center gap-3'>
                       <Image alt='player-image' src={player.user_image_url || '/images/avatar-not-found.png'} width={48} height={48} className='rounded-full' />
                       <Typography variant='paragraph-l-regular' className='text-gray-900'>
@@ -109,16 +157,25 @@ const PlayersTab = ({ players }: Props) => {
                         <Typography variant='paragraph-l-regular' className='text-gray-900 capitalize'>
                           {player.additional_info || '-'}
                         </Typography>
-                        {roomPermission?.setWinner && (
-                          !shouldDisableOption(1) && (
-                            <Button variant="default" className='absolute hidden top-[50%] translate-y-[-50%] right-2 gap-4' onClick={(event) => { event.preventDefault(); setIsOpenConfirmation(true); setSelectedIndex(index); setSelectedPlayer(player) }}>
-                              <MedalStar />
-                              <Typography variant='text-body-l-medium'>
-                                Set as a winner
-                              </Typography>
-                            </Button>
-                          )
-                        )}
+                        <div className='absolute hidden top-[50%] translate-y-[-50%] right-2 flex-row justify-center items-center gap-2'>
+                          {roomPermission?.setWinner && (
+                            !shouldDisableOption(1) && (
+                              <Button variant="default" className='gap-4' onClick={(event) => { event.preventDefault(); setIsOpenConfirmation(true); setSelectedIndex(index); setSelectedPlayer(player) }}>
+                                <MedalStar />
+                                <Typography variant='text-body-l-medium'>
+                                  Set as a winner
+                                </Typography>
+                              </Button>
+                            )
+                          )}
+                          {
+                            canRemoveParticipants && (
+                              <Button variant="destructive" className='w-fit p-1' onClick={(event) => { event.preventDefault(); setIsOpenDeleteConfirmation(true); setSelectedIndex(index); setSelectedPlayer(player) }}>
+                                <Trash />
+                              </Button>
+                            )
+                          }
+                        </div>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -147,6 +204,12 @@ const PlayersTab = ({ players }: Props) => {
           form.handleSubmit(onSubmit)()
         }}
         message={`Are you sure to set ${selectedPlayer?.user_name} as a winner?`}
+      />
+      <ConfirmationModal
+        open={isOpenDeleteConfirmation}
+        onOpenChange={(isOpen) => setIsOpenDeleteConfirmation(isOpen)}
+        onConfirm={() => handleRemoveParticipants()}
+        message={`Are you sure to remove ${selectedPlayer?.user_name} from the room?`}
       />
     </>
   );

@@ -12,9 +12,10 @@ type Props = PropsWithRef<{
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
   message?: string
+  isLoading?: boolean
 }>;
 
-const ConfirmationModal = ({ open, onOpenChange, onConfirm, message }: Props) => {
+const ConfirmationModal = ({ open, onOpenChange, onConfirm, message, isLoading }: Props) => {
   if (!message) return null
   return (
     <Modal open={open} onOpenChange={onOpenChange} >
@@ -28,8 +29,8 @@ const ConfirmationModal = ({ open, onOpenChange, onConfirm, message }: Props) =>
           </Typography>
         </section>
         <section className='flex gap-6'>
-          <Button className='flex-1' size="lg" variant="secondary" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button className='flex-1' size="lg" variant="default" onClick={onConfirm}>Yes, Continue</Button>
+          <Button className='flex-1' size="lg" variant="secondary" disabled={isLoading} onClick={() => onOpenChange(false)}>Cancel</Button>
+          <Button className='flex-1' size="lg" variant="default" disabled={isLoading} loading={isLoading} onClick={onConfirm}>Yes, Continue</Button>
         </section>
       </ModalContent>
     </Modal>

@@ -30,6 +30,7 @@ dayjs.extend(timezone)
 type Props = {
   players: RoomParticipant[]
   endDateTime: string
+  roomId: string
 };
 
 const isRoomEnded = (dateTime: string) => {
@@ -43,11 +44,12 @@ const isRoomEnded = (dateTime: string) => {
   return currentDate > endDate
 }
 
-const PlayersTab = ({ players, endDateTime }: Props) => {
+const PlayersTab = ({ players, endDateTime, roomId }: Props) => {
   const roomPermission = usePermissions().room
 
   const [isOpenConfirmation, setIsOpenConfirmation] = useState<boolean>(false)
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] = useState<boolean>(false)
+  const [isDeleting, setIsDeleting] = useState<boolean>(false)
   const [selectedPlayer, setSelectedPlayer] = useState<RoomParticipant | null>(null)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
@@ -63,13 +65,13 @@ const PlayersTab = ({ players, endDateTime }: Props) => {
   const { fields, remove, update } = useFieldArray({ control: form.control, name: 'players' });
 
   const handleRemoveParticipants = async () => {
-    if (!selectedPlayer || !selectedIndex) return
-
-    remove(selectedIndex)
-
+    if (selectedPlayer === undefined || selectedPlayer === null || selectedIndex === undefined || selectedIndex === null) return
+    setIsDeleting(true)
     try {
-      const res = await removeParticipant({ body: { user_code: selectedPlayer.user_code } })
+      const res = await removeParticipant({ body: { user_code: selectedPlayer.user_code }, param: roomId })
       if (res.stat_code?.includes('ERR')) throw new Error(res.stat_code)
+
+      remove(selectedIndex)
       toast({
         title: `Successfully removed ${selectedPlayer.user_name} from participants`,
         variant: 'default',
@@ -84,7 +86,8 @@ const PlayersTab = ({ players, endDateTime }: Props) => {
       }
     }
 
-
+    setIsDeleting(false)
+    setIsOpenDeleteConfirmation(false)
   }
 
   const onSubmit = async (data: z.infer<typeof JoinedPlayersSchema>) => {
@@ -210,6 +213,7 @@ const PlayersTab = ({ players, endDateTime }: Props) => {
         onOpenChange={(isOpen) => setIsOpenDeleteConfirmation(isOpen)}
         onConfirm={() => handleRemoveParticipants()}
         message={`Are you sure to remove ${selectedPlayer?.user_name} from the room?`}
+        isLoading={isDeleting}
       />
     </>
   );

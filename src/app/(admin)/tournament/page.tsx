@@ -13,7 +13,7 @@ import { Pagination } from '@/types/network';
 
 const RoomPage = async ({ searchParams }: PageProps) => {
   const isFilterAll: boolean = searchParams.status === 'all'
-  const pagination: Pagination = { order: 'tournaments.status,tournaments.created_date', sort: 'ASC,DESC', status: 'active', ...searchParams }
+  const pagination: Pagination = { order: 'tournaments.status,tournaments.start_date', sort: 'ASC,ASC', status: 'active', ...searchParams }
   if (isFilterAll) delete pagination.status
 
   const tournaments = await getTournaments({ pagination: pagination });

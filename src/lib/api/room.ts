@@ -37,7 +37,7 @@ export const setRoomWinner = async (options: ApiOptions<SetRoomWinnerPayload>) =
   return res
 };
 
-export const removeParticipant = async (options: ApiOptions<RemoveRoomParticipant>) => {
+export const removeRoomParticipant = async (options: ApiOptions<RemoveRoomParticipant>) => {
   const res = await fetcher('deleteRoomParticipant', options);
   if (!res.stat_code?.includes('ERR')) revalidateTag('room-detail');
   return res

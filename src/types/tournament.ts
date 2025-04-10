@@ -30,6 +30,17 @@ export type TournamentType = {
   tournament_badges: BadgeType[]
 };
 
+export type TournamentParticipant = {
+  user_code: string,
+  user_name: string,
+  user_image_url: string,
+  status_winner: boolean,
+  status: string,
+  additional_info: string,
+  position: number,
+  reward_point: number
+}
+
 export type TournamentDetailType = {
   game_code: string,
   game_name: string,
@@ -51,16 +62,7 @@ export type TournamentDetailType = {
   participant_vp: number,
   status: string,
   current_used_slot: number,
-  tournament_participants: {
-    user_code: string,
-    user_name: string,
-    user_image_url: string,
-    status_winner: boolean,
-    status: string,
-    additional_info: string,
-    position: number,
-    reward_point: number
-  }[],
+  tournament_participants: TournamentParticipant[],
   tournament_badges: BadgeType<{ position: number }>[],
   created_date: string,
   updated_date: string,
@@ -123,3 +125,7 @@ export type SetTournamentWinnerType = {
     status: string
   }[]
 }
+
+export type RemoveTournamentParticipant = {
+  user_code: string;
+};

@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { removeParticipant, setRoomWinner } from '@/lib/api/room';
+import { removeRoomParticipant, setRoomWinner } from '@/lib/api/room';
 
 import ConfirmationModal from '@/components/PageComponents/RoomPage/RoomDetail/ConfirmationModal';
 import { Button } from '@/components/ui/Buttons';
@@ -68,7 +68,7 @@ const PlayersTab = ({ players, endDateTime, roomId }: Props) => {
     if (selectedPlayer === undefined || selectedPlayer === null || selectedIndex === undefined || selectedIndex === null) return
     setIsDeleting(true)
     try {
-      const res = await removeParticipant({ body: { user_code: selectedPlayer.user_code }, param: roomId })
+      const res = await removeRoomParticipant({ body: { user_code: selectedPlayer.user_code }, param: roomId })
       if (res.stat_code?.includes('ERR')) throw new Error(res.stat_code)
 
       remove(selectedIndex)

@@ -59,6 +59,7 @@ const fetcher = async <Response>(endpointKey: EndpointKey, options?: ApiOptions)
 		...fetchOpt,
 		...options?.requestOpt
 	});
+
 	const response = await res.json();
 
 	if (!res.ok) {

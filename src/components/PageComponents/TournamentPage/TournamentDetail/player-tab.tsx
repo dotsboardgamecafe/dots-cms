@@ -1,12 +1,18 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
+import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
+import { Trash } from 'iconsax-react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
+import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { setTournamentWinner } from '@/lib/api/tournament';
+import { removeTournamentParticipant, setTournamentWinner } from '@/lib/api/tournament';
 
+import ConfirmationModal from '@/components/PageComponents/RoomPage/RoomDetail/ConfirmationModal';
 import { Button } from '@/components/ui/Buttons';
 import { Form, FormControl, FormField } from '@/components/ui/Form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
@@ -18,15 +24,34 @@ import { Positions } from '@/constant/winner_position';
 import { usePermissions } from '@/helper/context/permissionsContext';
 
 import { JoinedPlayersSchema } from '@/types/game';
-import { SetTournamentWinnerType, TournamentDetailType } from '@/types/tournament';
+import { SetTournamentWinnerType, TournamentDetailType, TournamentParticipant } from '@/types/tournament';
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 type Props = {
-  players: TournamentDetailType['tournament_participants'];
+  players: TournamentParticipant[];
   badges: TournamentDetailType['tournament_badges']
+  tournamentEndDateTime: string
 };
 
-const TournamentPlayers = ({ players, badges }: Props) => {
+const isTournamentEnded = (dateTime: string) => {
+  dayjs.tz.setDefault('Asia/Jakarta')
+
+  const endDate = dayjs.tz(dateTime, 'Asia/Jakarta').unix()
+  const currentDate = dayjs().unix()
+
+  dayjs.tz.setDefault()
+
+  return currentDate > endDate
+}
+
+const TournamentPlayers = ({ players, badges, tournamentEndDateTime }: Props) => {
   const tournamentPermission = usePermissions().tournament
+  const [isRemovingParticipants, setIsRemovingParticipants] = useState<boolean>(false)
+  const [isOpenRemoveParticipantModal, setIsOpenRemoveParticipantModal] = useState<boolean>(false)
+  const [selectedPlayer, setSelectedPlayer] = useState<TournamentParticipant | null>(null)
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
   const param = useParams();
   const { toast } = useToast();
@@ -36,8 +61,9 @@ const TournamentPlayers = ({ players, badges }: Props) => {
     },
     resolver: zodResolver(JoinedPlayersSchema),
   });
+  const tournamentCode: string = param.tournament_code as string
 
-  const { fields, append, remove, } = useFieldArray({ control: form.control, name: 'players' });
+  const { fields, remove, } = useFieldArray({ control: form.control, name: 'players' });
 
   const onSubmit = async (data: z.infer<typeof JoinedPlayersSchema>) => {
     const firstBadge = badges.find((badge) => badge.badge_rules[0].value.position === 1)
@@ -59,7 +85,7 @@ const TournamentPlayers = ({ players, badges }: Props) => {
         })
       };
 
-      await setTournamentWinner({ body, param: param.tournament_code as string });
+      await setTournamentWinner({ body, param: tournamentCode });
 
       toast({
         title: `Successfully set the winner`,
@@ -82,6 +108,34 @@ const TournamentPlayers = ({ players, badges }: Props) => {
     return form.getValues('players').some((player) => player.position > 0 && player.position === currentPosition);
   };
 
+  const handleRemoveParticipants = async () => {
+    if (selectedPlayer === undefined || selectedPlayer === null || selectedIndex === undefined || selectedIndex === null) return
+    setIsRemovingParticipants(true)
+    try {
+      const res = await removeTournamentParticipant({ body: { user_code: selectedPlayer.user_code }, param: tournamentCode })
+      if (res.stat_code?.includes('ERR')) throw new Error(res.stat_code)
+
+      remove(selectedIndex)
+      toast({
+        title: `Successfully removed ${selectedPlayer.user_name} from participants`,
+        variant: 'default',
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        toast({
+          title: 'Something went wrong',
+          description: `failed to remove ${selectedPlayer.user_name} from participants`,
+          variant: 'destructive',
+        });
+      }
+    }
+
+    setIsRemovingParticipants(false)
+    setIsOpenRemoveParticipantModal(false)
+  }
+
+  const canRemoveParticipants = Boolean(tournamentPermission?.removeParticipants && !isTournamentEnded(tournamentEndDateTime))
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -103,12 +157,13 @@ const TournamentPlayers = ({ players, badges }: Props) => {
                   Position
                 </Typography>
               </TableHead>
+              <TableHead />
             </TableRow>
           </TableHeader>
           <TableBody>
             {
               fields.map((player, index) => (
-                <TableRow key={player.user_code} >
+                <TableRow key={player.user_code} className='relative [&>td>.remove-btn]:hover:opacity-100'>
                   <TableCell className='py-[10px] flex flex-row items-center gap-3'>
                     <Image alt='player-image' src={player.user_image_url || '/images/avatar-not-found.png'} width={48} height={48} className='rounded-full' />
                     <Typography variant='paragraph-l-regular' className='text-gray-900'>
@@ -144,6 +199,15 @@ const TournamentPlayers = ({ players, badges }: Props) => {
                       )}
                     />
                   </TableCell>
+                  <TableCell className='py-[10px] px-0' align='center'>
+                    {
+                      canRemoveParticipants && (
+                        <Button variant="destructive" className='w-fit p-1 opacity-0 remove-btn' onClick={(event) => { event.preventDefault(); setIsOpenRemoveParticipantModal(true); setSelectedIndex(index); setSelectedPlayer(player) }}>
+                          <Trash />
+                        </Button>
+                      )
+                    }
+                  </TableCell>
                 </TableRow>
               ))
             }
@@ -157,6 +221,13 @@ const TournamentPlayers = ({ players, badges }: Props) => {
           </div>
         )}
       </form>
+      <ConfirmationModal
+        open={isOpenRemoveParticipantModal}
+        onOpenChange={(isOpen) => setIsOpenRemoveParticipantModal(isOpen)}
+        onConfirm={() => handleRemoveParticipants()}
+        message={`Are you sure to remove ${selectedPlayer?.user_name} from the tournament?`}
+        isLoading={isRemovingParticipants}
+      />
     </Form>
   );
 };

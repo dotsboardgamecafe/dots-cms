@@ -4,7 +4,7 @@ import { revalidateTag } from 'next/cache';
 
 import fetcher, { ApiOptions } from '@/lib/api/utils/fetcher';
 
-import { AddTournamentPayload, SetTournamentWinnerType, TournamentDetailType, TournamentType } from '@/types/tournament';
+import { AddTournamentPayload, RemoveTournamentParticipant, SetTournamentWinnerType, TournamentDetailType, TournamentType } from '@/types/tournament';
 
 export const getTournaments = async (options?: ApiOptions) => {
   return await fetcher<TournamentType[]>('getTournaments', { ...options, requestOpt: { next: { tags: ['getTournaments'] } } });
@@ -33,6 +33,15 @@ export const setTournamentWinner = async (options: ApiOptions<SetTournamentWinne
   revalidateTag(`get-tournament-${options.param}`);
   return res
 }
+
+export const removeTournamentParticipant = async (options: ApiOptions<RemoveTournamentParticipant>) => {
+  const res = await fetcher('deleteTournamentParticipant', options);
+  if (!res.stat_code?.includes('ERR')) {
+    revalidateTag('getTournaments');
+    revalidateTag(`get-tournament-${options.param}`);
+  }
+  return res
+};
 
 export const updateTournamentsStatus = async (tournament_code: TournamentType['tournament_rules'], status: 'active' | 'inactive') => {
   const res = await fetcher('updateTournamentsStatus', { param: tournament_code, body: { status } });

@@ -37,7 +37,7 @@ const RoomDetail = ({ roomDetail }: Props) => {
             <RoomInfo roomDetail={roomDetail} />
           </TabsContent>
           <TabsContent value="players">
-            <PlayersTab roomId={roomDetail.room_code} players={roomDetail.room_participants} endDateTime={`${roomDetail.end_date} ${roomDetail.start_time}`} />
+            <PlayersTab roomId={roomDetail.room_code} players={roomDetail.room_participants} endDateTime={`${roomDetail.end_date} ${roomDetail.end_time}`} />
           </TabsContent>
         </Tabs>
       </div>

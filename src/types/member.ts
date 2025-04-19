@@ -1,5 +1,9 @@
 import { z } from 'zod';
 
+export type UserCustomization = {
+  color: string
+}
+
 export type MemberType = {
   user_code: string;
   email: string;
@@ -19,6 +23,7 @@ export type MemberType = {
   total_spent: number;
   date_of_birth: string;
   gender: string;
+  user_style: UserCustomization
 };
 
 export const AddMemberSchema = z.object({
@@ -48,5 +53,11 @@ export type InvoiceType = {
 export type ClaimInvoicePayload = {
   invoice_code: string
 }
+
+export const UpdateUserCustomizationSchema = z.object({
+  color: z.string().refine((value: string) => /^#?[a-fA-F0-9]{6}|[a-fA-F0-9]{3}$/.test(value), {
+    message: 'Invalide color code!'
+  }),
+});
 
 export type ResponseClaimedInvoice = Pick<MemberType, 'user_code' | 'username'> & InvoiceType & { full_name: string }

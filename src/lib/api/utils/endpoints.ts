@@ -59,6 +59,9 @@ const endpointData = {
 	updateGameMechanics: { path: '/game-mechanics', method: 'PUT', prefix: '' },
 	updateTournamentsStatus: { path: '/tournaments', method: 'PUT', prefix: 'status' },
 
+	//PATCH
+	updateUserCustomization: { path: '/users', method: 'PATCH', prefix: 'style' },
+
 	// DELETE
 	deleteGameMechanics: { path: '/game-mechanics', method: 'DELETE', prefix: '' },
 	deleteMember: { path: '/users', method: 'DELETE', prefix: '' },

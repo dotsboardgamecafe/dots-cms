@@ -1,7 +1,7 @@
 'use client';
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { ArrowCircleDown2, Eye, Gift, HambergerMenu, ReceiptItem, Setting4, Trash } from 'iconsax-react';
+import { ArrowCircleDown2, Eye, Gift, HambergerMenu, Magicpen, ReceiptItem, Setting4, Trash } from 'iconsax-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PropsWithRef, useEffect, useMemo, useState } from 'react';
@@ -13,6 +13,7 @@ import StatusConfirmationModal from '@/components/PageComponents/MemberPage/Conf
 import MemberDetailModal from '@/components/PageComponents/MemberPage/DetailModal';
 import MemberFilterModal from '@/components/PageComponents/MemberPage/FilterModal';
 import GiftBadgeModal from '@/components/PageComponents/MemberPage/GiftBadgeModal';
+import UserCustomizationModal from '@/components/PageComponents/MemberPage/UserCustomizationModal';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/ButtonDropdown';
 import { Button } from '@/components/ui/Buttons';
 import Search from '@/components/ui/Input/Search';
@@ -41,6 +42,7 @@ const MemberTable = ({ data, pagination }: Props) => {
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState<boolean>(false);
   const [changeStatusConfirmationModalOpen, setChangeStatusConfirmationModalOpen] = useState<boolean>(false);
+  const [userCustomizationModalOpen, setUserCustomizationModalOpen] = useState<boolean>(false)
   const [selectedRow, setSelectedRow] = useState<MemberType>();
   const columns: ColumnDef<MemberType>[] = useMemo(() => {
     const result: ColumnDef<MemberType>[] = [
@@ -49,14 +51,15 @@ const MemberTable = ({ data, pagination }: Props) => {
         header: 'User Name',
         cell: ({ row }) => {
           return (
-            <section className='flex flex-row items-center gap-[10px]'>
+            <section className='flex flex-row items-center gap-2 w-fit min-w-max'>
               <Image
                 src={row.original.image_url || '/images/avatar-not-found.png'}
                 alt={row.original.username + '-img-pic'}
                 width={32}
                 height={32}
               />
-              <Typography variant='paragraph-l-regular'>
+              <div className='w-3 h-2' style={{ backgroundColor: `${row.original.user_style.color || '#000000'}` }} />
+              <Typography variant='paragraph-l-regular' className='flex-shrink-0'>
                 {row.original.username || '-'}
               </Typography>
             </section>
@@ -171,7 +174,7 @@ const MemberTable = ({ data, pagination }: Props) => {
       },
     ]
 
-    if (memberPermissions?.detail || memberPermissions?.viewInvoice || memberPermissions?.delete || memberPermissions?.giftBadge) {
+    if (memberPermissions?.detail || memberPermissions?.viewInvoice || memberPermissions?.delete || memberPermissions?.giftBadge || memberPermissions?.userCustomization) {
       result.push({
         id: 'action',
         header: 'Action',
@@ -205,6 +208,14 @@ const MemberTable = ({ data, pagination }: Props) => {
                   <Trash className='cursor-pointer' />
                 </Button>
               )}
+              {memberPermissions.userCustomization && (
+                <Button className='p-0' variant='link' onClick={() => {
+                  setUserCustomizationModalOpen(true)
+                  setSelectedRow(row.original)
+                }} >
+                  <Magicpen className='cursor-pointer' />
+                </Button>
+              )}
             </div>
           );
         }
@@ -212,7 +223,7 @@ const MemberTable = ({ data, pagination }: Props) => {
     }
 
     return result
-  }, [memberPermissions?.delete, memberPermissions?.detail, memberPermissions?.viewInvoice, memberPermissions?.status, memberPermissions?.giftBadge])
+  }, [memberPermissions?.delete, memberPermissions?.detail, memberPermissions?.viewInvoice, memberPermissions?.status, memberPermissions?.giftBadge, memberPermissions?.userCustomization])
 
   const table = useReactTable({
     data: data,
@@ -328,6 +339,11 @@ const MemberTable = ({ data, pagination }: Props) => {
         onOpenChange={(isOpen) => setModalGiftBadgeOpen(isOpen)}
         open={modalGiftBadgeOpen}
         member={selectedRow}
+      />
+      <UserCustomizationModal
+        defaultData={selectedRow}
+        onOpenChange={(isOpen) => setUserCustomizationModalOpen(isOpen)}
+        open={userCustomizationModalOpen}
       />
     </div>
   );

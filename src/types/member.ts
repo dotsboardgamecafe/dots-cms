@@ -24,6 +24,14 @@ export type MemberType = {
   date_of_birth: string;
   gender: string;
   user_style: UserCustomization
+  stats?: {
+    vp: number,
+    board_game: number,
+    badge: number,
+    room_general: number,
+    room_event: number,
+    tournament: number
+  }
 };
 
 export const AddMemberSchema = z.object({

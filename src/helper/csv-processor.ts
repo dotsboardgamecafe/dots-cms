@@ -99,16 +99,22 @@ const getObjectValueByHeader = <ObjectType extends { [x: string]: any }>(object:
   }, object)
 }
 
-export function ObjectToCSV<T extends { [key: string]: any }>(data: T[], header?: NestedKeyOf<T>[]): Promise<Blob> {
+interface THeaderObject<T extends { [key: string]: any }> { title: string, key: NestedKeyOf<T> }
+export type THeaderCSV<T extends { [key: string]: any }> = (NestedKeyOf<T> | THeaderObject<T>)[]
+export function ObjectToCSV<T extends { [key: string]: any }>(data: T[], header?: THeaderCSV<T>): Promise<Blob> {
   return new Promise((resolve, reject) => {
     if (!Array.isArray(data)) reject('Err: cannot proccess the data')
 
-    const headerList = header?.length ? header : Object.keys(data).join(',')
+    const headerList: string = (header?.length ? header.map<string>((headerData) => {
+      if (typeof headerData === 'object') return headerData.title
+      return headerData
+    }) : Object.keys(data)).join(',')
 
     const rows = data.reduce((result: any[], nextRow) => {
       if (header?.length) return [
         ...result,
-        header.map((headerKey: string) => {
+        header.map<string>((headerData) => {
+          const headerKey: string = typeof headerData === 'object' ? headerData.title : headerData
           const rowValue = getObjectValueByHeader<T>(nextRow, headerKey as unknown as NestedKeyOf<T>)
 
           if (Array.isArray(rowValue)) return `"${rowValue.join(',').replaceAll(`"`, `""`)}"`

@@ -15,7 +15,7 @@ import { MemberType, ResponseClaimedInvoice } from "@/types/member";
 
 
 export async function exportMember() {
-  const exportedColumns: THeaderCSV<MemberType> = ['username', 'email', "fullname", "gender", "date_of_birth", "phone_number", "latest_point", "latest_tier", "total_spent", { title: 'total_vp', key: 'stats.vp' }, { title: 'total_board_game', key: 'stats.board_game' }, { title: 'total_badge', key: 'stats.badge' }, { title: 'total_sessions', key: 'stats.room_general' }, { title: 'total_events', key: 'stats.room_event' }, { title: 'total_tournament', key: 'stats.tournament' }, "status", "created_date"]
+  const exportedColumns: THeaderCSV<MemberType> = ['username', 'email', "fullname", "gender", "date_of_birth", "phone_number", "latest_point", "latest_tier", "total_spent", { title: 'total_vp', key: 'stats.vp' }, { title: 'total_board_game', key: 'stats.game' }, { title: 'total_badge', key: 'stats.badge' }, { title: 'total_sessions', key: 'stats.room_normal' }, { title: 'total_events', key: 'stats.room_event' }, { title: 'total_tournament', key: 'stats.tournament' }, "status", "created_date"]
   const member = await getMembers({ pagination: { limit: 99999999999999 } })
   const csvFile = await ObjectToCSV<MemberType>(member.data, exportedColumns)
 

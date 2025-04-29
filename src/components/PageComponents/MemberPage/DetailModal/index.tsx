@@ -37,10 +37,10 @@ const MemberDetailModal = ({ open, onOpenChange, memberData }: Props) => {
             <TextLabel title='Total Spent' value={`Rp ${memberData?.total_spent || 0}`} />
             {memberData?.stats && (
               <>
-                <TextLabel title='Total of Board Games Played' value={`${memberData?.stats.board_game || 0} Board games`} />
+                <TextLabel title='Total of Board Games Played' value={`${memberData?.stats.game || 0} Board games`} />
                 <TextLabel title='Total of VP' value={`${memberData?.stats.vp || 0} VP`} />
                 <TextLabel title='Total of Badges' value={`${memberData?.stats.badge || 0} Badges`} />
-                <TextLabel title='Total of Joined Sessions' value={`${memberData?.stats.room_general || 0} Sessions`} />
+                <TextLabel title='Total of Joined Sessions' value={`${memberData?.stats.room_normal || 0} Sessions`} />
                 <TextLabel title='Total of Joined Events' value={`${memberData?.stats.room_event || 0} Events`} />
                 <TextLabel title='Total of Joined Tournaments' value={`${memberData?.stats.tournament || 0} Tournamnets`} />
               </>

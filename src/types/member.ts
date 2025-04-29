@@ -26,9 +26,9 @@ export type MemberType = {
   user_style: UserCustomization
   stats?: {
     vp: number,
-    board_game: number,
+    game: number,
     badge: number,
-    room_general: number,
+    room_normal: number,
     room_event: number,
     tournament: number
   }

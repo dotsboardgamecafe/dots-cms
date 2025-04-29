@@ -114,7 +114,7 @@ export function ObjectToCSV<T extends { [key: string]: any }>(data: T[], header?
       if (header?.length) return [
         ...result,
         header.map<string>((headerData) => {
-          const headerKey: string = typeof headerData === 'object' ? headerData.title : headerData
+          const headerKey: string = typeof headerData === 'object' ? headerData.key : headerData
           const rowValue = getObjectValueByHeader<T>(nextRow, headerKey as unknown as NestedKeyOf<T>)
 
           if (Array.isArray(rowValue)) return `"${rowValue.join(',').replaceAll(`"`, `""`)}"`

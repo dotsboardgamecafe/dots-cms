@@ -58,7 +58,7 @@ export async function exportAdmin() {
 }
 
 export async function exportGameCatalog() {
-  const exportedColumns: (NestedKeyOf<GameType>)[] = ['game_code', "name", 'game_type', 'duration', 'cafe_name', 'level', 'minimal_participant', "maximum_participant", "status", 'description', 'game_masters.admin_code', 'game_masters.name']
+  const exportedColumns: THeaderCSV<GameType> = ['game_code', "name", 'game_type', 'duration', 'cafe_name', 'level', 'minimal_participant', "maximum_participant", "status", 'description', 'game_masters.admin_code', 'game_masters.name', { title: 'total_played', key: 'stats.played' }]
   const games = await getGameList({ pagination: { limit: 99999999999999 } })
   const csvFile = await ObjectToCSV<GameType>(games.data, exportedColumns)
 

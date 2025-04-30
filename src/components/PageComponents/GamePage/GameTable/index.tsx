@@ -117,6 +117,17 @@ const GameTable = ({ data, pagination, gameTypes }: Props) => {
         }
       },
       {
+        accessorKey: 'stats',
+        header: 'Played (count)',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular' className='text-center'>
+              {row.original.stats?.played ?? 'n/a'}
+            </Typography>
+          );
+        }
+      },
+      {
         accessorKey: 'status',
         header: 'Status',
         cell: ({ row }) => {

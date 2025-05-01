@@ -1,4 +1,6 @@
 import dayjs from "dayjs";
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
 
 import { getAdmins } from "@/lib/api/admin";
 import { getBadges, importBadges } from "@/lib/api/badge";
@@ -9,10 +11,12 @@ import { ObjectToCSV, THeaderCSV } from "@/helper";
 
 import { AdminType } from "@/types/admin";
 import { BadgeType } from "@/types/badge";
-import { NestedKeyOf } from "@/types/common";
 import { GameType } from "@/types/game";
 import { MemberType, ResponseClaimedInvoice } from "@/types/member";
 
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 export async function exportMember() {
   const exportedColumns: THeaderCSV<MemberType> = ['username', 'email', "fullname", "gender", "date_of_birth", "phone_number", "latest_point", "latest_tier", "total_spent", { title: 'total_vp', key: 'stats.vp' }, { title: 'total_board_game', key: 'stats.game' }, { title: 'total_badge', key: 'stats.badge' }, { title: 'total_sessions', key: 'stats.room_normal' }, { title: 'total_events', key: 'stats.room_event' }, { title: 'total_tournament', key: 'stats.tournament' }, "status", "created_date"]
@@ -29,7 +33,14 @@ export async function exportMember() {
 }
 
 export async function exportClaimedHistory() {
-  const exportedColumns: (NestedKeyOf<ResponseClaimedInvoice>)[] = ['user_code', 'username', 'full_name', 'invoice_code', 'invoice_amount', 'invoice_items.name', 'claimed_date', 'claimed_time']
+  const getDateValue = (data: ResponseClaimedInvoice) => {
+    const timeInUTC = dayjs(data.claimed_time.split(' ').join('T') + 'Z')
+    const timeInJakarta = timeInUTC.tz('Asia/Jakarta')
+
+    return timeInJakarta.format('D MMM YYYY, H:mm')
+  }
+
+  const exportedColumns: THeaderCSV<ResponseClaimedInvoice> = ['user_code', 'username', 'full_name', 'invoice_code', 'invoice_amount', 'invoice_items.name', { key: 'claimed_date', title: 'claimed_date', getValue: getDateValue }, { key: 'claimed_time', title: 'claimed_time', getValue: getDateValue }]
   const claimedInvoice = await getAllClaimedInvoice({ pagination: { limit: 99999999999999 } })
 
   const csvFile = await ObjectToCSV<ResponseClaimedInvoice>(claimedInvoice, exportedColumns)

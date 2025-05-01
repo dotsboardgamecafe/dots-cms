@@ -40,7 +40,7 @@ export async function exportClaimedHistory() {
     return timeInJakarta.format('D MMM YYYY, H:mm')
   }
 
-  const exportedColumns: THeaderCSV<ResponseClaimedInvoice> = ['user_code', 'username', 'full_name', 'invoice_code', 'invoice_amount', 'invoice_items.name', { key: 'claimed_date', title: 'claimed_date', getValue: getDateValue }, { key: 'claimed_time', title: 'claimed_time', getValue: getDateValue }]
+  const exportedColumns: THeaderCSV<ResponseClaimedInvoice> = ['user_code', 'username', 'full_name', 'invoice_code', 'invoice_amount', 'invoice_items.name', { key: 'claimed_date', title: 'claimed_date', getValue: getDateValue }]
   const claimedInvoice = await getAllClaimedInvoice({ pagination: { limit: 99999999999999 } })
 
   const csvFile = await ObjectToCSV<ResponseClaimedInvoice>(claimedInvoice, exportedColumns)

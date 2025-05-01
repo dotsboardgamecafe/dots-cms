@@ -6,25 +6,28 @@ import { RoomParticipantSchema } from '@/types/room';
 export type QRType = string
 
 export type GameType = {
-  cafe_name: string,
-  cafe_code: string,
-  cafe_address: string,
-  game_code: string,
-  game_type: string,
-  name: string,
-  image_url: string,
-  collection_url: string[],
-  description: string,
-  status: string,
-  difficulty: string,
-  level: number,
-  duration: number,
-  minimal_participant: number,
-  maximum_participant: number,
-  game_categories?: GameCategory[];
-  game_related?: string,
-  game_rooms?: string,
-  game_masters?: AdminType[];
+  cafe_name: string
+  cafe_code: string
+  cafe_address: string
+  game_code: string
+  game_type: string
+  name: string
+  image_url: string
+  collection_url: string[]
+  description: string
+  status: string
+  difficulty: string
+  level: number
+  duration: number
+  minimal_participant: number
+  maximum_participant: number
+  game_categories?: GameCategory[]
+  game_related?: string
+  game_rooms?: string
+  game_masters?: AdminType[]
+  stats: {
+    played: number
+  }
 };
 
 export type GameCategory = {

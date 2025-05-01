@@ -99,7 +99,7 @@ const getObjectValueByHeader = <ObjectType extends { [x: string]: any }>(object:
   }, object)
 }
 
-interface THeaderObject<T extends { [key: string]: any }> { title: string, key: NestedKeyOf<T> }
+interface THeaderObject<T extends { [key: string]: any }> { title: string, key: NestedKeyOf<T>, getValue?: (data: T) => string }
 export type THeaderCSV<T extends { [key: string]: any }> = (NestedKeyOf<T> | THeaderObject<T>)[]
 export function ObjectToCSV<T extends { [key: string]: any }>(data: T[], header?: THeaderCSV<T>): Promise<Blob> {
   return new Promise((resolve, reject) => {
@@ -115,7 +115,7 @@ export function ObjectToCSV<T extends { [key: string]: any }>(data: T[], header?
         ...result,
         header.map<string>((headerData) => {
           const headerKey: string = typeof headerData === 'object' ? headerData.key : headerData
-          const rowValue = getObjectValueByHeader<T>(nextRow, headerKey as unknown as NestedKeyOf<T>)
+          const rowValue = (typeof headerData === 'object' && headerData.getValue?.(nextRow)) ?? getObjectValueByHeader<T>(nextRow, headerKey as unknown as NestedKeyOf<T>)
 
           if (Array.isArray(rowValue)) return `"${rowValue.join(',').replaceAll(`"`, `""`)}"`
           if (typeof rowValue === 'object') return `"${JSON.stringify(rowValue).replaceAll(`"`, `""`)}"`

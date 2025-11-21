@@ -8,11 +8,11 @@ import { adjustUserVp } from '@/lib/api/member';
 import { Button } from '@/components/ui/Buttons';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/Input/RadioGroup';
-import Text from '@/components/ui/Input/Text';
 import { useToast } from '@/components/ui/Toast/use-toast';
 import Typography from '@/components/ui/Typography';
 
 import { AdjustUserVpPayload, AdjustUserVpSchema, MemberType } from '@/types/member';
+import InputNumber from '@/components/ui/Input/Number';
 
 type Props = {
   onClose: () => void;
@@ -65,7 +65,7 @@ export const AdjustUserVpForm = ({ onClose, member_code }: Props) => {
                 </Typography>
               </FormLabel>
               <FormControl>
-                <Text placeholder='Enter VP Point' value={field.value} onChange={(event) => field.onChange({ ...event, target: { ...event.target, value: Number(event.target.value || 0) } })} maxLength={100} type='number' />
+                <InputNumber placeholder='Enter VP Point' value={field.value} onChange={(event) => field.onChange({ ...event, target: { ...event.target, value: Number(event.target.value || 0) } })} maxLength={100} type='number' />
               </FormControl>
               <FormMessage />
             </FormItem>

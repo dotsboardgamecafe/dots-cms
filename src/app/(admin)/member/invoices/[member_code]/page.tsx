@@ -14,7 +14,7 @@ type Props = {
   searchParams: Omit<Pagination, 'keyword'>
 };
 
-const ClaimHistoryPage = async ({ params, ...searchParams }: Props) => {
+const ClaimHistoryPage = async ({ params, searchParams }: Props) => {
   const memberDetail = await getMemberDetail(params.member_code);
   const invoiceHistory = await getMemberInvoices({ param: params.member_code, query: searchParams })
 

@@ -14,9 +14,17 @@ type Props = {
   searchParams: Omit<Pagination, 'keyword'>
 };
 
-const ClaimHistoryPage = async ({ params, ...searchParams }: Props) => {
+const VpHistoryPage = async ({ params, searchParams }: Props) => {
+  const pagination: Pagination = {
+    order: 'created_date',
+    sort: 'ASC',
+    page: 1,
+    limit: 10,
+    ...searchParams
+  }
+
   const memberDetail = await getMemberDetail(params.member_code);
-  const userVpHistory = await getUserVpHistory(params.member_code, { query: searchParams })
+  const userVpHistory = await getUserVpHistory(params.member_code, { pagination })
 
   return (
     <div>
@@ -36,4 +44,4 @@ const ClaimHistoryPage = async ({ params, ...searchParams }: Props) => {
   );
 };
 
-export default ClaimHistoryPage;
+export default VpHistoryPage;

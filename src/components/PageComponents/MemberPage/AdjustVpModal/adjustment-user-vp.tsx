@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/Buttons';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/Input/RadioGroup';
 import Text from '@/components/ui/Input/Text';
+import { useToast } from '@/components/ui/Toast/use-toast';
 import Typography from '@/components/ui/Typography';
 
 import { AdjustUserVpPayload, AdjustUserVpSchema, MemberType } from '@/types/member';
@@ -19,6 +20,8 @@ type Props = {
 };
 
 export const AdjustUserVpForm = ({ onClose, member_code }: Props) => {
+  const { toast } = useToast()
+
   const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false)
 
   const form = useForm<AdjustUserVpPayload>(({
@@ -34,9 +37,16 @@ export const AdjustUserVpForm = ({ onClose, member_code }: Props) => {
     setIsSubmitting(true)
     try {
       await adjustUserVp(member_code, payload)
-
+      toast({
+        title: `Successfully adjusted the VP`,
+        variant: 'default',
+      });
     } catch (error) {
-
+      toast({
+        title: 'Something went wrong',
+        description: `Failed to adjust the VP`,
+        variant: 'destructive',
+      });
     } finally {
       setIsSubmitting(false)
     }

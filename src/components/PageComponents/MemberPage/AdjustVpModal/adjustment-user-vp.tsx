@@ -40,6 +40,7 @@ export const AdjustUserVpForm = ({ onClose, member_code }: Props) => {
         title: `Successfully adjusted the VP`,
         variant: 'default',
       });
+      onClose()
     } catch (error) {
       toast({
         title: 'Something went wrong',

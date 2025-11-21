@@ -61,6 +61,7 @@ export const getUserVpHistory = async (member_code: MemberType['user_code'], opt
 export const adjustUserVp = async (member_code: MemberType['user_code'], payload: AdjustUserVpPayload) => {
   const res = await fetcher('adjustUserVp', { param: member_code, body: payload })
   revalidateTag('get-members')
+  revalidateTag(`get-member-${member_code}`)
   revalidateTag(`get-user-${member_code}-vp-history`)
   return res
 }

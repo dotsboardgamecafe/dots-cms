@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import React, { PropsWithRef } from 'react';
 
 import AdjustVpModal from '@/components/PageComponents/MemberPage/AdjustVpModal';
-import UserVpHistoryModal from '@/components/PageComponents/MemberPage/UserVpHistoryModal';
 import { Button } from '@/components/ui/Buttons';
 import { Modal, ModalContent } from '@/components/ui/Modal';
 import TextLabel from '@/components/ui/TextLabel';
@@ -96,7 +95,6 @@ const MemberDetailModal = ({ open, onOpenChange, memberData }: Props) => {
       {memberData?.user_code && (
         <>
           <AdjustVpModal member_code={memberData.user_code} onOpenChange={(isOpen) => setOpenVpAdjustmentModal(isOpen)} open={openAdjustmentModal} />
-          <UserVpHistoryModal member_code={memberData.user_code} onOpenChange={(isOpen) => setOpenUserVpHistoryModal(isOpen)} open={openUserVpHistoryModal} />
         </>
       )}
     </>

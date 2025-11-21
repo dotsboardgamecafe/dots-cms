@@ -25,7 +25,7 @@ type Props = PropsWithRef<{
 const MemberDetailModal = ({ open, onOpenChange, memberData }: Props) => {
   const userPermissions = usePermissions().member
   const [openAdjustmentModal, setOpenVpAdjustmentModal] = React.useState<boolean>(false)
-  const [openUserVpHistoryModal, setOpenUserVpHistoryModal] = React.useState<boolean>(false)
+
   const router = useRouter()
 
   const hasVPAccess = Boolean(userPermissions?.adjustVP || userPermissions?.showVpHistory)

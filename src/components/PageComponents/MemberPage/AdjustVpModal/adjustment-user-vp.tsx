@@ -33,7 +33,6 @@ export const AdjustUserVpForm = ({ onClose, member_code }: Props) => {
   }));
 
   const onSubmit = async (payload: AdjustUserVpPayload) => {
-    console.log(payload)
     setIsSubmitting(true)
     try {
       await adjustUserVp(member_code, payload)

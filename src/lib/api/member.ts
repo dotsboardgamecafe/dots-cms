@@ -4,7 +4,7 @@ import { revalidateTag } from 'next/cache';
 
 import fetcher, { ApiOptions } from '@/lib/api/utils/fetcher';
 
-import { ClaimInvoicePayload, InvoiceType, MemberType, ResponseClaimedInvoice, UserCustomization } from '@/types/member';
+import { AdjustUserVpPayload, ClaimInvoicePayload, InvoiceType, MemberType, ResponseClaimedInvoice, UserCustomization, UserVpHistory } from '@/types/member';
 
 export const getMembers = async (options?: ApiOptions) => {
   return await fetcher<MemberType[]>('getMembers', { ...options, requestOpt: { next: { tags: ['get-members'] } } });
@@ -53,3 +53,14 @@ export const deleteMember = async (member_code: MemberType['user_code']) => {
   revalidateTag('get-members')
   return res
 };
+
+export const getUserVpHistory = async (member_code: MemberType['user_code'], options: ApiOptions) => {
+  return await fetcher<UserVpHistory[]>('getUserVpHistory', { ...options, param: member_code, requestOpt: { next: { tags: [`get-user-${member_code}-vp-history`] } } })
+}
+
+export const adjustUserVp = async (member_code: MemberType['user_code'], payload: AdjustUserVpPayload) => {
+  const res = await fetcher('adjustUserVp', { param: member_code, body: payload })
+  revalidateTag('get-members')
+  revalidateTag(`get-user-${member_code}-vp-history`)
+  return res
+}

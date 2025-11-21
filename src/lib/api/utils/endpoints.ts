@@ -21,6 +21,7 @@ const endpointData = {
 	getGameQR: { path: '/games', method: 'GET', prefix: 'qrcode' },
 	getAvailableUserBadges: { path: '/badges/unowned', method: 'GET', prefix: '' },
 	getAllClaimedInvoice: { path: '/invoices/history', method: 'GET', prefix: '' },
+	getUserVpHistory: { path: '/users', method: 'GET', prefix: 'point-history' },
 
 	// POST
 	auth: { path: '/auths/login', method: 'POST', prefix: '' },
@@ -61,6 +62,7 @@ const endpointData = {
 
 	//PATCH
 	updateUserCustomization: { path: '/users', method: 'PATCH', prefix: 'style' },
+	adjustUserVp: { path: '/users', method: 'PATCH', prefix: 'point-adjustment' },
 
 	// DELETE
 	deleteGameMechanics: { path: '/game-mechanics', method: 'DELETE', prefix: '' },

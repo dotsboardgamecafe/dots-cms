@@ -35,7 +35,8 @@ export const AdjustUserVpForm = ({ onClose, member_code }: Props) => {
   const onSubmit = async (payload: AdjustUserVpPayload) => {
     setIsSubmitting(true)
     try {
-      await adjustUserVp(member_code, payload)
+      const res = await adjustUserVp(member_code, payload)
+      if (res.stat_code?.includes('ERR')) throw new Error("ERR: Failed to adjust vp")
       toast({
         title: `Successfully adjusted the VP`,
         variant: 'default',

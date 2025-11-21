@@ -25,7 +25,7 @@ const UserVpHistoryTable = ({ data, pagination, isLoading }: Props) => {
         cell: ({ row }) => {
           return (
             <Typography variant='paragraph-l-regular'>
-              {row.original.created_date ? dayjs(row.original.created_date).format('DD MMM, YYYY') : 'n/a'}
+              {row.original.created_date ? dayjs(row.original.created_date).format('DD MMM, YYYY HH:mm a') : 'n/a'}
             </Typography>
           );
         }

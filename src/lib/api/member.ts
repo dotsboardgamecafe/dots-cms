@@ -55,7 +55,7 @@ export const deleteMember = async (member_code: MemberType['user_code']) => {
 };
 
 export const getUserVpHistory = async (member_code: MemberType['user_code'], options: ApiOptions) => {
-  return await fetcher<UserVpHistory[]>('getUserVpHistory', { ...options, param: member_code, requestOpt: { next: { tags: [`get-user-${member_code}-vp-history`] } } })
+  return await fetcher<UserVpHistory[]>('getUserVpHistory', { ...options, pagination: { order: 'created_date', sort: 'ASC' }, param: member_code, requestOpt: { next: { tags: [`get-user-${member_code}-vp-history`] } } })
 }
 
 export const adjustUserVp = async (member_code: MemberType['user_code'], payload: AdjustUserVpPayload) => {

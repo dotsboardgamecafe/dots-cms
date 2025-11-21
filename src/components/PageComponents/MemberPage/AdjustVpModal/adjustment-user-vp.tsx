@@ -26,7 +26,7 @@ export const AdjustUserVpForm = ({ onClose, member_code }: Props) => {
 
   const form = useForm<AdjustUserVpPayload>(({
     defaultValues: {
-      adjusment_type: 'subtract',
+      adjustment_type: 'subtract',
       point: 0
     },
     resolver: zodResolver(AdjustUserVpSchema)
@@ -72,7 +72,7 @@ export const AdjustUserVpForm = ({ onClose, member_code }: Props) => {
           )}
         />
         <FormField
-          name='adjusment_type'
+          name='adjustment_type'
           control={form.control}
           render={({ field }) => (
             <FormItem>

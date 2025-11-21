@@ -81,13 +81,13 @@ export type UserVpHistory = {
 }
 
 export const AdjustUserVpSchema = z.object({
-  adjusment_type: z.enum(["add", "subtract"], {
+  adjustment_type: z.enum(["add", "subtract"], {
     required_error: "Adjustment type is required",
   }),
   point: z.number({ required_error: 'VP Point is required' }).min(1, 'VP Point is required'),
 });
 
 export type AdjustUserVpPayload = {
-  adjusment_type: 'add' | 'subtract',
+  adjustment_type: 'add' | 'subtract',
   point: number
 }

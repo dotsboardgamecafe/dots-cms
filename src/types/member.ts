@@ -69,3 +69,25 @@ export const UpdateUserCustomizationSchema = z.object({
 });
 
 export type ResponseClaimedInvoice = Pick<MemberType, 'user_code' | 'username'> & InvoiceType & { full_name: string }
+
+export type UserVpHistory = {
+  source_id: number,
+  source_user_code: string,
+  source_type: string,
+  source_code: string,
+  source_name: string,
+  point: number,
+  created_date: string
+}
+
+export const AdjustUserVpSchema = z.object({
+  adjustment_type: z.enum(["add", "subtract"], {
+    required_error: "Adjustment type is required",
+  }),
+  point: z.number({ required_error: 'VP Point is required' }).min(1, 'VP Point is required'),
+});
+
+export type AdjustUserVpPayload = {
+  adjustment_type: 'add' | 'subtract',
+  point: number
+}

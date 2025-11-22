@@ -36,6 +36,8 @@ export interface IPermissionsContextValue {
     giftBadge?: boolean
     exportClaimedHistory?: boolean
     userCustomization?: boolean
+    adjustVP?: boolean
+    showVpHistory?: boolean
   }
   mechanics?: IBasePermissions
   banner?: IBasePermissions
@@ -145,6 +147,8 @@ export const PermissionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
           claimInvoice: permissionList.includes('claim-invoice-cms') || permissionList.includes('member-claim-invoice'),
           exportClaimedHistory: permissionList.includes('invoice-all-history-cms') || permissionList.includes('invoice-history-cms') || permissionList.includes('member-claimed-invoice-history'),
           userCustomization: permissionList.includes('member-store-style'),
+          adjustVP: permissionList.includes('member-adjust-vp'),
+          showVpHistory: permissionList.includes('member-history-vp')
         }
       }
 

@@ -8,8 +8,9 @@ type Props = PropsWithRef<PropsWithChildren<{
   title: string,
   value?: React.ReactNode;
   className?: string;
+  actions?: React.ReactNode
 }>>;
-const TextLabel = ({ title, value, className, children }: Props) => {
+const TextLabel = ({ title, value, className, children, actions }: Props) => {
 
   return (
     <div className={cn(['flex flex-col', className])}>
@@ -17,9 +18,12 @@ const TextLabel = ({ title, value, className, children }: Props) => {
         {title}
       </Typography>
       {value && (
-        <Typography variant='paragraph-xl-regular'>
-          {value}
-        </Typography>
+        <div className={cn(['flex flex-row justify-between items-center'])}>
+          <Typography variant='paragraph-xl-regular'>
+            {value}
+          </Typography>
+          {actions}
+        </div>
       )}
       {children}
     </div>

@@ -7,12 +7,12 @@ import { adjustUserVp } from '@/lib/api/member';
 
 import { Button } from '@/components/ui/Buttons';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/Form';
+import InputNumber from '@/components/ui/Input/Number';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/Input/RadioGroup';
 import { useToast } from '@/components/ui/Toast/use-toast';
 import Typography from '@/components/ui/Typography';
 
 import { AdjustUserVpPayload, AdjustUserVpSchema, MemberType } from '@/types/member';
-import InputNumber from '@/components/ui/Input/Number';
 
 type Props = {
   onClose: () => void;

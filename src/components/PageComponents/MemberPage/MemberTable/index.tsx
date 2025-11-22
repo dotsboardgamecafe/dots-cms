@@ -44,6 +44,7 @@ const MemberTable = ({ data, pagination }: Props) => {
   const [changeStatusConfirmationModalOpen, setChangeStatusConfirmationModalOpen] = useState<boolean>(false);
   const [userCustomizationModalOpen, setUserCustomizationModalOpen] = useState<boolean>(false)
   const [selectedRow, setSelectedRow] = useState<MemberType>();
+  const [selectedRowIndex, setSelectedRowIndex] = useState<number>();
   const columns: ColumnDef<MemberType>[] = useMemo(() => {
     const result: ColumnDef<MemberType>[] = [
       {
@@ -143,6 +144,7 @@ const MemberTable = ({ data, pagination }: Props) => {
               onValueChange={() => {
                 setChangeStatusConfirmationModalOpen(true)
                 setSelectedRow(row.original)
+                setSelectedRowIndex(row.index)
               }}
             >
               <SelectTrigger variant='badge' className={cn(
@@ -183,14 +185,14 @@ const MemberTable = ({ data, pagination }: Props) => {
             <div className='flex flex-row items-center gap-4' >
               {memberPermissions.detail && (
                 <Button className='p-0' variant='link' onClick={() => {
-                  onClickDetail(row.original);
+                  onClickDetail(row.original, row.index);
                 }}>
                   <Eye />
                 </Button>
               )}
               {memberPermissions.giftBadge && (
                 <Button className='p-0' variant='link' onClick={() => {
-                  openModalGiftBadge(row.original);
+                  openModalGiftBadge(row.original, row.index);
                 }}>
                   <Gift />
                 </Button>
@@ -204,6 +206,7 @@ const MemberTable = ({ data, pagination }: Props) => {
                 <Button className='p-0' variant='link' onClick={() => {
                   setDeleteConfirmationModalOpen(true);
                   setSelectedRow(row.original);
+                  setSelectedRowIndex(row.index);
                 }}>
                   <Trash className='cursor-pointer' />
                 </Button>
@@ -212,6 +215,7 @@ const MemberTable = ({ data, pagination }: Props) => {
                 <Button className='p-0' variant='link' onClick={() => {
                   setUserCustomizationModalOpen(true)
                   setSelectedRow(row.original)
+                  setSelectedRowIndex(row.index)
                 }} >
                   <Magicpen className='cursor-pointer' />
                 </Button>
@@ -232,14 +236,16 @@ const MemberTable = ({ data, pagination }: Props) => {
     columns,
   });
 
-  function onClickDetail(row: MemberType) {
+  function onClickDetail(row: MemberType, index: number) {
     setDetailModalOpen(true);
     setSelectedRow(row);
+    setSelectedRowIndex(index);
   };
 
-  function openModalGiftBadge(row: MemberType) {
+  function openModalGiftBadge(row: MemberType, index: number) {
     setModalGiftBadgeOpen(true)
     setSelectedRow(row)
+    setSelectedRowIndex(index)
   }
 
   useEffect(() => {
@@ -248,6 +254,12 @@ const MemberTable = ({ data, pagination }: Props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.limit])
+
+  useEffect(() => {
+    if (typeof selectedRowIndex !== 'number') return
+    const selectedData = data[selectedRowIndex]
+    setSelectedRow(selectedData)
+  }, [data])
 
   return (
     <div className='flex flex-col gap-6'>

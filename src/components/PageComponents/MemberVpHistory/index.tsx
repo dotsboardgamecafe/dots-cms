@@ -26,7 +26,7 @@ const MemberVpHistoryPage = ({ memberData, data, pagination }: Props) => {
     <div className='flex flex-col gap-6'>
       {memberPermission?.adjustVP && (
         <section className='table-action'>
-          <Typography variant='heading-h4'>Total VP: {memberData.stats?.vp || 0}</Typography>
+          <Typography variant='heading-h4'>Total VP: {memberData.stats?.vp || memberData.latest_point || 0}</Typography>
           <Button variant="default" size="md" onClick={() => setOpenAdjustVpModal(true)}>
             <Typography variant='paragraph-l-bold'>
               Adjust VP

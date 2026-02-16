@@ -13,6 +13,7 @@ import { useToast } from '@/components/ui/Toast/use-toast';
 import Typography from '@/components/ui/Typography';
 
 import { AdjustUserVpPayload, AdjustUserVpSchema, MemberType } from '@/types/member';
+import Textarea from '@/components/ui/Input/TextArea';
 
 type Props = {
   onClose: () => void;
@@ -27,7 +28,8 @@ export const AdjustUserVpForm = ({ onClose, member_code }: Props) => {
   const form = useForm<AdjustUserVpPayload>(({
     defaultValues: {
       adjustment_type: 'subtract',
-      point: 0
+      point: 0,
+      description: null,
     },
     resolver: zodResolver(AdjustUserVpSchema)
   }));
@@ -106,6 +108,23 @@ export const AdjustUserVpForm = ({ onClose, member_code }: Props) => {
                     </FormLabel>
                   </FormItem>
                 </RadioGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem >
+              <FormLabel className='mb-2 block'>
+                <Typography variant='paragraph-l-medium'>
+                  Description
+                </Typography>
+              </FormLabel>
+              <FormControl>
+                <Textarea placeholder='Enter Some Description' style={{ resize: 'none', height: '100px' }} value={field.value?.toString()} onChange={(event) => event.target.value.length > 150 ? null : field.onChange({ ...event, target: { ...event.target, value: event.target.value || null } })} maxLength={150} />
               </FormControl>
               <FormMessage />
             </FormItem>

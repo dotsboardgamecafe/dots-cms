@@ -63,6 +63,17 @@ const UserVpHistoryTable = ({ data, pagination, isLoading }: Props) => {
           );
         }
       },
+      {
+        accessorKey: 'description',
+        header: 'Description',
+        cell: ({ row }) => {
+          return (
+            <Typography variant='paragraph-l-regular'>
+              {row.original.description || '-'}
+            </Typography>
+          );
+        }
+      },
     ]
 
     return result

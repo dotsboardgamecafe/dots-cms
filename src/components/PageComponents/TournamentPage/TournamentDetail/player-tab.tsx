@@ -35,6 +35,11 @@ type Props = {
   tournamentEndDateTime: string
 };
 
+const registrationTypeLabel: Record<TournamentParticipant['additional_info']['registration_type'], string> = {
+  self_booking: 'Self Booking',
+  manual_admin: 'Manual Admin',
+}
+
 const isTournamentEnded = (dateTime: string) => {
   dayjs.tz.setDefault('Asia/Jakarta')
 
@@ -172,7 +177,7 @@ const TournamentPlayers = ({ players, badges, tournamentEndDateTime }: Props) =>
                   </TableCell>
                   <TableCell className='py-[10px]'>
                     <Typography variant='paragraph-l-regular' className='text-gray-900 capitalize'>
-                      {player.additional_info || '-'}
+                      {registrationTypeLabel[player.additional_info?.registration_type || 'self_booking']}
                     </Typography>
                   </TableCell>
                   <TableCell className='py-[10px]'>

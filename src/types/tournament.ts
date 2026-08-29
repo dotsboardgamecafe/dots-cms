@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { BadgeType } from '@/types/badge';
+import { RoomParticipantAdditionalInfo } from '@/types/room';
 
 export type TournamentType = {
   game_code: string;
@@ -36,7 +37,7 @@ export type TournamentParticipant = {
   user_image_url: string,
   status_winner: boolean,
   status: string,
-  additional_info: string,
+  additional_info: RoomParticipantAdditionalInfo,
   position: number,
   reward_point: number
 }
@@ -121,7 +122,7 @@ export type SetTournamentWinnerType = {
     position: number,
     badge_code: string,
     user_code: string,
-    additional_info: string,
+    additional_info: RoomParticipantAdditionalInfo,
     status: string
   }[]
 }

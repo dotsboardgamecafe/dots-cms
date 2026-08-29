@@ -3,7 +3,7 @@ import { revalidateTag } from 'next/cache';
 
 import fetcher, { ApiOptions } from '@/lib/api/utils/fetcher';
 
-import { AddRoomPayload, RemoveRoomParticipant, RoomDetailType, RoomType, SetRoomWinnerPayload } from '@/types/room';
+import { AddRoomParticipantPayload, AddRoomPayload, RemoveRoomParticipant, RoomDetailType, RoomType, SetRoomWinnerPayload } from '@/types/room';
 
 export const getRooms = async (options?: ApiOptions) => {
   return await fetcher<RoomType[]>('getRooms', { ...options, requestOpt: { next: { tags: ['rooms'] } } });
@@ -39,6 +39,12 @@ export const setRoomWinner = async (options: ApiOptions<SetRoomWinnerPayload>) =
 
 export const removeRoomParticipant = async (options: ApiOptions<RemoveRoomParticipant>) => {
   const res = await fetcher('deleteRoomParticipant', options);
+  if (!res.stat_code?.includes('ERR')) revalidateTag('room-detail');
+  return res
+};
+
+export const addRoomParticipant = async (options: ApiOptions<AddRoomParticipantPayload>) => {
+  const res = await fetcher('addRoomParticipant', options);
   if (!res.stat_code?.includes('ERR')) revalidateTag('room-detail');
   return res
 };

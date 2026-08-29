@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { GroupBase } from "react-select"
+import { components as selectComponents, GroupBase } from "react-select"
 import { AsyncPaginate, AsyncPaginateProps } from "react-select-async-paginate"
 
 import { SelectOptionType } from '@/components/ui/Input/SelectMultiple'
@@ -18,6 +18,15 @@ function SelectAsync<isMulti extends boolean, OptionType = SelectOptionType, Add
       {...props}
       components={{
         IndicatorSeparator: () => null,
+        Menu: (menuProps) => (
+          <selectComponents.Menu
+            {...menuProps}
+            innerProps={{
+              ...menuProps.innerProps,
+              onWheel: (event) => event.stopPropagation(),
+            }}
+          />
+        ),
         ...components
       }}
       styles={{
@@ -79,7 +88,7 @@ function SelectAsync<isMulti extends boolean, OptionType = SelectOptionType, Add
             color: 'black',
           })
         },
-        menuPortal: (base) => ({ ...base, zIndex: 999, height: 'fit-content', pointerEvents: 'auto' })
+        menuPortal: (base) => ({ ...base, zIndex: 999, pointerEvents: 'auto' })
       }}
       menuPlacement='auto'
       menuPortalTarget={isClient ? document.body : undefined}

@@ -28,6 +28,7 @@ const endpointData = {
 	login: { path: '/auths/login', method: 'POST', prefix: '' },
 	addGame: { path: '/games', method: 'POST', prefix: '' },
 	createRoom: { path: '/rooms', method: 'POST', prefix: '' },
+	addRoomParticipant: { path: '/rooms', method: 'POST', prefix: 'participants' },
 	addBanner: { path: '/banners', method: 'POST', prefix: '' },
 	addCafe: { path: '/cafes', method: 'POST', prefix: '' },
 	addBadges: { path: '/badges', method: 'POST', prefix: '' },

@@ -1,6 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { MultiValue } from 'react-select';
 
 import { addRoomParticipant } from '@/lib/api/room';
@@ -22,9 +22,21 @@ const AddParticipantsForm = ({ roomCode, availableSlots, joinedUserCodes, onClos
   const [selectedMembers, setSelectedMembers] = useState<MultiValue<MemberOptionType>>([]);
   const [isOpenConfirmation, setIsOpenConfirmation] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   const router = useRouter();
   const { toast } = useToast();
+  const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    if (!isRefreshing || isPending) return;
+
+    setIsRefreshing(false);
+    setIsSubmitting(false);
+    setIsOpenConfirmation(false);
+    onClose();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPending, isRefreshing]);
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
@@ -39,9 +51,11 @@ const AddParticipantsForm = ({ roomCode, availableSlots, joinedUserCodes, onClos
         title: `Successfully added ${selectedMembers.length} participant(s)`,
         variant: 'default',
       });
-      router.refresh();
-      setIsOpenConfirmation(false);
-      onClose();
+      setIsRefreshing(true);
+      startTransition(() => {
+        router.refresh();
+      });
+      return;
     } catch (error) {
       toast({
         title: 'Something went wrong',

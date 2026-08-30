@@ -6,7 +6,7 @@ import utc from 'dayjs/plugin/utc'
 import { AddCircle, MedalStar, Trash } from 'iconsax-react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -72,6 +72,11 @@ const PlayersTab = ({ players, endDateTime, roomId, maximumParticipant, currentU
   });
 
   const { fields, remove, update } = useFieldArray({ control: form.control, name: 'players' });
+
+  useEffect(() => {
+    form.reset({ players });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [players]);
 
   const handleRemoveParticipants = async () => {
     if (selectedPlayer === undefined || selectedPlayer === null || selectedIndex === undefined || selectedIndex === null) return

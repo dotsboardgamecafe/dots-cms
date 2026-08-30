@@ -18,6 +18,7 @@ export interface IPermissionsContextValue {
   room?: IBasePermissions & {
     setWinner?: boolean
     removeParticipants?: boolean
+    addParticipants?: boolean
   }
   tournament?: IBasePermissions & {
     setWinner?: boolean
@@ -121,7 +122,8 @@ export const PermissionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
           status: permissionList.includes('room-update-status'),
           setWinner: permissionList.includes('rooms-setwinner'),
           delete: permissionList.includes('rooms-delete'),
-          removeParticipants: permissionList.includes('rooms-participants-delete')
+          removeParticipants: permissionList.includes('rooms-participants-delete'),
+          addParticipants: permissionList.includes('rooms-participants-add')
         },
         tier: {
           view: permissionList.includes('tier-get-list'),

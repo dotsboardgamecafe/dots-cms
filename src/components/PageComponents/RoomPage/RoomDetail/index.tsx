@@ -37,7 +37,13 @@ const RoomDetail = ({ roomDetail }: Props) => {
             <RoomInfo roomDetail={roomDetail} />
           </TabsContent>
           <TabsContent value="players">
-            <PlayersTab roomId={roomDetail.room_code} players={roomDetail.room_participants} endDateTime={`${roomDetail.end_date} ${roomDetail.end_time}`} />
+            <PlayersTab
+              roomId={roomDetail.room_code}
+              players={roomDetail.room_participants}
+              endDateTime={`${roomDetail.end_date} ${roomDetail.end_time}`}
+              maximumParticipant={roomDetail.maximum_participant}
+              currentUsedSlot={roomDetail.current_used_slot}
+            />
           </TabsContent>
         </Tabs>
       </div>

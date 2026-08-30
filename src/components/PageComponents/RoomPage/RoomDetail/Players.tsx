@@ -3,15 +3,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
-import { MedalStar, Trash } from 'iconsax-react';
+import { AddCircle, MedalStar, Trash } from 'iconsax-react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { removeRoomParticipant, setRoomWinner } from '@/lib/api/room';
 
+import AddParticipantsModal from '@/components/PageComponents/RoomPage/RoomDetail/AddParticipantsModal';
 import ConfirmationModal from '@/components/PageComponents/RoomPage/RoomDetail/ConfirmationModal';
 import { Button } from '@/components/ui/Buttons';
 import { Form } from '@/components/ui/Form';
@@ -31,7 +32,14 @@ type Props = {
   players: RoomParticipant[]
   endDateTime: string
   roomId: string
+  maximumParticipant: number
+  currentUsedSlot: number
 };
+
+const registrationTypeLabel: Record<RoomParticipant['additional_info']['registration_type'], string> = {
+  self_booking: 'Self Booking',
+  manual_admin: 'Manual Admin',
+}
 
 const isRoomEnded = (dateTime: string) => {
   dayjs.tz.setDefault('Asia/Jakarta')
@@ -44,11 +52,12 @@ const isRoomEnded = (dateTime: string) => {
   return currentDate > endDate
 }
 
-const PlayersTab = ({ players, endDateTime, roomId }: Props) => {
+const PlayersTab = ({ players, endDateTime, roomId, maximumParticipant, currentUsedSlot }: Props) => {
   const roomPermission = usePermissions().room
 
   const [isOpenConfirmation, setIsOpenConfirmation] = useState<boolean>(false)
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] = useState<boolean>(false)
+  const [isOpenAddModal, setIsOpenAddModal] = useState<boolean>(false)
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
   const [selectedPlayer, setSelectedPlayer] = useState<RoomParticipant | null>(null)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
@@ -63,6 +72,11 @@ const PlayersTab = ({ players, endDateTime, roomId }: Props) => {
   });
 
   const { fields, remove, update } = useFieldArray({ control: form.control, name: 'players' });
+
+  useEffect(() => {
+    form.reset({ players });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [players]);
 
   const handleRemoveParticipants = async () => {
     if (selectedPlayer === undefined || selectedPlayer === null || selectedIndex === undefined || selectedIndex === null) return
@@ -124,9 +138,21 @@ const PlayersTab = ({ players, endDateTime, roomId }: Props) => {
   };
 
   const canRemoveParticipants = Boolean(roomPermission?.removeParticipants && !isRoomEnded(endDateTime))
+  const availableSlots = maximumParticipant - currentUsedSlot
+  const canAddParticipants = Boolean(roomPermission?.addParticipants && !isRoomEnded(endDateTime) && availableSlots > 0)
 
   return (
     <>
+      {canAddParticipants && (
+        <div className='flex justify-end mb-4'>
+          <Button variant="default" className='gap-2 w-fit' onClick={() => setIsOpenAddModal(true)}>
+            <AddCircle />
+            <Typography variant='text-body-l-medium'>
+              Add Participants
+            </Typography>
+          </Button>
+        </div>
+      )}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <Table>
@@ -158,7 +184,7 @@ const PlayersTab = ({ players, endDateTime, roomId }: Props) => {
                     <TableCell className='py-[10px]'>
                       <div className='w-full h-full relative'>
                         <Typography variant='paragraph-l-regular' className='text-gray-900 capitalize'>
-                          {player.additional_info || '-'}
+                          {registrationTypeLabel[player.additional_info?.registration_type || 'self_booking']}
                         </Typography>
                         <div className='absolute hidden top-[50%] translate-y-[-50%] right-2 flex-row justify-center items-center gap-2'>
                           {roomPermission?.setWinner && (
@@ -214,6 +240,13 @@ const PlayersTab = ({ players, endDateTime, roomId }: Props) => {
         onConfirm={() => handleRemoveParticipants()}
         message={`Are you sure to remove ${selectedPlayer?.user_name} from the room?`}
         isLoading={isDeleting}
+      />
+      <AddParticipantsModal
+        open={isOpenAddModal}
+        onOpenChange={setIsOpenAddModal}
+        roomCode={roomId}
+        availableSlots={availableSlots}
+        joinedUserCodes={fields.map((player) => player.user_code)}
       />
     </>
   );

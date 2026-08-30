@@ -54,13 +54,17 @@ export type RoomDetailType = {
   room_banner_url: string;
 };
 
+export type RoomParticipantAdditionalInfo = {
+  registration_type: 'self_booking' | 'manual_admin';
+};
+
 export type RoomParticipant = {
   user_code: string;
   user_name: string;
   user_image_url: string;
   status_winner: boolean,
   status: string;
-  additional_info: string;
+  additional_info: RoomParticipantAdditionalInfo;
   position: number;
   reward_point: number;
 };
@@ -71,7 +75,9 @@ export const RoomParticipantSchema = z.array(z.object({
   user_image_url: z.string(),
   status_winner: z.boolean(),
   status: z.string(),
-  additional_info: z.string(),
+  additional_info: z.object({
+    registration_type: z.enum(['self_booking', 'manual_admin']).default('self_booking'),
+  }).default({ registration_type: 'self_booking' }),
   position: z.number(),
   reward_point: z.number(),
 }));
@@ -136,4 +142,8 @@ export type SetRoomWinnerPayload = {
 
 export type RemoveRoomParticipant = {
   user_code: string;
+};
+
+export type AddRoomParticipantPayload = {
+  user_codes: string[];
 };

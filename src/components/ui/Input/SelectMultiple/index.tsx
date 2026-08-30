@@ -1,6 +1,6 @@
 'use client';
 import React, { memo, PropsWithChildren, ReactElement, ReactNode, useCallback, useRef } from 'react';
-import Select, { components, OptionProps, Options, ValueContainerProps } from 'react-select';
+import Select, { components, components as selectComponents, OptionProps, Options, ValueContainerProps } from 'react-select';
 
 import { cn } from '@/lib/utils';
 
@@ -33,6 +33,15 @@ const SelectMultiple = React.forwardRef<
           menuPosition='fixed'
           components={{
             IndicatorSeparator: () => null,
+            Menu: (menuProps) => (
+              <selectComponents.Menu
+                {...menuProps}
+                innerProps={{
+                  ...menuProps.innerProps,
+                  onWheel: (event) => event.stopPropagation(),
+                }}
+              />
+            ),
             ...components
           }}
           styles={{
@@ -95,7 +104,7 @@ const SelectMultiple = React.forwardRef<
                 color: 'black',
               })
             },
-            menuPortal: (base) => ({ ...base, zIndex: 999, height: 'fit-content', pointerEvents: 'auto' })
+            menuPortal: (base) => ({ ...base, zIndex: 999, pointerEvents: 'auto' })
           }}
         />
       </InputWrapper>
@@ -122,7 +131,7 @@ export function SelectOptionCheckBox<OptionType = SelectOptionType, isMulti exte
       className={cn("relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50", className)}
       {...props}
     >
-      <Checkbox id={props.innerProps.id} label={props.label} checked={props.isSelected} onChange={() => null} onClick={() => null} />
+      <Checkbox id={props.innerProps.id && `${props.innerProps.id}-checkbox`} label={props.label} checked={props.isSelected} onChange={() => null} onClick={() => null} />
     </components.Option>
   )
 }

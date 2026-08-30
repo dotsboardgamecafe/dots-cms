@@ -1,4 +1,4 @@
-FROM node:18-alpine AS build_stage
+FROM node:20-alpine AS build_stage
 
 ARG stage=prod
 
@@ -11,7 +11,7 @@ RUN yarn install
 RUN yarn build
 
 # PACKAGING STAGE
-FROM node:18-alpine AS packaging_stage
+FROM node:20-alpine AS packaging_stage
 
 WORKDIR /app
 

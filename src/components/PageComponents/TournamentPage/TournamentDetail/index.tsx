@@ -37,7 +37,13 @@ const TournamentDetail = ({ tournamentDetail }: Props) => {
             <TournamentInfo tournamentDetail={tournamentDetail} />
           </TabsContent>
           <TabsContent value="players">
-            <TournamentPlayers tournamentEndDateTime={`${tournamentDetail.end_date} ${tournamentDetail.end_time}`} badges={tournamentDetail.tournament_badges} players={tournamentDetail.tournament_participants} />
+            <TournamentPlayers
+              tournamentEndDateTime={`${tournamentDetail.end_date} ${tournamentDetail.end_time}`}
+              badges={tournamentDetail.tournament_badges}
+              players={tournamentDetail.tournament_participants}
+              playerSlot={tournamentDetail.player_slot}
+              currentUsedSlot={tournamentDetail.current_used_slot}
+            />
           </TabsContent>
         </Tabs>
       </div>

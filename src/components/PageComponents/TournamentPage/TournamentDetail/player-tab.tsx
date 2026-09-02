@@ -3,16 +3,17 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
-import { Trash } from 'iconsax-react';
+import { AddCircle, Trash } from 'iconsax-react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { removeTournamentParticipant, setTournamentWinner } from '@/lib/api/tournament';
 
 import ConfirmationModal from '@/components/PageComponents/RoomPage/RoomDetail/ConfirmationModal';
+import AddParticipantsModal from '@/components/PageComponents/TournamentPage/TournamentDetail/AddParticipantsModal';
 import { Button } from '@/components/ui/Buttons';
 import { Form, FormControl, FormField } from '@/components/ui/Form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
@@ -33,6 +34,8 @@ type Props = {
   players: TournamentParticipant[];
   badges: TournamentDetailType['tournament_badges']
   tournamentEndDateTime: string
+  playerSlot: number
+  currentUsedSlot: number
 };
 
 const registrationTypeLabel: Record<TournamentParticipant['additional_info']['registration_type'], string> = {
@@ -51,10 +54,11 @@ const isTournamentEnded = (dateTime: string) => {
   return currentDate > endDate
 }
 
-const TournamentPlayers = ({ players, badges, tournamentEndDateTime }: Props) => {
+const TournamentPlayers = ({ players, badges, tournamentEndDateTime, playerSlot, currentUsedSlot }: Props) => {
   const tournamentPermission = usePermissions().tournament
   const [isRemovingParticipants, setIsRemovingParticipants] = useState<boolean>(false)
   const [isOpenRemoveParticipantModal, setIsOpenRemoveParticipantModal] = useState<boolean>(false)
+  const [isOpenAddModal, setIsOpenAddModal] = useState<boolean>(false)
   const [selectedPlayer, setSelectedPlayer] = useState<TournamentParticipant | null>(null)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
@@ -69,6 +73,11 @@ const TournamentPlayers = ({ players, badges, tournamentEndDateTime }: Props) =>
   const tournamentCode: string = param.tournament_code as string
 
   const { fields, remove, } = useFieldArray({ control: form.control, name: 'players' });
+
+  useEffect(() => {
+    form.reset({ players });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [players]);
 
   const onSubmit = async (data: z.infer<typeof JoinedPlayersSchema>) => {
     const firstBadge = badges.find((badge) => badge.badge_rules[0].value.position === 1)
@@ -140,9 +149,21 @@ const TournamentPlayers = ({ players, badges, tournamentEndDateTime }: Props) =>
   }
 
   const canRemoveParticipants = Boolean(tournamentPermission?.removeParticipants && !isTournamentEnded(tournamentEndDateTime))
+  const availableSlots = playerSlot - currentUsedSlot
+  const canAddParticipants = Boolean(tournamentPermission?.addParticipants && !isTournamentEnded(tournamentEndDateTime) && availableSlots > 0)
 
   return (
     <Form {...form}>
+      {canAddParticipants && (
+        <div className='flex justify-end mb-4'>
+          <Button variant="default" className='gap-2 w-fit' onClick={() => setIsOpenAddModal(true)}>
+            <AddCircle />
+            <Typography variant='text-body-l-medium'>
+              Add Participants
+            </Typography>
+          </Button>
+        </div>
+      )}
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Table>
           <TableHeader>
@@ -232,6 +253,13 @@ const TournamentPlayers = ({ players, badges, tournamentEndDateTime }: Props) =>
         onConfirm={() => handleRemoveParticipants()}
         message={`Are you sure to remove ${selectedPlayer?.user_name} from the tournament?`}
         isLoading={isRemovingParticipants}
+      />
+      <AddParticipantsModal
+        open={isOpenAddModal}
+        onOpenChange={setIsOpenAddModal}
+        tournamentCode={tournamentCode}
+        availableSlots={availableSlots}
+        joinedUserCodes={fields.map((player) => player.user_code)}
       />
     </Form>
   );

@@ -35,6 +35,7 @@ const endpointData = {
 	addBadges: { path: '/badges', method: 'POST', prefix: '' },
 	addTournamentBadge: { path: '/tournament-badges', method: 'POST', prefix: '' },
 	addTournaments: { path: '/tournaments', method: 'POST', prefix: '' },
+	addTournamentParticipant: { path: '/tournaments', method: 'POST', prefix: 'participants' },
 	addReward: { path: '/rewards', method: 'POST', prefix: '' },
 	claimInvoice: { path: '/invoices', method: 'POST', prefix: 'claim' },
 	createAdmin: { path: '/admins', method: 'POST', prefix: '' },

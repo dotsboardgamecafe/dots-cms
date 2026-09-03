@@ -130,3 +130,7 @@ export type SetTournamentWinnerType = {
 export type RemoveTournamentParticipant = {
   user_code: string;
 };
+
+export type AddTournamentParticipantPayload = {
+  user_codes: string[];
+};

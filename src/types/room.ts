@@ -69,6 +69,19 @@ export type RoomParticipant = {
   reward_point: number;
 };
 
+export type RoomPlayExportRow = {
+  room_code: string;
+  room_name: string;
+  host_day: string;
+  time: string;
+  location: string;
+  slot: string;
+  game_name: string;
+  game_master: string;
+  winners: string;
+  players: string;
+};
+
 export const RoomParticipantSchema = z.array(z.object({
   user_code: z.string(),
   user_name: z.string(),

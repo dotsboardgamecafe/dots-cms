@@ -2,7 +2,7 @@
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import dayjsFormats from 'dayjs/plugin/advancedFormat';
-import { AddCircle, Edit, Eye, Setting4, Trash } from 'iconsax-react';
+import { AddCircle, ArrowCircleDown2, Edit, Eye, HambergerMenu, Setting4, Trash } from 'iconsax-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -12,8 +12,10 @@ import { cn } from '@/lib/utils';
 import DeleteConfirmationModal from '@/components/PageComponents/RoomPage/ConfirmationModal/DeleteConfirmationModal';
 import StatusConfirmationModal from '@/components/PageComponents/RoomPage/ConfirmationModal/StatusConfirmationModal';
 import RoomFilterModal from '@/components/PageComponents/RoomPage/FilterModal/RoomFilterModal';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/ButtonDropdown';
 import { Button } from '@/components/ui/Buttons';
 import Search from '@/components/ui/Input/Search';
+import { useProcessDispatch } from '@/components/ui/Modal/processContext';
 import Pagination from '@/components/ui/Pagination/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
@@ -36,6 +38,7 @@ type Props = {
 
 const RoomTable = ({ data, pagination }: Props) => {
   const roomPermission = usePermissions().room
+  const { dispatchAction: dispatchProcess } = useProcessDispatch()
 
   const [statusConfirmationModalOpen, setStatusConfirmationModalOpen] = useState<boolean>(false);
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState<boolean>(false);
@@ -263,6 +266,17 @@ const RoomTable = ({ data, pagination }: Props) => {
             Filter
           </Typography>
         </button>
+        <DropdownMenu>
+          <DropdownMenuTrigger variant='default' size='lg' className='gap-4 bg-transparent text-black !p-0'>
+            <HambergerMenu />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className='bg-white border p-0 pr-4'>
+            <DropdownMenuItem onClick={() => dispatchProcess('export_room_play', { title: 'Exporting room play data' })}>
+              <ArrowCircleDown2 />
+              <Typography className='grow text-left' variant='paragraph-l-regular'>Export room play data to CSV</Typography>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </section>
       <Table>
         <TableHeader>

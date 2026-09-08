@@ -13,6 +13,21 @@ export const getRoomDetail = async (options: ApiOptions) => {
   return await fetcher<RoomDetailType>('getRoomDetail', { ...options, requestOpt: { next: { tags: ['room-detail'] } } });
 };
 
+const ROOM_DETAIL_CONCURRENCY = 6;
+
+export const getRoomPlayDetails = async (roomCodes: string[]) => {
+  if (!Array.isArray(roomCodes)) return [];
+  const details: (RoomDetailType | undefined)[] = [];
+
+  for (let index = 0; index < roomCodes.length; index += ROOM_DETAIL_CONCURRENCY) {
+    const wave = roomCodes.slice(index, index + ROOM_DETAIL_CONCURRENCY);
+    const settled = await Promise.allSettled(wave.map((room_code) => getRoomDetail({ param: room_code })));
+    settled.forEach((result) => details.push(result.status === 'fulfilled' ? result.value.data : undefined));
+  }
+
+  return details;
+};
+
 export const createRoom = async (options: ApiOptions<AddRoomPayload>) => {
   const res = await fetcher('createRoom', options);
   revalidateTag('rooms');

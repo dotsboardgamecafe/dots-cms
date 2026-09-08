@@ -8,7 +8,11 @@ export type ProcesType = {
   status: 'pending' | 'in-progress' | 'completed' | 'failed',
   title: string,
   id: string
+  progress?: { current: number, total: number }
 }
+
+export type ProcessActionContext = { onProgress: (current: number, total: number) => void }
+export type ProcessAction = (context?: ProcessActionContext) => Promise<unknown>
 
 type ActionName = keyof (typeof actionProcessList)
 
@@ -64,8 +68,9 @@ export const ProcessContextProvider: React.FC<React.PropsWithChildren> = ({ chil
 
   const dispatchAction = async (actionName: ActionName, config?: { title?: string, disableAutoClose?: boolean }) => {
     const id = addProcess({ status: 'in-progress', title: config?.title ?? `Exporting data ${actionName.split('_')[1]}` })
+    const onProgress = (current: number, total: number) => editProcess(id, (prevData) => ({ ...prevData, progress: { current, total } }))
     try {
-      await actionProcessList[actionName]()
+      await (actionProcessList[actionName] as ProcessAction)({ onProgress })
       editProcess(id, (prevData) => ({ ...prevData, status: 'completed' }))
     } catch (error) {
       editProcess(id, (prevData) => ({ ...prevData, status: 'failed' }))

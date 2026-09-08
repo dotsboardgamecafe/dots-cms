@@ -30,7 +30,16 @@ const ProcessItem: React.FC<ProcesType> = (process) => {
   return (
     <div key={process.title} className="flex flex-row items-center justify-between gap-5 w-full shadow-md border-slate-700 border py-2 px-6 bg-white">
       <Typography variant="paragraph-l-regular">{process.title}</Typography>
-      {process.status === 'in-progress' && <Spiner className="!text-gray-400" />}
+      {process.status === 'in-progress' && (
+        <>
+          {process.progress && (
+            <Typography variant="paragraph-l-regular" className="text-gray-500">
+              {process.progress.current}/{process.progress.total}
+            </Typography>
+          )}
+          <Spiner className="!text-gray-400" />
+        </>
+      )}
       {process.status !== 'in-progress' && (
         <>
           <Typography variant="paragraph-l-medium" className={cn('py-[2px] px-[10px] rounded-2xl', statusBackground, textColor)}>{process.status}</Typography>

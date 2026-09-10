@@ -14,7 +14,7 @@ import { ObjectToCSV, THeaderCSV } from "@/helper";
 import { formatTimeHourMinutes } from "@/helper/datetime";
 
 import { AdminType } from "@/types/admin";
-import { BadgeType } from "@/types/badge";
+import { BadgeOwnerExportRow, BadgeOwnerType, BadgeType } from "@/types/badge";
 import { GameType } from "@/types/game";
 import { MemberType, ResponseClaimedInvoice } from "@/types/member";
 import { RoomDetailType, RoomParticipant, RoomPlayExportRow, RoomType } from "@/types/room";
@@ -97,6 +97,75 @@ export async function exportBadges() {
   const downloadTrigger = document.createElement('a')
   downloadTrigger.href = link
   downloadTrigger.download = `DOTS Badges Data [Exported on ${dateStamp}]`
+  downloadTrigger.click()
+  URL.revokeObjectURL(link)
+}
+
+function formatUtcToJakarta(value?: string | null): string {
+  if (!value) return ''
+
+  const timeInUTC = dayjs(value)
+  if (!timeInUTC.isValid()) return ''
+
+  return timeInUTC.tz('Asia/Jakarta').format('D MMM YYYY, H:mm')
+}
+
+function buildBadgeOwnerRows(badge: BadgeType): BadgeOwnerExportRow[] {
+  const owners: BadgeOwnerType[] = badge.owned_by ?? []
+  const totalClaimed = owners.filter((owner) => owner.claimed_date !== null).length
+
+  const badgeColumns = {
+    badge_code: badge.badge_code,
+    badge_name: badge.name,
+    badge_category: badge.badge_category,
+    vp_point: badge.vp_point,
+    badge_status: badge.status,
+    total_earned: 0,
+    total_claimed: 0,
+    total_unclaimed: 0,
+  }
+
+  if (!owners.length) return [{
+    ...badgeColumns,
+    username: '',
+    email: '',
+    earned_date: '',
+    claimed_date: '',
+  }]
+
+  return owners.map((owner) => ({
+    ...badgeColumns,
+    total_earned: 1,
+    total_claimed: owner.claimed_date ? 1 : 0,
+    total_unclaimed: owner.claimed_date ? 0 : 1,
+    username: owner.username ?? '',
+    email: owner.email ?? '',
+    earned_date: formatUtcToJakarta(owner.earned_date),
+    claimed_date: formatUtcToJakarta(owner.claimed_date),
+  }))
+}
+
+export async function exportBadgeOwners(context?: ProcessActionContext) {
+  const badges = await getBadges({ pagination: { limit: 999999999999999 } })
+  const badgeList: BadgeType[] = badges.data ?? []
+  const total = badgeList.length
+
+  context?.onProgress(0, total)
+
+  const rows: BadgeOwnerExportRow[] = []
+  badgeList.forEach((badge, index) => {
+    rows.push(...buildBadgeOwnerRows(badge))
+    context?.onProgress(index + 1, total)
+  })
+
+  const exportedColumns: THeaderCSV<BadgeOwnerExportRow> = ['badge_code', 'badge_name', 'badge_category', 'vp_point', 'badge_status', 'total_earned', 'total_claimed', 'total_unclaimed', 'username', 'email', 'earned_date', 'claimed_date']
+  const csvFile = await ObjectToCSV<BadgeOwnerExportRow>(rows, exportedColumns)
+
+  const dateStamp = dayjs(new Date()).format('DD-MMM-YYYY')
+  const link = URL.createObjectURL(csvFile)
+  const downloadTrigger = document.createElement('a')
+  downloadTrigger.href = link
+  downloadTrigger.download = `DOTS Badge Owned By Data [Exported on ${dateStamp}]`
   downloadTrigger.click()
   URL.revokeObjectURL(link)
 }
@@ -219,6 +288,7 @@ export const actionProcessList = {
   export_admin: exportAdmin,
   export_game: exportGameCatalog,
   export_badges: exportBadges,
+  export_badge_owners: exportBadgeOwners,
   import_game: importGameCatalog,
   import_badges: importBadgesUpdate,
   export_all_claimed_history: exportClaimedHistory,

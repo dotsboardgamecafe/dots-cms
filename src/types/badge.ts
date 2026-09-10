@@ -35,6 +35,28 @@ export type BadgeSpesificGameBoardCriteriaValue = {
   booking_price?: number
 }
 
+export type BadgeOwnerType = {
+  username: string,
+  email: string,
+  claimed_date: string | null, // UTC+0
+  earned_date: string // UTC+0
+}
+
+export type BadgeOwnerExportRow = {
+  badge_code: string,
+  badge_name: string,
+  badge_category: string,
+  vp_point: number | string,
+  badge_status: string,
+  total_earned: number,
+  total_claimed: number,
+  total_unclaimed: number,
+  username: string,
+  email: string,
+  earned_date: string,
+  claimed_date: string
+}
+
 export type BadgeType<T = BadgeTimeLimitCriteriaValue | BadgeTotalSpendCriteriaValue | BadgeSpesificGameBoardCriteriaValue | BadgeTournamentWonCriteriaValue | BadgePlayingGamesCriteriaValue | { position: number }> = {
   badge_code: string,
   badge_category: string,
@@ -47,7 +69,8 @@ export type BadgeType<T = BadgeTimeLimitCriteriaValue | BadgeTotalSpendCriteriaV
   created_date: string,
   updated_date: string,
   deleted_date: string,
-  description: string
+  description: string,
+  owned_by?: BadgeOwnerType[]
 }
 
 export type TournamentBadgeType = {

@@ -218,6 +218,10 @@ const BadgePageContent = ({ data, pagination }: Props) => {
                 <ArrowCircleDown2 />
                 <Typography className='grow text-left' variant='paragraph-l-regular'>Export Badges Data to CSV</Typography>
               </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => dispatchProcess('export_badge_owners', { title: 'Exporting badge owned by data' })}>
+                <ArrowCircleDown2 />
+                <Typography className='grow text-left' variant='paragraph-l-regular'>Export Badge Owned By Data to CSV</Typography>
+              </DropdownMenuItem>
               {badgePermission?.import && (
                 <DropdownMenuItem onClick={() => dispatchProcess('import_badges', { title: 'Importing badges data (update VP)', disableAutoClose: true })}>
                   <DocumentUpload />

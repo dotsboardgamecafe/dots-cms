@@ -139,7 +139,9 @@ const PlayersTab = ({ players, endDateTime, roomId, maximumParticipant, currentU
 
   const canRemoveParticipants = Boolean(roomPermission?.removeParticipants && !isRoomEnded(endDateTime))
   const availableSlots = maximumParticipant - currentUsedSlot
-  const canAddParticipants = Boolean(roomPermission?.addParticipants && !isRoomEnded(endDateTime) && availableSlots > 0)
+
+  const hasAddParticipantsPermissions = Boolean(roomPermission?.addParticipants || roomPermission?.removeParticipants)
+  const canAddParticipants = Boolean(hasAddParticipantsPermissions && !isRoomEnded(endDateTime) && availableSlots > 0)
 
   return (
     <>

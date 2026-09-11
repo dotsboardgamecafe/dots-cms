@@ -150,7 +150,9 @@ const TournamentPlayers = ({ players, badges, tournamentEndDateTime, playerSlot,
 
   const canRemoveParticipants = Boolean(tournamentPermission?.removeParticipants && !isTournamentEnded(tournamentEndDateTime))
   const availableSlots = playerSlot - currentUsedSlot
-  const canAddParticipants = Boolean(tournamentPermission?.addParticipants && !isTournamentEnded(tournamentEndDateTime) && availableSlots > 0)
+
+  const hasAddParticipantsPermission = Boolean(tournamentPermission?.addParticipants || tournamentPermission?.removeParticipants)
+  const canAddParticipants = Boolean(hasAddParticipantsPermission && !isTournamentEnded(tournamentEndDateTime) && availableSlots > 0)
 
   return (
     <Form {...form}>
